@@ -15,10 +15,10 @@ public class SudokuManager {
 	
 	private void newGame(int difficulty)
 	{
-		board = new Board(BOARD_SIZE, difficulty);
+		board = new SudokuBoard(BOARD_SIZE, difficulty);
 	}
 	
-	private Board board;
+	private SudokuBoard board;
 	private static final int BOARD_SIZE = 9;
 	private static final int DIFFICULTY_EASY = 1;
 	private static final int DIFFICULTY_MEDIUM = 2;
