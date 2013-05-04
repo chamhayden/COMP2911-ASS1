@@ -1,3 +1,7 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+
 public class SudokuManager {
 	
 	public SudokuManager()
@@ -16,6 +20,16 @@ public class SudokuManager {
 	private void newGame(int difficulty)
 	{
 		board = new SudokuBoard(BOARD_SIZE, difficulty);
+		
+		//initialises frame with events handler
+		EventQueue.invokeLater(new Runnable(){
+			public void run()
+			{
+				SudokuFrame frame = new SudokuFrame(board);
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.setVisible(true);
+			}
+		});
 	}
 	
 	private SudokuBoard board;
