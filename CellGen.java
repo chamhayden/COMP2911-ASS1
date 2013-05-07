@@ -7,6 +7,7 @@
 public class CellGen {
 	public CellGen(int value){
 		this.value = value;
+		presence = true;
 	}
 	
 	@Override
@@ -39,6 +40,15 @@ public class CellGen {
 		value = x;
 	}
 	
+	public void setPresence(boolean x){
+		presence = x;
+	}
+	
+	public boolean getPresence(){
+		return presence;
+	}
+	
 	
 	private int value;
+	private boolean presence;
 }

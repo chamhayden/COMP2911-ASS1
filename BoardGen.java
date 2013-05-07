@@ -16,12 +16,19 @@ import java.util.Random;
 public class BoardGen {
 	public BoardGen(){
 		
+		boolean filled = false;
+		
 		row = new SectionGen[9];
 		collumn = new SectionGen[9];
 		square = new SectionGen[9];
 		initialiseBoard();
-
-		
+		while(!filled){
+			filled = fillBoard();	
+		}
+		removeValues(4);
+	}
+	
+	private boolean fillBoard(){
 		int i, j, k;
 		int x = 0;
 		Random r = new Random();  
@@ -30,9 +37,7 @@ public class BoardGen {
 		int counter = 0;
 		
 		
-		
-		i = 0;
-		while(i < 9){
+		for(i = 0; i < 9; i++){
 			counter = 0;
 			j = 0;
 			while(j < 9){				
@@ -60,7 +65,8 @@ public class BoardGen {
 					j = resetPoint;
 					counter++;
 					if (counter > 50){
-						break;
+						initialiseBoard();
+						return false;
 					}
 					continue;
 				}
@@ -70,14 +76,8 @@ public class BoardGen {
 				square[k].set(squarePos(i, j), x);
 				j++;
 			}
-			if (counter>50){
-				counter = 0;
-				initialiseBoard();
-				i = 0;
-				continue;
-			}
-			i++;
 		}
+		return true;
 	}
 	
 	private void initialiseBoard(){
@@ -103,6 +103,20 @@ public class BoardGen {
 
 	}
 	
+	private void removeValues(int difficulty){
+		Random r = new Random();
+		int x,i;
+		if(difficulty > 4){
+			difficulty = 4;
+		}
+		
+		for(i = 0; i < difficulty*2; i++){
+			x = r.nextInt(9);
+			row[i].remove(x);	
+		}
+		
+	}
+	
 	private int squarePos(int row, int collumn){
 		return (collumn % 3) + 3*((row % 3));
 	}
@@ -117,7 +131,11 @@ public class BoardGen {
 		int i,j;
 		for(i = 0; i < 9; i++){
 			for(j = 0; j < 9; j++){
-				System.out.printf("%d" ,row[i].get(j));
+				if(row[i].displays(j)){
+					System.out.printf("%d" ,row[i].get(j));
+				} else {
+					System.out.printf("%d", 0);
+				}
 			}
 			System.out.printf("\n");
 		}

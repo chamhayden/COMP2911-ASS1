@@ -2,7 +2,7 @@
  * Keeps track of groups of Cells, e.g rows columns and squares
  * Allows you to manipulate Cells as a group
  * @author laura
- * blah
+ *
  */
 
 public class SectionGen {
@@ -65,6 +65,14 @@ public class SectionGen {
 	
 	public void setCell(int position, CellGen c){
 		cells[position] = c;
+	}
+	
+	public boolean displays(int position){
+		return cells[position].getPresence();
+	}
+	
+	public void remove(int position){
+		cells[position].setPresence(false);
 	}
 	
 	private CellGen[] cells;
