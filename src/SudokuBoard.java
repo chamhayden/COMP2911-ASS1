@@ -13,8 +13,8 @@ public class SudokuBoard implements Board {
 	public SudokuBoard(int size, int difficulty)
 	{
 		boardSize = size;
-		board = new ArrayList<ArrayList<Cell>>();
-		generateBoard(difficulty);
+		board = new ArrayList<ArrayList<BoardCell>>();
+		Cell generation[][] = generateBoard(difficulty);
 	}
 	
 	// TODO Javadoc this
@@ -60,26 +60,28 @@ public class SudokuBoard implements Board {
 	}
 	
 	// TODO Javadoc this
-	private Cell getCell(int row, int col)
+	private BoardCell getCell(int row, int col)
 	{
 		return board.get(row).get(col);
 	}
 	
 	// TODO Write this properly
-	private void generateBoard(int difficulty)
+	private ArrayList<ArrayList<Cell[][] generateBoard(int difficulty)
 	{
+		int c = 0;
 		for (int i = 0; i < boardSize; i++)
 		{
-			board.add(new ArrayList<Cell>());
-			ArrayList<Cell> row = board.get(i);
+			board.add(new ArrayList<BoardCell>());
+			ArrayList<BoardCell> row = board.get(i);
 			for (int j = 0; j < boardSize; j++)
 			{
-				row.add(new Cell(1, true, boardSize));
+				row.add(new BoardCell(c++, true, boardSize));
 			}
 		}
+		
 	}	
 		
-	private ArrayList<ArrayList<Cell>> board;
+	private ArrayList<ArrayList<BoardCell>> board;
 	private static int boardSize;
 	
 }
