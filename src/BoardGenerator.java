@@ -131,7 +131,7 @@ public class BoardGenerator {
 		return ((int)Math.floor(collumn/3) + (int)Math.floor(row/3)*3);
 	}
 	
-	public void constructBoard(){
+	private void constructBoard(){
 		int i,j;
 		for(i = 0; i < 9; i++){
 			for(j = 0; j < 9; j++){
@@ -160,12 +160,12 @@ public class BoardGenerator {
 		}
 	}
 	
-	public boolean[][] getVisibility(){
-		return visibilities;
+	public boolean getVisibility(int row, int collumn){
+		return visibilities[row][collumn];
 	}
 	
-	public int[][] getValues(){
-		return finalValues;
+	public int getValues(int row, int collumn){
+		return finalValues[row][collumn];
 	}
 	
 	private boolean[][] visibilities;
