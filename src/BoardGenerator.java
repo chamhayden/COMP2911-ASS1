@@ -32,6 +32,7 @@ public class BoardGenerator {
 		}
 		removeValues(difficulty);
 		constructBoard();
+		printBoard();
 	}
 	
 	private boolean fillBoard(){
@@ -136,7 +137,6 @@ public class BoardGenerator {
 		for(i = 0; i < 9; i++){
 			for(j = 0; j < 9; j++){
 				finalValues[i][j] = row[i].get(j);
-				System.out.println("Displays ("+i+")("+j+") " + row[i].displays(j));
 				if(row[i].displays(j)){
 					visibilities[i][j] = true;
 				}

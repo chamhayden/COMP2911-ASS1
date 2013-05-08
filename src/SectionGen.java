@@ -8,15 +8,15 @@
 public class SectionGen {
 	
 	public SectionGen(int x){
-		cells = new SimpleCell[9]; 
+		cells = new CellGen[9]; 
 		int i; 
 		for(i = 0; i < 9; i++){
-			cells[i] = new SimpleCell(0);
+			cells[i] = new CellGen(0);
 		}
 	}
 	
 	public SectionGen(){
-		cells = new SimpleCell[9];
+		cells = new CellGen[9];
 	}
 	
 	public boolean has(int x){
@@ -29,7 +29,7 @@ public class SectionGen {
 		return false;
 	}
 	public void set(int position, int x){
-		cells[position] = new SimpleCell(x);
+		cells[position] = new CellGen(x);
 	}
 	
 	public int get(int position){
@@ -39,7 +39,7 @@ public class SectionGen {
 	public int[] getValues(){
 		int[] values = new int[9];
 		int i = 0;
-		for(SimpleCell c : cells){
+		for(CellGen c : cells){
 			values[i] = c.getValue();
 			i++;
 		}
@@ -59,22 +59,22 @@ public class SectionGen {
 		}
 	}
 	
-	public SimpleCell getCell(int position){
+	public CellGen getCell(int position){
 		return cells[position];
 	}
 	
-	public void setCell(int position, SimpleCell c){
+	public void setCell(int position, CellGen c){
 		cells[position] = c;
 	}
 	
 	public boolean displays(int position){
-		return cells[position].isVisible();
+		return cells[position].getPresence();
 	}
 	
 	public void remove(int position){
-		cells[position].setVisible(false);
+		cells[position].setPresence(false);
 	}
 	
-	private SimpleCell[] cells;
+	private CellGen[] cells;
 	
 }
