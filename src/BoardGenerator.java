@@ -19,7 +19,8 @@ public class BoardGenerator {
 	{
 		this.boardSize = boardSize;
 		this.finalValues = new int[boardSize][boardSize];
-		this.finalVisibilities = new boolean[boardSize][boardSize];
+		this.visibilities = new boolean[boardSize][boardSize];
+		
 		
 		boolean filled = false;
 		row = new SectionGen[this.boardSize];
@@ -29,30 +30,8 @@ public class BoardGenerator {
 		while(!filled){
 			filled = fillBoard();	
 		}
-		removeValues(4);
-		
-		/* This sets up values to be returned */
-		/*
-		 * Hey laura, this is here to populate two arrays.
-		 * 	One that keeps track of all the values, and one
-		 * 	that keeps track of all the visibilities. This is
-		 * 	just going to sit at the end of the constructor so
-		 *  that I can use two public methods down the bottom to 
-		 *  get the data I need
-		 */
-		for (int i = 0; i < this.boardSize; i++) 
-		{
-			for (int j = 0; j < this.boardSize; j++)
-			{
-				this.finalValues[i][j] = row[i].get(j);
-				if(row[i].displays(j)){
-					this.finalVisibilities[i][j] = true;
-				} else {
-					this.finalVisibilities[i][j] = false;
-				}
-			}
-		}
-		/* End setup */
+		removeValues(difficulty);
+		constructBoard();
 	}
 	
 	private boolean fillBoard(){
@@ -152,6 +131,19 @@ public class BoardGenerator {
 		return ((int)Math.floor(collumn/3) + (int)Math.floor(row/3)*3);
 	}
 	
+	public void constructBoard(){
+		int i,j;
+		for(i = 0; i < 9; i++){
+			for(j = 0; j < 9; j++){
+				finalValues[i][j] = row[i].get(j);
+				if(row[i].displays(j)){
+					visibilities[i][j] = true;
+				}
+			}
+			System.out.printf("\n");
+		}
+	}
+	
 	//FOR DEBUGGING PURPOSES ONLY DO NOT USE
 	//TODO remove after debugging is finished
 	public void printBoard(){
@@ -168,18 +160,16 @@ public class BoardGenerator {
 		}
 	}
 	
-	public int getValue(int row, int col)
-	{
-		return this.finalValues[row][col];
+	public boolean[][] getVisibility(){
+		return visibilities;
 	}
 	
-	public boolean isVisible(int row, int col) 
-	{
-		return this.finalVisibilities[row][col];
+	public int[][] getValues(){
+		return finalValues;
 	}
 	
-	private boolean finalVisibilities[][];
-	private int finalValues[][];
+	private boolean[][] visibilities;
+	private int[][] finalValues;
 	private int boardSize;
 	SectionGen[] row;
 	SectionGen[] collumn;
