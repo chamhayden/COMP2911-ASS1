@@ -6,20 +6,7 @@ public class SudokuManager {
 	
 	public SudokuManager()
 	{
-		newGame(DIFFICULTY_EASY);
-		for (int i = 0; i < BOARD_SIZE; i++)
-		{
-			for (int j = 0; j < BOARD_SIZE; j++)
-			{
-				System.out.print(board.getCellActualFinal(i, j) + " ");
-			}
-			System.out.print("\n");
-		}
-	}
-	
-	private void newGame(int difficulty)
-	{
-		board = new SudokuBoard(BOARD_SIZE, difficulty);
+		board = new SudokuBoard(BOARD_SIZE, DIFFICULTY_EASY);
 		
 		//initialises frame with events handler
 		EventQueue.invokeLater(new Runnable(){

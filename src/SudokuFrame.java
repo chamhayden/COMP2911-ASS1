@@ -30,7 +30,7 @@ class SudokuFrame extends JFrame
 		for(int i = 0; i<9; i++)
 		{
 			for(int j = 0; j<9; j++){
-				makeButton(Integer.toString(board.getCellActualFinal(i,j)), Color.YELLOW, buttonPanel);
+				makeButton(Integer.toString(board.getCellValue(i,j)), Color.YELLOW, buttonPanel);
 			}
 		}
 		
