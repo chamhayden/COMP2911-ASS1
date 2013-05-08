@@ -32,7 +32,14 @@ public class BoardGenerator {
 		removeValues(4);
 		
 		/* This sets up values to be returned */
-		
+		/*
+		 * Hey laura, this is here to populate two arrays.
+		 * 	One that keeps track of all the values, and one
+		 * 	that keeps track of all the visibilities. This is
+		 * 	just going to sit at the end of the constructor so
+		 *  that I can use two public methods down the bottom to 
+		 *  get the data I need
+		 */
 		for (int i = 0; i < this.boardSize; i++) 
 		{
 			for (int j = 0; j < this.boardSize; j++)
@@ -45,7 +52,6 @@ public class BoardGenerator {
 				}
 			}
 		}
-		
 		/* End setup */
 	}
 	
