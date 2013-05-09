@@ -68,11 +68,11 @@ public class SectionGen {
 	}
 	
 	public boolean displays(int position){
-		return cells[position].getPresence();
+		return cells[position].isVisible();
 	}
 	
 	public void remove(int position){
-		cells[position].setPresence(false);
+		cells[position].setVisible(false);
 	}
 	
 	private CellGen[] cells;
