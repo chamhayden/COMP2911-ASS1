@@ -72,7 +72,7 @@ public class SudokuState {
 		public int getTempFinalVal(int row, int col) {
 			LinkedList<Integer> possibleCellVals = this.possibleVals(row, col);
 			if(possibleCellVals.size() == 1) {
-				return possibleCellVals.remove();
+				return possibleCellVals.peek();
 			} 
 			return NOT_POSSIBLE;		
 		}
@@ -95,12 +95,18 @@ public class SudokuState {
 		 * -------------
 		 * |   | | | 3 |
 		 *  x = 3 since all other rows and columns already have a 3.
+		 *  @return True if any cells were solved.
 		 */
 		public void solveMediumSteps() {
+			boolean cellsFilled = false;
 			int sectionRow = 0;
 			int sectionCol = 0;
-			int rowsAndColsSatisfied = 0;
 			LinkedList<Integer> possibleCellVal = null;
+			LinkedList<Integer> allOtherPossibleCellVals = new LinkedList<Integer>();
+			boolean sameCell = false;
+			System.out.println("Solving Simple Steps");
+			this.solveSimpleSteps();
+			System.out.println("Solving Medium Steps");
 			// For each row and column
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
@@ -110,30 +116,204 @@ public class SudokuState {
 						for(Integer num : possibleCellVal) {
 							sectionRow = 3*(row/3);
 							sectionCol = 3*(col/3);
+							allOtherPossibleCellVals.clear();
 							for(int rowTranslate = 0; rowTranslate < SECTION_SIZE; rowTranslate++) {								
-								if((sectionRow + rowTranslate) != row && this.inRow(num, sectionRow) > 0) {
-									rowsAndColsSatisfied++;
+								for(int colTranslate = 0; colTranslate < SECTION_SIZE; colTranslate++) {
+									int currentRow = sectionRow + rowTranslate;
+									int currentCol = sectionCol + colTranslate;
+									sameCell = ((currentRow == row) && (currentCol == col));
+									if(!sameCell) {
+										allOtherPossibleCellVals.addAll(this.possibleVals(currentRow, currentCol));
+									}
 								}
 							}
-							for(int colTranslate = 0; colTranslate < SECTION_SIZE; colTranslate++) {
-								if((sectionCol + colTranslate) != col && this.inColumn(num, sectionCol) > 0) {
-									rowsAndColsSatisfied++;
-								}
+							this.removeDuplicates(allOtherPossibleCellVals);
+							debug("Num = " + num + " (" + row + ", " + col + ") " + allOtherPossibleCellVals + !allOtherPossibleCellVals.contains(num));
+							
+							if(!allOtherPossibleCellVals.contains(num)) {
+								this.board[row][col] = num;
+								this.updateCellsFilled();
+								this.updateTempVals();
+								cellsFilled = true;
 							}
-							// TODO is evaluating cases where there is only 3 and not 4 rows and cols satisfied.
-							//System.out.println("#################### " + rowsAndColsSatisfied + " num " + num + " row = " + row + " col = " + col + " sectionRow = " + sectionRow + " sectionCol = " + sectionCol);
-							if(rowsAndColsSatisfied >= SATISFIES_ENOUGH) {
-								System.out.println("####################   " + rowsAndColsSatisfied + " row = " + row + " col = " + col);
-								this.setTempFinalVal(num, row, col);
-								this.updateBoardVals();
-							}
-							rowsAndColsSatisfied = 0;
 						}
 					}
 				}
 			}
+			if(cellsFilled) {
+				this.solveMediumSteps();
+			}
 		}
 		
+		public void solveHardSteps() {
+			this.pointingPairsAndTriplesAlgorithm();
+			for(int row = 0; row < BOARD_SIZE; row++) {
+				for(int col = 0; col < BOARD_SIZE; col++) {
+					debug(this.getSectionPossibleVals(row, col));
+				}
+			}
+		}
+		
+		/**
+		 * http://www.sudokuwiki.org/Intersection_Removal 
+		 */
+		public void pointingPairsAndTriplesAlgorithm() {
+			for(int row = 0; row < this.BOARD_SIZE; row++) {
+				for(int col = 0; col < this.BOARD_SIZE; col++) {
+					int section = this.getSection(row, col);
+					int sectionFirstRow = this.getSectionFirstRow(section); 
+					int sectionFirstCol = this.getSectionFirstCol(section);
+					// Current Cell is First Cell in a Section
+					if(row == sectionFirstRow && col == sectionFirstCol) {
+						LinkedList sectionRowPossibleVals = this.getSectionRowPossibleVals(row, col);
+						LinkedList sectionColPossibleVals = this.getSectionColPossibleVals(row, col);
+						// Get all possible values of this section except this cell.
+						LinkedList sectionPossibleVals = this.getSectionPossibleVals(row, col);
+						// Add the possible values of this cell as well.
+						sectionPossibleVals.addAll(this.possibleVals(row, col));
+						// A Pair or Triple in a box - if they are aligned on a row, n can be removed from the rest of the row.
+						//                           - if they are aligned on a column, n can be removed from the rest of the column.
+						for(int num = 1; num <= this.BOARD_SIZE; num++) {
+							int numOccurencesInSection = this.numberOccurances(num, sectionPossibleVals);
+							int numOccurencesInSectionRow = this.numberOccurances(num, sectionRowPossibleVals);
+							int numOccurencesInSectionCol = this.numberOccurances(num, sectionColPossibleVals);
+							boolean pairOrTripleInSection = (numOccurencesInSection == 2 || numOccurencesInSection == 3); 
+							boolean pairOrTripleInSectionRow = (numOccurencesInSectionRow == 2 || numOccurencesInSectionRow == 3);
+							boolean pairOrTripleInSectionCol = (numOccurencesInSectionCol == 2 || numOccurencesInSectionCol == 3);
+							// A Pair or Triple in box
+							if(pairOrTripleInSection) {
+								if(pairOrTripleInSectionRow) {
+									
+								}
+								if(pairOrTripleInSectionCol) {
+									
+								}
+							}
+						}
+					}
+					// 
+					// A Pair or Triple on a row - if they are all in the same box, n can be removed from the rest of the box.
+					// A Pair or Triple on a column - if they are all in the same box, n can be removed from the rest of the box.
+				}
+			}
+		}
+		
+		public void removeTempVal(int num, int row, int col) {
+			if(this.getTempFinalVal(row, col) == this.NOT_POSSIBLE) {
+				this.temp[row][col][num] = this.NOT_POSSIBLE;
+			}
+		}
+		
+		/**
+		 * Returns the number of occurrences of a single number within a list of integers.
+		 * @param number The number to count the occurrences of within the given list.
+		 * @param list The list of integers to search through.
+		 * @return The number of occurrences of a single number within a list of integers. 
+		 */
+		public int numberOccurances(int number, LinkedList<Integer> list) {
+			int numCounter = 0;
+			for(Integer currentNum : list) {
+				if(currentNum == number) {
+					numCounter++;
+				}
+			}
+			return numCounter;
+		}
+		
+		
+		/** Returns the first column for a given section parsed
+		 * @param section Square of 3 by 3 cells contained on a Sudoku board labeled from 1-9 as shown below. <br/>
+		 * |1|2|3| <br/>
+		 * |4|5|6| <br/>
+		 * |7|8|9| <br/>
+		 * @return First column in a given section.
+		 */
+		public int getSectionFirstCol(int section) {
+			return (3 * (section % 3));
+		}
+
+		/** Returns the first row for a given section parsed
+		 * @param section Square of 3 by 3 cells contained on a Sudoku board labeled from 1-9 as shown below. <br/>
+		 * |1|2|3| <br/>
+		 * |4|5|6| <br/>
+		 * |7|8|9| <br/>
+		 * @return First row in a given section.
+		 */
+		public int getSectionFirstRow(int section) {
+			return (3 * ((section - 1) % 3));
+		}
+		
+		/**
+		 * Returns list of all possible values for cells in 
+		 * @param row
+		 * @param col
+		 * @return
+		 */
+		public LinkedList<Integer> getSectionRowPossibleVals(int row, int col) {
+			int sectionCol = 3*(col/3);
+			LinkedList<Integer> sectionRowTemps = new LinkedList<Integer>();
+			for(int colTranslate = 0; colTranslate < this.SECTION_SIZE; colTranslate++) {
+				int currentCol = sectionCol + colTranslate;
+				if(this.getTempFinalVal(row, currentCol) == this.NOT_POSSIBLE) {
+					sectionRowTemps.addAll(this.possibleVals(row, currentCol));
+				}
+			}
+			return sectionRowTemps;
+		}
+		
+		public LinkedList<Integer> getSectionColPossibleVals(int row, int col) {
+			int sectionRow = 3*(row/3);
+			LinkedList<Integer> sectionColTemps = new LinkedList<Integer>();
+			for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
+				int currentRow = sectionRow + rowTranslate;
+				if(this.getTempFinalVal(currentRow, col) == this.NOT_POSSIBLE) {
+					sectionColTemps.addAll(this.possibleVals(currentRow, col));
+				}
+			}
+			return sectionColTemps;
+		}
+		
+		/**
+		 * Returns list of all possible values of cells contained within the section except those for the cell located at row and col.
+		 * @param row
+		 * @param col
+		 * @return
+		 */
+		public LinkedList<Integer> getSectionPossibleVals(int row, int col) {
+			int sectionRow = (3*(row/3));
+			int sectionCol = (3*(col/3));
+			int currentRow = 0;
+			int currentCol = 0;
+			LinkedList<Integer> sectionTemps = new LinkedList<Integer>();
+			for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
+				for(int colTranslate = 0; colTranslate < this.SECTION_SIZE; colTranslate++) {
+					currentRow = sectionRow + rowTranslate;
+					currentCol = sectionCol + colTranslate;
+					// Exclude Final Values
+					if(this.getTempFinalVal(currentRow, currentCol) == this.NOT_POSSIBLE) {
+						sectionTemps.addAll(this.possibleVals(currentRow, currentCol));
+					}
+				}
+			}
+			return sectionTemps;
+		}
+		
+		public void removeDuplicates(LinkedList<Integer> list) {
+			LinkedList<Integer> duplicateFreeList = new LinkedList<Integer>();
+			while(!list.isEmpty()) {
+				Integer currentElement = list.remove();
+				if(!duplicateFreeList.contains(currentElement)) {
+					duplicateFreeList.add(currentElement);
+				}
+			}
+			while(!duplicateFreeList.isEmpty()) {
+				list.add(duplicateFreeList.remove());
+			}
+		}
+		
+		public void debug(Object obj) {
+			System.out.println(obj.toString());
+		}
 		/**
 		 * Solves for cells which have all but 1 number missing in a column, row or square.
 		 */
@@ -211,10 +391,8 @@ public class SudokuState {
 		public void solve() {
 			System.out.println("Updating Temp Vals");
 			this.updateTempVals();
-			System.out.println("Solving Simple Steps");
-			this.solveSimpleSteps();
-			System.out.println("Solving Medium Steps");
 			this.solveMediumSteps();
+			this.solveHardSteps();
 			this.updateTempVals();
 			this.updateBoardVals();
 			this.updateCellsFilled();
@@ -408,11 +586,10 @@ public class SudokuState {
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
 					LinkedList<Integer> possibleValues = this.possibleVals(row, col);
-					for(Integer val : possibleValues) {
-						System.out.print(val + "_");
-					}
-					System.out.print("   |    ");
+						System.out.print(possibleValues);
+					System.out.print("     |      ");
 				}
+				System.out.println("");
 				System.out.println("");
 			}
 		}
