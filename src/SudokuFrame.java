@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.Integer;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 /**
@@ -25,6 +27,14 @@ class SudokuFrame extends JFrame
 		
 		currentValue = "-1";
 		
+		/*
+		 * 
+		 * Lists added in order to quickly find each button location via row and column (might be needed)
+		 * 
+		 */
+		buttonGrid = new ArrayList<ArrayList<JButton>>(8);
+		buttonRow = new ArrayList<JButton>(8);
+		
 		//button panel is created, which will be added to SudokuFrame
 		buttonPanel = new JPanel();
 		
@@ -41,8 +51,9 @@ class SudokuFrame extends JFrame
 				{
 					cellVal = "";
 				}
-				makeGridButton(cellVal, currentValue, buttonPanel);
+				buttonRow.add(makeGridButton(i, j ,cellVal, currentValue, buttonPanel));
 			}
+			buttonGrid.add(buttonRow);
 		}
 		
 		/*
@@ -97,13 +108,15 @@ class SudokuFrame extends JFrame
 	 * ActionListener should be detached to add different functionality to different buttons
 	 * in the future, add 1 more argument to represent a type of ActionListener
 	 */
-	public JButton makeGridButton(String name, String currentValue, JPanel panel)
+	public JButton makeGridButton(int row, int col, String name, String currentValue, JPanel panel)
 	{
+		
+		
 		JButton button = new JButton(name);
 		panel.add(button);
-		
 		NumberInsert insert = new NumberInsert(button);
 		button.addActionListener(insert);
+
 		return button;
 	}
 	
@@ -178,8 +191,10 @@ class SudokuFrame extends JFrame
 	private JPanel commandPanel;
 	private JPanel modePanel;
 	private JPanel scorePanel;
+	private ArrayList<ArrayList<JButton>> buttonGrid;
+	private ArrayList<JButton> buttonRow;
+
 	
-	//you can play around with width and height as well - only affects initial window size, nothing more
 	public static final int DEFAULT_WIDTH = 900;
 	public static final int DEFAULT_HEIGHT = 700;
 }
