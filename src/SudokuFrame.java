@@ -23,6 +23,8 @@ class SudokuFrame extends JFrame
 		setTitle("SudokuFrame");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		
+		currentValue = "";
+		
 		//button panel is created, which will be added to SudokuFrame
 		buttonPanel = new JPanel();
 		
@@ -37,9 +39,9 @@ class SudokuFrame extends JFrame
 				}
 				else
 				{
-					cellVal = "..";
+					cellVal = "";
 				}
-				makeButton(cellVal, Color.YELLOW, buttonPanel);
+				makeGridButton(cellVal, currentValue, buttonPanel);
 			}
 		}
 		
@@ -51,76 +53,107 @@ class SudokuFrame extends JFrame
 		buttonPanel.setLayout(new GridLayout(9,9));
 		
 		//creating a list of panels
-		hintPanel = new JPanel();
-		hintPanel.setLayout(new BoxLayout(hintPanel, DO_NOTHING_ON_CLOSE));
-		makeButton("Click for Hint", Color.BLUE, hintPanel);
-		makeButton("Give up?", Color.GREEN, hintPanel);
 		
 		commandPanel = new JPanel();
 		commandPanel.setLayout(new FlowLayout());
-		makeButton("NEW EASY", Color.PINK, commandPanel);
-		makeButton("NEW MEDIUM", Color.CYAN, commandPanel);
-		makeButton("NEW HARD", Color.RED, commandPanel);
+		makeMenuButton("NEW EASY", Color.PINK, commandPanel);
+		makeMenuButton("NEW MEDIUM", Color.CYAN, commandPanel);
+		makeMenuButton("NEW HARD", Color.RED, commandPanel);
+		makeMenuButton("Click for Hint", Color.BLUE, commandPanel);
+		makeMenuButton("Give up?", Color.GREEN, commandPanel);
 		
-		modePanel = new JPanel();
-		modePanel.setLayout(new FlowLayout());
-		makeButton("DRAFT", Color.PINK, modePanel);
-		makeButton("WTF", Color.CYAN, modePanel);
-		
-		modePanel = new JPanel();
-		modePanel.setLayout(new FlowLayout());
-		makeButton("DRAFT", Color.PINK, modePanel);
-		makeButton("WTF", Color.CYAN, modePanel);
+		makeMenuButton("DRAFT", Color.PINK, commandPanel);
+		makeMenuButton("WTF", Color.CYAN, commandPanel);
 		
 		scorePanel = new JPanel();
-		scorePanel.setLayout(new BoxLayout(scorePanel, DO_NOTHING_ON_CLOSE));
-		makeButton("PAUSE", Color.BLACK, scorePanel);
-		makeButton("TIME ME", Color.DARK_GRAY, scorePanel);
+		scorePanel.setLayout(new FlowLayout());
+		scorePanel.setVisible(true);
+		
+		makeMenuButton("PAUSE", Color.BLACK, scorePanel);
+		makeMenuButton("TIME ME", Color.DARK_GRAY, scorePanel);
+		
+		
+		String keyLabels = "123456789";
+		int count = 0;
+		
+		for (int i = 0; i < keyLabels.length(); i++,count++)
+	      {
+	         final String label = keyLabels.substring(i, i + 1);
+	         JButton keyButton = new JButton(label);
+	         NumberSelect action = new NumberSelect(label);
+	         keyButton.addActionListener(action);
+	         scorePanel.add(keyButton);
+	      }
 		
 		//add or nest panels to frame
 		add(buttonPanel,BorderLayout.CENTER);
-		add(hintPanel,BorderLayout.EAST);
-		add(commandPanel,BorderLayout.NORTH);
-		add(modePanel,BorderLayout.SOUTH);
-		add(scorePanel,BorderLayout.WEST);
+		add(commandPanel,BorderLayout.SOUTH);
+		add(scorePanel,BorderLayout.NORTH);
 		
-		//random label for fun
-		add(new JLabel("Hello there 2911"),BorderLayout.NORTH);
 	}
 	
-	/*
-	 * indiButton performs same as makeButton except has different return type
-	 * @return JButton object
-	 * Mainly used for random testing at this point
-	 */
-	public JButton indiButton(String name, Color backgroundColor)
-	{
-		JButton button = new JButton(name);
-		ColorAction action = new ColorAction(backgroundColor);
-		button.addActionListener(action);
-		return button;
-		
 	/*
 	 * makeButton makes a JButton, which is then added to the buttonPanel, with an attached ActionListener
 	 * ActionListener should be detached to add different functionality to different buttons
 	 * in the future, add 1 more argument to represent a type of ActionListener
 	 */
-	}
-	public void makeButton(String name, Color backgroundColor, JPanel panel)
+	public JButton makeGridButton(String name, String currentValue, JPanel panel)
 	{
 		JButton button = new JButton(name);
 		panel.add(button);
-		ColorAction action = new ColorAction(backgroundColor);
+		
+		NumberInsert insert = new NumberInsert(button);
+		button.addActionListener(insert);
+		return button;
+	}
+	
+	public JButton makeMenuButton(String name, Color backgroundColor, JPanel panel)
+	{
+		JButton button = new JButton(name);
+		panel.add(button);
+		NumberAction action = new NumberAction(backgroundColor);
 		button.addActionListener(action);
+		return button;
 	}
 	
 /**
  * An action listener that sets the panel's background color
  */
 	
-	private class ColorAction implements ActionListener
+	private class NumberInsert implements ActionListener
 	{
-		public ColorAction(Color c)
+		public NumberInsert(JButton button)
+		{
+			//newValue = getCurrentValue();
+			b = button;
+		}
+		
+		public void actionPerformed(ActionEvent event)
+		{
+			b.setText(getCurrentValue());
+		}
+		private JButton b;
+		//private String newValue;
+	}
+	
+	private class NumberSelect implements ActionListener
+	{
+		public NumberSelect(String select)
+		{
+			newCurrentValue = select;
+		}
+		
+		public void actionPerformed(ActionEvent event)
+		{
+			currentValue = event.getActionCommand();
+		}
+		private String newCurrentValue;
+	}
+	
+	//Dummy actionListner to be modified / deleted
+	private class NumberAction implements ActionListener
+	{
+		public NumberAction(Color c)
 		{
 			backgroundColor = c;
 		}
@@ -133,6 +166,12 @@ class SudokuFrame extends JFrame
 		private Color backgroundColor;
 	}
 	
+	public String getCurrentValue(){
+		return this.currentValue;
+	}
+	
+	private String currentValue;
+	//private int value;
 	private JPanel buttonPanel;
 	private JPanel hintPanel;
 	private JPanel commandPanel;
