@@ -23,7 +23,7 @@ class SudokuFrame extends JFrame
 		setTitle("SudokuFrame");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		
-		currentValue = "";
+		currentValue = "-1";
 		
 		//button panel is created, which will be added to SudokuFrame
 		buttonPanel = new JPanel();
@@ -130,7 +130,7 @@ class SudokuFrame extends JFrame
 		
 		public void actionPerformed(ActionEvent event)
 		{
-			if(!getCurrentValue().equalsIgnoreCase(""))
+			if(!getCurrentValue().equalsIgnoreCase("-1"))
 			b.setText(getCurrentValue());
 		}
 		private JButton b;
