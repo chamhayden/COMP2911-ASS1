@@ -7,6 +7,7 @@
 
 public class SectionGen {
 	
+	//TODO Deprecated, remove after testing
 	public SectionGen(int x){
 		cells = new StandardCell[9]; 
 		int i; 
@@ -22,14 +23,23 @@ public class SectionGen {
 	public boolean has(int x){
 		int i;
 		for(i = 0; i < 9; i++){
-			if (cells[i].getValue() == x){
+			if (cells[i].getValue() == x && cells[i].isVisible()){
 				return true;
 			}
 		}
 		return false;
-	}
-	public void set(int position, int x){
+	}	
+	
+	public void cellInit(int position, int x){
+		if (cells[position] != null){
+			System.out.println("ERROR you are re-initialising an already initialied cell");
+		}
 		cells[position] = new StandardCell(x);
+	}
+	
+	//TODO having both this and the above is a source of confusion
+	public void setValue(int position, int x){
+		cells[position].setValue(x);
 	}
 	
 	public int get(int position){
@@ -74,7 +84,11 @@ public class SectionGen {
 	public void remove(int position){
 		cells[position].setVisible(false);
 	}
+
+	public void putBack(int position){
+		cells[position].setVisible(true);
+	}
 	
-	private StandardCell[] cells;
+	/* TODO make private */ public StandardCell[] cells;
 	
 }

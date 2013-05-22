@@ -13,7 +13,7 @@ import java.util.Random;
  *
  */
 
-public class BoardGen {
+public class BoardGen implements Cloneable {
 	
 	public BoardGen(int difficulty, int boardSize) 
 	{
@@ -25,8 +25,24 @@ public class BoardGen {
 		collumn = new SectionGen[this.boardSize];
 		square = new SectionGen[this.boardSize];
 		initialiseBoard();
+		int i = 2;
+		int j = 3;
+		assert(collumn[i].getCell(j) == row[j].getCell(i));
 		while(!filled){
 			filled = fillBoard();	
+		}
+		assert(collumn[i].getCell(j) == row[j].getCell(i));
+		constructBoard();
+		assert(collumn[i].getCell(j) == row[j].getCell(i));
+	}
+	
+	@Override
+	public Object clone() {
+		try{
+			return super.clone();
+		}
+		catch(Exception e){ 
+			return null; 
 		}
 	}
 	
@@ -62,7 +78,7 @@ public class BoardGen {
 						resetPoint = 0;
 					}
 					for(int p = resetPoint; p < 9; p++){
-						row[i].set(p, 0);
+						row[i].setValue(p, 0);
 					}
 					j = resetPoint;
 					counter++;
@@ -73,9 +89,9 @@ public class BoardGen {
 					continue;
 				}
 				
-				row[i].set(j, x);
-				collumn[j].set(i, x);
-				square[k].set(squarePos(i, j), x);
+				row[i].setValue(j, x);
+				collumn[j].setValue(i, x);
+				square[k].setValue(squarePos(i, j), x);
 				j++;
 			}
 		}
@@ -88,7 +104,7 @@ public class BoardGen {
 			row[i] = new SectionGen();
 			square[i] = new SectionGen();
 			for(j = 0; j < 9; j ++){
-				row[i].set(j, (0));
+				row[i].cellInit(j, (0));
 			}
 		}
 		for(i = 0; i < 9; i++){
@@ -102,26 +118,30 @@ public class BoardGen {
 				square[squareNo(i,j)].setCell(squarePos(i,j), row[i].getCell(j));
 			}
 		}
-
+		
 	}
 	
-	private int squarePos(int row, int collumn){
+	public int squarePos(int row, int collumn){
 		return (collumn % 3) + 3*((row % 3));
 	}
 	
-	private int squareNo(int row, int collumn){
+	public int squareNo(int row, int collumn){
 		return ((int)Math.floor(collumn/3) + (int)Math.floor(row/3)*3);
 	}
 	
-	public int[][] constructBoard(){
+	//TODO change to get Board Values put most of code in constructor, then just return final values
+	private void constructBoard(){
 		int i,j;
-		int[][] finalValues = new int[9][9];
+		finalValues = new int[9][9];
 
 		for(i = 0; i < 9; i++){
 			for(j = 0; j < 9; j++){
 				finalValues[i][j] = row[i].get(j);
 			}
 		}
+	}
+	
+	public int[][] getBoardValues(){
 		return finalValues;
 	}
 	
@@ -141,8 +161,15 @@ public class BoardGen {
 		}
 	}
 	
+	//TODO this generates errors if you haven't yet run construct board
+	//FIX this either run construct board in the constructor or change implementation
+	public int getValue(int x, int y){
+		return finalValues[x][y];
+	}
+	
 	
 	private int boardSize;
+	private int[][] finalValues;
 	SectionGen[] row;
 	SectionGen[] collumn;
 	SectionGen[] square;

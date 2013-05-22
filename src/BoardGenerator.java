@@ -4,8 +4,10 @@ public class BoardGenerator {
 	public BoardGenerator(int difficulty, int boardSize){
 		BoardGen b = new BoardGen(difficulty, boardSize);
 		Removal r = new Removal(difficulty, b);
-		finalValues = b.constructBoard();
+		finalValues = b.getBoardValues();
+		b.printBoard();
 		visibilities = r.remove();
+		System.out.println("");
 		b.printBoard();
 	}
 	
