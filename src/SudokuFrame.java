@@ -130,6 +130,7 @@ class SudokuFrame extends JFrame
 		
 		public void actionPerformed(ActionEvent event)
 		{
+			if(!getCurrentValue().equalsIgnoreCase(""))
 			b.setText(getCurrentValue());
 		}
 		private JButton b;
