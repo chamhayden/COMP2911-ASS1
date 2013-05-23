@@ -7,61 +7,160 @@
  */
 public class BoardCell {
 
-	public BoardCell(int actualFinal, boolean visible, int boardSize)
+	/**
+	 * 
+	 * @param boardSize
+	 */
+	public BoardCell(int boardSize)
 	{		
-		this.visible = visible;
-		this.tempNumbers = new boolean[boardSize];
-		this.valueInput = -1;
-		
+		this.boardSize = boardSize;
 		for (int i = 0; i < boardSize; i++)
 		{
 			tempNumbers[i] = false;
 		}
 	}
 	
-	public void removeInput()
+	/**
+	 * 
+	 * @return
+	 */
+	public int getFinalValue()
+	{
+		return valueFinal;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getInputValue()
+	{
+		return valueInput;
+	}
+		
+	/**
+	 * 
+	 * @param number
+	 */
+	public void setFinalValue(int number)
+	{
+		valueFinal = number;
+	}
+	
+	/**
+	 * 
+	 * @param number
+	 */
+	public void setInputValue(int number)
+	{
+		valueInput = number;
+	}
+	
+	/**
+	 * 
+	 */
+	public void removeInputValue()
 	{
 		this.valueInput = -1;
 	}
+	
+	/**
+	 * 
+	 */
+	public void removeFinalValue()
+	{
+		this.valueFinal = -1;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isCurrentlyVisible()
+	{
+		return this.isCurrentlyVisible;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isInitiallyVisible()
+	{
+		return this.isInitiallyVisible;
+	}
 
-	public int getValue()
+	/**
+	 * 
+	 * @param isVisible
+	 */
+	public void setCurrentlyVisible(boolean isVisible)
 	{
-		if (this.valueInput == -1)
-		{
-			return valueMain;
-		}
-		else
-		{
-			return valueInput;
-		}
+		this.isCurrentlyVisible = isVisible;
 	}
 	
-	public void setInput(int number)
+	/**
+	 * 
+	 * @param isVisible
+	 */
+	public void setInitiallyVisible(boolean isVisible)
 	{
-		this.valueInput = number;
+		this.isInitiallyVisible = isVisible;
 	}
 	
+	/**
+	 * 
+	 * @param number
+	 * @return
+	 */
 	public boolean issetTemp(int number)
 	{
 		return tempNumbers[number - 1];
 	}
 
-
+	/**
+	 * 
+	 * @param number
+	 * @param isSet
+	 */
 	public void setTemp(int number, boolean isSet)
 	{
 		tempNumbers[number - 1] = isSet;
 	}
 	
+	/**
+	 * 
+	 */
+	public void reset()
+	{
+		this.valueFinal = -1;
+		this.valueInput = -1;
+		this.isCurrentlyVisible = false;
+		this.isInitiallyVisible = false;
+		for (int i = 0; i < boardSize; i++)
+		{
+			tempNumbers[i] = false;
+		}
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isCorrect()
 	{
-		if (valueInput == valueMain)
+		if (valueInput == valueFinal)
 		{
 			return true;
 		}
 		return false;
 	}
 	
-	protected int valueInput;
-	protected boolean tempNumbers[];
+	private int boardSize;
+	private int valueFinal;
+	private int valueInput;
+	private boolean isInitiallyVisible;
+	private boolean isCurrentlyVisible;
+	private boolean tempNumbers[];
 	
 }

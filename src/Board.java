@@ -49,7 +49,7 @@ public interface Board
 	 * @param col Column cell is in
 	 * @param visiblity Whether the particular cell is visible or not
 	 */
-	public void setCellVisiblity(int row, int col, boolean visiblity);
+	public void setCellVisiblity(int row, int col, boolean visibility);
 	
 	/**
 	 * Check is a particular cell value's temporary value for a 
@@ -80,6 +80,13 @@ public interface Board
 	 * @return Whether the board has been correctly filled out
 	 */
 	public boolean isCorrectBoard();
+	
+	/**
+	 * Remove the value stored in a cell
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 */
+	public void removeCellValue(int row, int col);
 	
 	/**
 	 * Return whether a particular cell in the board has been
@@ -118,6 +125,13 @@ public interface Board
 	/**
 	 * Reset all values in the board
 	 */
-	public void clear();
+	public void reset();
+	
+	/**
+	 * Generate a new board
+	 * @param difficulty The difficulty level the board
+	 *  should be generated with
+	 */
+	public void generate(int difficulty);
 	
 }

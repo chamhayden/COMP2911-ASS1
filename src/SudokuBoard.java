@@ -7,15 +7,17 @@ import java.util.ArrayList;
 * @version 0.1
 * 
 */
-
 public class SudokuBoard implements Board {
 
+	/**
+	 * 
+	 * @param size
+	 * @param difficulty
+	 */
 	public SudokuBoard(int size, int difficulty)
 	{	
-		boardSize = size;
+		this.boardSize = size;
 		board = new ArrayList<ArrayList<BoardCell>>();
-		
-		BoardGenerator generator = new BoardGenerator(difficulty, boardSize);
 		
 		for (int i = 0; i < boardSize; i++)
 		{
@@ -23,8 +25,48 @@ public class SudokuBoard implements Board {
 			ArrayList<BoardCell> row = board.get(i);
 			for (int j = 0; j < boardSize; j++)
 			{ 
-				row.add(new BoardCell(generator.getValues(i, j), generator.getVisibility(i, j), boardSize));
+				row.add(new BoardCell(boardSize));
 			}
+		}
+	}
+	
+	/**
+	 * Generate a new board
+	 * @param difficulty The difficulty level the board
+	 *  should be generated with
+	 */
+	public void generate(int difficulty)
+	{
+		reset();
+		this.currentlyGenerating = true;
+		// TODO:
+		// LAURA EDIT UNDER HERE
+		//
+		// I dont know, something like this:
+		// BoardFiller boardFiller = new BoardFiller();
+		// boardFiller.fill(board);
+		//
+		// BoardRemover boardRemover = new BoardRemover();
+		// boardRemover.remove(board);
+		//
+		// LAURA EDIT ABOVE HERE
+		this.currentlyGenerating = false;
+	}
+	
+	/**
+	 * Remove the value stored in a cell
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 */
+	public void removeCellValue(int row, int col)
+	{
+		if (currentlyGenerating)
+		{
+			getCell(row, col).removeFinalValue();
+		}
+		else
+		{
+			getCell(row, col).removeInputValue();
 		}
 	}
 	
@@ -36,7 +78,14 @@ public class SudokuBoard implements Board {
 	 */
 	public int getCellValue(int row, int col)
 	{
-		return getCell(row, col).getValue();
+		if (currentlyGenerating)
+		{
+			return getCell(row, col).getFinalValue();
+		}
+		else
+		{
+			return getCell(row, col).getInputValue();
+		}
 	}
 	
 	/**
@@ -47,7 +96,14 @@ public class SudokuBoard implements Board {
 	 */
 	public void setCellValue(int row, int col, int number)
 	{
-		//getCell(row, col).setValue(number);
+		if (currentlyGenerating)
+		{
+			getCell(row, col).setFinalValue(number);
+		}
+		else
+		{
+			getCell(row, col).setInputValue(number);
+		}
 	}
 	
 	/**
@@ -60,7 +116,7 @@ public class SudokuBoard implements Board {
 	 */
 	public boolean isCurrentlyVisibleCell(int row, int col)
 	{
-		return true;
+		return getCell(row, col).isCurrentlyVisible();
 	}
 	
 	/**
@@ -73,21 +129,26 @@ public class SudokuBoard implements Board {
 	 */
 	public boolean isInitiallyVisibleCell(int row, int col)
 	{
-		return true;
+		return getCell(row, col).isInitiallyVisible();
 	}
-	
 	/**
 	 * Set the visiblity of a cell on the board
 	 * @param row Row cell is in
 	 * @param col Column cell is in
 	 * @param visiblity Whether the particular cell is visible or not
 	 */
-	public void setCellVisiblity(int row, int col, boolean visiblity)
+	public void setCellVisiblity(int row, int col, boolean visibility)
 	{
-		
+		if (currentlyGenerating)
+		{
+			getCell(row, col).setInitiallyVisible(visibility);
+		}
+		else
+		{
+			getCell(row, col).setCurrentlyVisible(visibility);
+		}
 	}
-		
-		
+			
 	/**
 	 * Check is a particular cell value's temporary value for a 
 	 *  particular number is visible
@@ -117,7 +178,7 @@ public class SudokuBoard implements Board {
 	{
 		getCell(row, col).setTemp(number, isSet);
 	}
-	
+			
 	/**
 	 * Return whether the board has been correctly filled out
 	 * @return Whether the board has been correctly filled out
@@ -190,14 +251,13 @@ public class SudokuBoard implements Board {
 	/**
 	 * Reset all values in the board
 	 */
-	public void clear()
+	public void reset()
 	{
 		for (int i = 0; i < getBoardSize(); i++)
 		{
 			for (int j = 0; j < getBoardSize(); j++)
 			{
-				setCellValue(i, j, -1);
-				
+				resetCell(i, j);				
 			}
 		}
 	}
@@ -207,25 +267,30 @@ public class SudokuBoard implements Board {
 	
 	
 	
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 */
+	private void resetCell(int row, int col)
+	{
+		getCell(row, col).reset();
+	}
+	
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
 	private BoardCell getCell(int row, int col)
 	{
 		return board.get(row).get(col);
-	}
-		
-	public void print()
-	{
-		for (int i = 0; i < boardSize; i++)
-		{
-			for (int j = 0; j < boardSize; j++)
-			{
-				System.out.print(this.getCellValue(i, j) + " ");
-			}
-			System.out.print("\n");
-		}		
-	}
+	}	
 	
 	private ArrayList<ArrayList<BoardCell>> board;
 	private int boardSize;
+	private boolean currentlyGenerating;
 	private static final int DIFFICULTY_EASY = 1;
 	private static final int DIFFICULTY_MEDIUM = 2;
 	private static final int DIFFICULTY_HARD = 3;
