@@ -5,12 +5,10 @@
  * @version 0.1
  * 
  */
-public class BoardCell extends SimpleCell {
+public class BoardCell {
 
 	public BoardCell(int actualFinal, boolean visible, int boardSize)
-	{
-		super(actualFinal);
-		
+	{		
 		this.visible = visible;
 		this.tempNumbers = new boolean[boardSize];
 		this.valueInput = -1;

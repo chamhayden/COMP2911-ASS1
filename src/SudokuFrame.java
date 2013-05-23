@@ -43,7 +43,7 @@ class SudokuFrame extends JFrame
 		{
 			for(int j = 0; j<9; j++){
 				String cellVal;
-				if (board.isVisibleCellValue(i,j))
+				if (board.isCurrentlyVisibleCell(i,j))
 				{
 					cellVal = Integer.toString(board.getCellValue(i,j));
 				}

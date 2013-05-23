@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class SudokuBoard implements Board {
 
-	// TODO Javadoc this
 	public SudokuBoard(int size, int difficulty)
 	{	
 		boardSize = size;
@@ -29,7 +28,6 @@ public class SudokuBoard implements Board {
 		}
 	}
 	
-	// TODO Javadoc this
 	public int getCellValue(int row, int col)
 	{
 		return getCell(row, col).getValue();
@@ -71,20 +69,16 @@ public class SudokuBoard implements Board {
 		return allCorrect;
 	}
 
-	// TODO Javadoc this
 	public boolean isCorrectCell(int row, int col)
 	{
 		return getCell(row, col).isCorrect();
 	}
 	
-	// TODO Javadoc this
 	private BoardCell getCell(int row, int col)
 	{
 		return board.get(row).get(col);
 	}
 		
-
-	// TODO: Remove later
 	public void print()
 	{
 		for (int i = 0; i < boardSize; i++)
