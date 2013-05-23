@@ -51,9 +51,29 @@ public interface Board
 	 */
 	public void setCellVisiblity(int row, int col, boolean visiblity);
 	
-	// Cell Temp Values
+	/**
+	 * Check is a particular cell value's temporary value for a 
+	 *  particular number is visible
+	 * @param row Row cell is in
+	 * @param col Column Cell is in
+	 * @param number Number of the temporary value that needs to
+	 *  be checked if is visible
+	 * @return Whether a particular cell value's temporary value for
+	 *  a particular number is visible
+	 */
 	public boolean isVisibleCellTemp(int row, int col, int number);
-	public void setCellTemp(int row, int col, int number, boolean isSet);
+	
+	/**
+	 * Make a particular cell value's temporary value for a 
+	 *  particular number either visible or not visible
+	 * @param row Row cell is in
+	 * @param col Column Cell is in
+	 * @param number Number of the temporary value that needs to
+	 *  have it's visiblity changed
+	 * @param isSet Value to denote whether to have the cell visible
+	 *  or not visible
+	 */
+	public void setCellTempVisibility(int row, int col, int number, boolean isSet);
 	
 	/**
 	 * Return whether the board has been correctly filled out
@@ -94,5 +114,10 @@ public interface Board
 	 * @return Size of the board
 	 */
 	public int getBoardSize();
+	
+	/**
+	 * Reset all values in the board
+	 */
+	public void clear();
 	
 }
