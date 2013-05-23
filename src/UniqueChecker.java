@@ -1,4 +1,4 @@
 
 public interface UniqueChecker {
-	public boolean isSudokuSolutionUnique(int board[][]);
+	public boolean isSudokuSolutionUnique(Board boardToCheck);
 }

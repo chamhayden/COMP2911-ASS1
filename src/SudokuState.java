@@ -41,42 +41,73 @@ public class SudokuState {
 					System.out.print(this.board[row][col]);
 				}
 				System.out.println("");
-				this.updateTempVals();
-				this.updateCellsFilled();
 			}
+			this.updateTempVals();
+			this.updateCellsFilled();
 		}
 		
 		/**
-		 * Eliminate the possibility for all temp values except that assigned by number.
-		 * @param number
-		 * @param row
-		 * @param col
+		 * Checks if current board is solved.
 		 */
-		public void setTempFinalVal(int number, int row, int col) {
-			for(int num = 0; num < BOARD_SIZE; num++) {
-				if(number != (num + 1)) {
-					this.temp[row][col][num] = NOT_POSSIBLE;
-				} else {
-					this.temp[row][col][num] = POSSIBLE;
+		public boolean solved() {
+			if(this.updateCellsFilled() == BOARD_SIZE * BOARD_SIZE && this.valid()) {
+				return true;
+			}
+			return false;
+		}
+
+		/**
+		 * Solves a given puzzle stored in this board state.
+		 */
+		public void solve() {
+			System.out.println("Updating Temp Vals");
+			this.updateTempVals();
+			this.solveSimpleSteps();
+			this.solveMediumSteps();
+			this.solveHardSteps();
+			this.updateTempVals();
+			this.updateBoardVals();
+			this.updateCellsFilled();
+			this.printTemps();
+			if(this.solved()) {
+				System.out.println("Is Solved and Valid");
+			} else {
+				System.out.println("Is Not Solved or Valid");
+			}
+			this.printTemps();
+			this.pointingPairsAndTriplesAlgorithm();
+			if(this.solved()) {
+				System.out.println("Is Solved and Valid");
+			} else {
+				System.out.println("Is Not Solved or Valid");
+			}
+		}
+
+		/**
+		 * Solves for cells which have all but 1 number missing in a column, row or square.
+		 */
+		public void solveSimpleSteps() {
+			boolean cellsFilled = false;
+			for(int row = 0; row < BOARD_SIZE; row++) {
+				for(int col = 0; col < BOARD_SIZE; col++) {
+					if(this.board[row][col] == EMPTY) {
+						int cellVal = this.getTempFinalVal(row, col);
+						if(cellVal != NOT_POSSIBLE) {
+							this.board[row][col] = cellVal;
+							this.updateCellsFilled();
+							this.updateTempVals();
+							cellsFilled = true;
+						} else {
+							// **************************
+						}
+					}
 				}
-				
+			}
+			if(cellsFilled) {
+				this.solveSimpleSteps();
 			}
 		}
-		
-		/**
-		 * Return the only possible value for a given cell given all other possibilities have been exhausted. 
-		 * @param row
-		 * @param col
-		 * @return
-		 */
-		public int getTempFinalVal(int row, int col) {
-			LinkedList<Integer> possibleCellVals = this.possibleVals(row, col);
-			if(possibleCellVals.size() == 1) {
-				return possibleCellVals.peek();
-			} 
-			return NOT_POSSIBLE;		
-		}
-		
+
 		/**
 		 * Checks all other rows and columns for possible values in order to evaluate if a cell can be filled.
 		 * E.g.
@@ -143,15 +174,10 @@ public class SudokuState {
 			if(cellsFilled) {
 				this.solveMediumSteps();
 			}
+			this.solveSimpleSteps();
 		}
 		
 		public void solveHardSteps() {
-			this.pointingPairsAndTriplesAlgorithm();
-			for(int row = 0; row < BOARD_SIZE; row++) {
-				for(int col = 0; col < BOARD_SIZE; col++) {
-					debug(this.getSectionPossibleVals(row, col));
-				}
-			}
 		}
 		
 		/**
@@ -165,84 +191,100 @@ public class SudokuState {
 					int sectionFirstRow = this.getSectionFirstRow(section); 
 					int sectionFirstCol = this.getSectionFirstCol(section);
 					// Current Cell is First Cell in a Section
-					if(row == sectionFirstRow && col == sectionFirstCol) {
-						LinkedList<Integer> sectionRowPossibleVals = this.getSectionRowPossibleVals(row, col);
-						LinkedList<Integer> sectionColPossibleVals = this.getSectionColPossibleVals(row, col);
-						// Get all possible values of this section except this cell.
-						LinkedList<Integer> sectionPossibleVals = this.getSectionPossibleVals(row, col);
-						// Add the possible values of this cell as well.
-						sectionPossibleVals.addAll(this.possibleVals(row, col));
+					LinkedList<Integer> sectionRowPossibleVals = this.getSectionRowPossibleVals(row, col);
+					LinkedList<Integer> sectionColPossibleVals = this.getSectionColPossibleVals(row, col);
+					// Get all possible values of this section except this cell.
+					LinkedList<Integer> sectionPossibleVals = this.getSectionPossibleVals(row, col);
 						
-						LinkedList<Integer> rowPossibleVals = this.getRowPossibleVals(row, col);
-						LinkedList<Integer> colPossibleVals = this.getColPossibleVals(row, col);
-						for(int num = 1; num <= this.BOARD_SIZE; num++) {
-							int numOccurrencesInSection = this.numberOccurances(num, sectionPossibleVals);
-							int numOccurrencesInSectionRow = this.numberOccurances(num, sectionRowPossibleVals);
-							int numOccurrencesInSectionCol = this.numberOccurances(num, sectionColPossibleVals);
-							int numOccurrencesInRow = this.numberOccurances(num, rowPossibleVals);
-							int numOccurrencesInCol = this.numberOccurances(num, colPossibleVals);
-							boolean pairOrTripleInSection = (numOccurrencesInSection == 2 || numOccurrencesInSection == 3); 
-							boolean pairOrTripleInSectionRow = (numOccurrencesInSectionRow == 2 || numOccurrencesInSectionRow == 3);
-							boolean pairOrTripleInSectionCol = (numOccurrencesInSectionCol == 2 || numOccurrencesInSectionCol == 3);
-							boolean pairOrTripleInRow = (numOccurrencesInRow == 2 || numOccurrencesInRow == 3);
-							boolean pairOrTripleInCol = (numOccurrencesInCol == 2 || numOccurrencesInCol == 3);
-							// A Pair or Triple in a box - if they are aligned on a row, n can be removed from the rest of the row.
-							//                           - if they are aligned on a column, n can be removed from the rest of the column.
+					LinkedList<Integer> rowPossibleVals = this.getRowPossibleVals(row, col);
+					LinkedList<Integer> colPossibleVals = this.getColPossibleVals(row, col);
+					//this.printTempsSection(section);
+					for(int num = 1; num <= this.BOARD_SIZE; num++) {
+						int numOccurrencesInSection = this.numberOccurances(num, sectionPossibleVals);
+						int numOccurrencesInSectionRow = this.numberOccurances(num, sectionRowPossibleVals);
+						int numOccurrencesInSectionCol = this.numberOccurances(num, sectionColPossibleVals);
+						int numOccurrencesInRow = this.numberOccurances(num, rowPossibleVals);
+						int numOccurrencesInCol = this.numberOccurances(num, colPossibleVals);
+						boolean pairOrTripleInSection = (numOccurrencesInSection == 2 || numOccurrencesInSection == 3); 
+						boolean pairOrTripleInSectionRow = (numOccurrencesInSectionRow == 2 || numOccurrencesInSectionRow == 3);
+						boolean pairOrTripleInSectionCol = (numOccurrencesInSectionCol == 2 || numOccurrencesInSectionCol == 3);
+						boolean pairOrTripleInRow = (numOccurrencesInRow == 2 || numOccurrencesInRow == 3);
+						boolean pairOrTripleInCol = (numOccurrencesInCol == 2 || numOccurrencesInCol == 3);
+						// A Pair or Triple in a box - if they are aligned on a row, n can be removed from the rest of the row.
+						//                           - if they are aligned on a column, n can be removed from the rest of the column.
+						if(row == sectionFirstRow && col == sectionFirstCol) {
 							// A Pair or Triple in box
 							if(pairOrTripleInSection) {
-								if(pairOrTripleInSectionRow) {
+								debug("# of " + num + " in section " + section + " is " + numOccurrencesInSection + " with " + numOccurrencesInSectionRow + " in row " + row + " and " + numOccurrencesInSectionCol + " in col " + col);
+								if(numOccurrencesInSectionRow == numOccurrencesInSection) {
+									debug("# in section = # in row");
 									debug("pairOrTriple in section row " + row);
+									debug("pair Or Triple in Section = " + pairOrTripleInSection + " in sectionRow = " + pairOrTripleInSectionRow + " in sectionCol = " + pairOrTripleInSectionCol);
+									debug("Num is " + num + " vals in section " + sectionPossibleVals + " vals in section row " + sectionRowPossibleVals + " vals in section col " + sectionColPossibleVals);
 									for(int currentCol = 0; currentCol < this.BOARD_SIZE; currentCol++) {
 										// Check if currentCol is not contained within this section of the board.
-										if(this.getSection(row, currentCol) != this.getSection(row, col)) {
+										if(this.getSection(row, currentCol) != section && this.possibleVals(row, currentCol).contains(num)) {
 											// Remove occurrences of this number from all columns in this row that are not in the same section.
 											this.removeTempVal(num, row, currentCol);
+											this.printTempsSection(this.getSection(row, currentCol));
 											this.updateBoardVals();
-											debug("Removed possibility of " + num + " from (" + currentCol + ", " + row + ") ");
+											debug("Removed possibility of " + num + " from (" + currentCol + ", " + row + ") From Section " + this.getSection(row, currentCol) + " due to Section " + section);
 										}
 									}
 								}
-								if(pairOrTripleInSectionCol) {
+								if(numOccurrencesInSectionCol == numOccurrencesInSection) {
 									debug("pairOrTriple in section col " + col);
+									debug("pair Or Triple in Section = " + pairOrTripleInSection + " in sectionRow = " + pairOrTripleInSectionRow + " in sectionCol = " + pairOrTripleInSectionCol);
+									debug("Num is " + num + " vals in section " + sectionPossibleVals + " vals in section row " + sectionRowPossibleVals + " vals in section col " + sectionColPossibleVals);
+									//this.printTempsSection(section);
+									debug("# in section = # in col");
 									for(int currentRow = 0; currentRow < this.BOARD_SIZE; currentRow++) {
 										// Check if currentRow is not contained within this section of the board.
-										if(this.getSection(currentRow, col) != this.getSection(row, col)) {
+										if(this.getSection(currentRow, col) != this.getSection(row, col) && this.possibleVals(currentRow, col).contains(num)) {
 											// Remove occurrences of this number from all rows in this column that are not in the same section.
 											this.removeTempVal(num, currentRow, col);
+											this.printTempsSection(this.getSection(currentRow, col));
 											this.updateBoardVals();
-											debug("Removed possibility of " + num + " from (" + col + ", " + currentRow + ") ");
+											debug("Removed possibility of " + num + " from (" + col + ", " + currentRow + ") From Section " + this.getSection(currentRow, col) + " due to Section " + section);
 										}
 									}
-								}
+								}								
 							}
+						} else 
+						// A Pair or Triple on a row - if they are all in the same box, n can be removed from the rest of the box.
+						if(numOccurrencesInSectionRow == numOccurrencesInRow && pairOrTripleInRow) {
 							
-							// A Pair or Triple on a row - if they are all in the same box, n can be removed from the rest of the box.
-							if(numOccurrencesInSectionRow == numOccurrencesInRow && pairOrTripleInRow) {
-								debug("A Pair or Triple on a row - if they are all in the same box = " + section + " row = " + row + " col = " + col);
-								for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
-									for(int colTranslate = 0; colTranslate < this.SECTION_SIZE; colTranslate++) {
-										int currentRow = sectionFirstRow + rowTranslate;
-										int currentCol = sectionFirstCol + colTranslate;
-										if(currentRow != row) {
-											this.removeTempVal(num, currentRow, currentCol);
-											this.updateBoardVals();
-											debug("Removed possibility of " + num + " from (" + currentCol + ", " + currentRow + ") ");
-										}
+							debug("A Pair or Triple on a row - if they are all in the same box = " + section + " row = " + row + " col = " + col);
+							for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
+								for(int colTranslate = 0; colTranslate < this.SECTION_SIZE; colTranslate++) {
+									int currentRow = sectionFirstRow + rowTranslate;
+									int currentCol = sectionFirstCol + colTranslate;
+									if(currentRow != row && this.possibleVals(currentRow, currentCol).contains(num)) {
+										debug("# of " + num + " in row " + row + " is " + numOccurrencesInRow + " with " + numOccurrencesInSectionRow + " in section row " + row + " and " + numOccurrencesInSectionCol + " in section col " + col);
+										debug("pair Or Triple in Section = " + pairOrTripleInSection + " in sectionRow = " + pairOrTripleInSectionRow + " in sectionCol = " + pairOrTripleInSectionCol);
+										debug("Num is " + num + " vals in section " + sectionPossibleVals + " vals in section row " + sectionRowPossibleVals + " vals in section col " + sectionColPossibleVals);
+										this.removeTempVal(num, currentRow, currentCol);
+										this.updateBoardVals();
+										debug("Removed possibility of " + num + " from (" + currentCol + ", " + currentRow + ") ");
 									}
 								}
 							}
-							// A Pair or Triple on a column - if they are all in the same box, n can be removed from the rest of the box.
-							if(numOccurrencesInSectionCol == numOccurrencesInCol && pairOrTripleInCol) {
-								debug("A Pair or Triple on a col - if they are all in the same box = " + section + " row = " + row + " col = " + col);
-								for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
-									for(int colTranslate = 0; colTranslate < this.SECTION_SIZE; colTranslate++) {
-										int currentRow = sectionFirstRow + rowTranslate;
-										int currentCol = sectionFirstCol + colTranslate;
-										if(currentCol != col) {
-											this.removeTempVal(num, currentRow, currentCol);
-											this.updateBoardVals();
-											debug("Removed possibility of " + num + " from (" + currentCol + ", " + currentRow + ") ");
-										}
+						} else
+						// A Pair or Triple on a column - if they are all in the same box, n can be removed from the rest of the box.
+						if(numOccurrencesInSectionCol == numOccurrencesInCol && pairOrTripleInCol) {
+							debug("# of " + num + " in section " + section + " is " + numOccurrencesInSection + " with " + numOccurrencesInSectionRow + " in row " + row + " and " + numOccurrencesInSectionCol + " in col " + col);
+							debug("A Pair or Triple on a col - if they are all in the same box = " + section + " row = " + row + " col = " + col);
+							for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
+								for(int colTranslate = 0; colTranslate < this.SECTION_SIZE; colTranslate++) {
+									int currentRow = sectionFirstRow + rowTranslate;
+									int currentCol = sectionFirstCol + colTranslate;
+									if(currentCol != col && this.possibleVals(currentRow, currentCol).contains(num)) {
+										debug("# of " + num + " in col " + col + " is " + numOccurrencesInCol + " with " + numOccurrencesInSectionRow + " in section row " + row + " and " + numOccurrencesInSectionCol + " in section col " + col);
+										debug("pair Or Triple in Section = " + pairOrTripleInSection + " in sectionRow = " + pairOrTripleInSectionRow + " in sectionCol = " + pairOrTripleInSectionCol);
+										debug("Num is " + num + " vals in section " + sectionPossibleVals + " vals in section row " + sectionRowPossibleVals + " vals in section col " + sectionColPossibleVals);
+										this.removeTempVal(num, currentRow, currentCol);
+										this.updateBoardVals();
+										debug("Removed possibility of " + num + " from (" + currentCol + ", " + currentRow + ") ");
 									}
 								}
 							}
@@ -251,12 +293,22 @@ public class SudokuState {
 				}
 			}
 		}
+
 		
-		public void removeTempVal(int num, int row, int col) {
-			if(this.getTempFinalVal(row, col) == this.NOT_POSSIBLE) {
-				this.temp[row][col][num] = this.NOT_POSSIBLE;
+		public void test() {
+			for(int row = 0; row < this.BOARD_SIZE; row++) {
+				for(int col = 0; col < this.BOARD_SIZE; col++) {
+					debug("Section is " + this.getSection(row, col));
+					this.printTempsSection(this.getSection(row, col));
+					debug("Possible Section Vals " + this.getSectionPossibleVals(row, col));
+					debug("Possible Section Row Vals " + this.getSectionRowPossibleVals(row, col));
+					debug("Possible Section Col Vals " + this.getSectionColPossibleVals(row, col));
+					debug("Possible Col Vals " + this.getColPossibleVals(row, col));
+					debug("Possible Row Vals " + this.getRowPossibleVals(row, col));
+				}
 			}
 		}
+		
 		
 		/**
 		 * Returns the number of occurrences of a single number within a list of integers.
@@ -275,6 +327,39 @@ public class SudokuState {
 		}
 		
 		
+		/**
+		 * Returns section number from 1 to 9 as illustrated below:-
+		 * -------------
+		 * | 1 | 2 | 3 |
+		 * -------------
+		 * | 4 | 5 | 6 |
+		 * -------------
+		 * | 7 | 8 | 9 |
+		 * -------------
+		 * @param row
+		 * @param col
+		 * @return
+		 */
+		public int getSection(int row, int col) {
+			int sectionRow = 0;
+			int sectionCol = 0;
+			if(row < 3) {
+				sectionRow = 1;
+			} else if(row < 6 ) {
+				sectionRow = 2; 
+			} else if(row < 9) {
+				sectionRow = 3;
+			}
+			if(col < 3) {
+				sectionCol = 1;
+			} else if(col < 6) {
+				sectionCol = 2;
+			} else if(col < 9) {
+				sectionCol = 3;
+			}
+			return 3*(sectionRow-1) + sectionCol;
+		}
+
 		/** Returns the first column for a given section parsed
 		 * @param section Square of 3 by 3 cells contained on a Sudoku board labeled from 1-9 as shown below. <br/>
 		 * |1|2|3| <br/>
@@ -283,7 +368,7 @@ public class SudokuState {
 		 * @return First column in a given section.
 		 */
 		public int getSectionFirstCol(int section) {
-			return (3 * (section % 3));
+			return (3 * ((section - 1) % 3));
 		}
 
 		/** Returns the first row for a given section parsed
@@ -294,7 +379,8 @@ public class SudokuState {
 		 * @return First row in a given section.
 		 */
 		public int getSectionFirstRow(int section) {
-			return (3 * ((section - 1) % 3));
+			return 3 * ((section - 1)/ 3);
+			
 		}
 		
 		/**
@@ -304,10 +390,11 @@ public class SudokuState {
 		 * @return
 		 */
 		public LinkedList<Integer> getSectionRowPossibleVals(int row, int col) {
-			int sectionCol = 3*(col/3);
+			int section = this.getSection(row, col);
+			int sectionFirstCol = this.getSectionFirstCol(section);
 			LinkedList<Integer> sectionRowTemps = new LinkedList<Integer>();
 			for(int colTranslate = 0; colTranslate < this.SECTION_SIZE; colTranslate++) {
-				int currentCol = sectionCol + colTranslate;
+				int currentCol = sectionFirstCol + colTranslate;
 				if(this.getTempFinalVal(row, currentCol) == this.NOT_POSSIBLE) {
 					sectionRowTemps.addAll(this.possibleVals(row, currentCol));
 				}
@@ -321,10 +408,11 @@ public class SudokuState {
 		 * @return
 		 */
 		public LinkedList<Integer> getSectionColPossibleVals(int row, int col) {
-			int sectionRow = 3*(row/3);
+			int section = this.getSection(row, col);
+			int sectionFirstRow = this.getSectionFirstRow(section);
 			LinkedList<Integer> sectionColTemps = new LinkedList<Integer>();
 			for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
-				int currentRow = sectionRow + rowTranslate;
+				int currentRow = sectionFirstRow + rowTranslate;
 				if(this.getTempFinalVal(currentRow, col) == this.NOT_POSSIBLE) {
 					sectionColTemps.addAll(this.possibleVals(currentRow, col));
 				}
@@ -371,29 +459,52 @@ public class SudokuState {
 		 * @return
 		 */
 		public LinkedList<Integer> getSectionPossibleVals(int row, int col) {
-			int sectionRow = (3*(row/3));
-			int sectionCol = (3*(col/3));
+			int sectionFirstRow = 3*(row/3);
+			int sectionFirstCol = 3*(col/3);
 			int currentRow = 0;
 			int currentCol = 0;
 			LinkedList<Integer> sectionTemps = new LinkedList<Integer>();
 			for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
 				for(int colTranslate = 0; colTranslate < this.SECTION_SIZE; colTranslate++) {
-					currentRow = sectionRow + rowTranslate;
-					currentCol = sectionCol + colTranslate;
+					currentRow = sectionFirstRow + rowTranslate;
+					currentCol = sectionFirstCol + colTranslate;
 					// Exclude Final Values
 					if(this.getTempFinalVal(currentRow, currentCol) == this.NOT_POSSIBLE) {
 						sectionTemps.addAll(this.possibleVals(currentRow, currentCol));
 					}
+					
 				}
 			}
 			return sectionTemps;
 		}
 		
 		/**
+		 * Return the only possible value for a given cell given all other possibilities have been exhausted. 
+		 * @param row
+		 * @param col
+		 * @return
+		 */
+		public int getTempFinalVal(int row, int col) {
+			LinkedList<Integer> possibleCellVals = this.possibleVals(row, col);
+			if(possibleCellVals.size() == 1) {
+				return possibleCellVals.peek();
+			} 
+			return NOT_POSSIBLE;		
+		}
+
+		/**
 		 * Returns the number of filled (non empty) cells on the board
 		 */
 		public int getNumCellsFilled() {
 			return this.cellsFilled;
+		}
+
+		public boolean removeTempVal(int num, int row, int col) {
+			if(this.getTempFinalVal(row, col) == this.NOT_POSSIBLE) {
+				this.temp[row][col][num - 1] = this.NOT_POSSIBLE;
+				return true;
+			}
+			return false;
 		}
 
 		public void removeDuplicates(LinkedList<Integer> list) {
@@ -409,35 +520,26 @@ public class SudokuState {
 			}
 		}
 		
-		public void debug(Object obj) {
-			System.out.println(obj.toString());
-		}
 		/**
-		 * Solves for cells which have all but 1 number missing in a column, row or square.
+		 * Eliminate the possibility for all temp values except that assigned by number.
+		 * @param number
+		 * @param row
+		 * @param col
 		 */
-		public void solveSimpleSteps() {
-			boolean cellsFilled = false;
-			for(int row = 0; row < BOARD_SIZE; row++) {
-				for(int col = 0; col < BOARD_SIZE; col++) {
-					if(this.board[row][col] == EMPTY) {
-						int cellVal = this.getTempFinalVal(row, col);
-						if(cellVal != NOT_POSSIBLE) {
-							this.board[row][col] = cellVal;
-							this.updateCellsFilled();
-							this.updateTempVals();
-							cellsFilled = true;
-						} else {
-							// **************************
-						}
-					}
+		public void setTempFinalVal(int number, int row, int col) {
+			for(int num = 0; num < BOARD_SIZE; num++) {
+				if(number != (num + 1)) {
+					this.temp[row][col][num] = NOT_POSSIBLE;
+				} else {
+					this.temp[row][col][num] = POSSIBLE;
 				}
 			}
-			if(cellsFilled) {
-				this.solveSimpleSteps();
-			}
 		}
-		
-		
+	
+
+		public void debug(Object obj) {
+			//System.out.println(obj.toString());
+		}
 		/**
 		 * Provides linked list of possible values for a given cell at (row, col)
 		 * @param row Value from 0 to 9 representing the row number from top to bottom
@@ -464,6 +566,7 @@ public class SudokuState {
 				for(int col = 0; col < BOARD_SIZE; col++) {
 					for(int number = 1; number <= BOARD_SIZE; number++) {
 						if(this.inColumn(number, col) > 1 || this.inRow(number, row) > 1 || this.inSection(number, row, col) > 1) {
+							System.out.println("row = " + row + " col = " + col);
 							return false;
 						}
 					}
@@ -472,29 +575,6 @@ public class SudokuState {
 			return true;
 		}
 		
-		
-		/**
-		 * Checks if current board is solved.
-		 */
-		public boolean solved() {
-			if(this.cellsFilled == BOARD_SIZE * BOARD_SIZE && this.valid()) {
-				return true;
-			}
-			return false;
-		}
-		
-		/**
-		 * Solves a given puzzle stored in this board state.
-		 */
-		public void solve() {
-			System.out.println("Updating Temp Vals");
-			this.updateTempVals();
-			this.solveMediumSteps();
-			this.solveHardSteps();
-			this.updateTempVals();
-			this.updateBoardVals();
-			this.updateCellsFilled();
-		}
 		
 		/**
 		 * Sets all temp values in a given cell to be empty
@@ -514,7 +594,7 @@ public class SudokuState {
 			int count = 0;
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
-					if(this.board[row][col] != 0) {
+					if(this.board[row][col] != this.EMPTY) {
 						count++;
 					}
 				}
@@ -543,6 +623,8 @@ public class SudokuState {
 					}
 				}
 			}
+			//this.pointingPairsAndTriplesAlgorithm();
+			//this.updateBoardVals();
 		}
 		public void updateBoardVals() {
 			for(int row = 0; row < BOARD_SIZE; row++) {
@@ -600,38 +682,6 @@ public class SudokuState {
 		}
 		
 		/**
-		 * Returns section number from 1 to 9 as illustrated below:-
-		 * -------------
-		 * | 1 | 2 | 3 |
-		 * -------------
-		 * | 4 | 5 | 6 |
-		 * -------------
-		 * | 7 | 8 | 9 |
-		 * -------------
-		 * @param row
-		 * @param col
-		 * @return
-		 */
-		public int getSection(int row, int col) {
-			int sectionRow = 0;
-			int sectionCol = 0;
-			if(row < 3) {
-				sectionRow = 1;
-			} else if(row < 6 ) {
-				sectionRow = 2; 
-			} else if(row < 9) {
-				sectionRow = 3;
-			}
-			if(col < 3) {
-				sectionCol = 1;
-			} else if(col < 6) {
-				sectionCol = 2;
-			} else if(col < 9) {
-				sectionCol = 3;
-			}
-			return 3*(sectionRow-1) + sectionCol;
-		}
-		/**
 		 * Returns number of occurrences of number within a section determined by the row 
 		 * and column of the number cell.
 		 * @param number
@@ -678,6 +728,22 @@ public class SudokuState {
 				for(int col = 0; col < BOARD_SIZE; col++) {
 					LinkedList<Integer> possibleValues = this.possibleVals(row, col);
 						System.out.print(possibleValues);
+					System.out.print("                |                 ");
+				}
+				System.out.println("");
+				System.out.println("");
+			}
+		}
+		
+		public void printTempsSection(int section) {
+			int sectionRow = this.getSectionFirstRow(section);
+			int sectionCol = this.getSectionFirstCol(section);
+			for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
+				for(int colTranslate = 0; colTranslate < this.SECTION_SIZE; colTranslate++) {
+					int currentRow = sectionRow + rowTranslate;
+					int currentCol = sectionCol + colTranslate;
+					LinkedList<Integer> possibleValues = this.possibleVals(currentRow, currentCol);
+					System.out.print(possibleValues);
 					System.out.print("     |      ");
 				}
 				System.out.println("");
@@ -724,8 +790,6 @@ public class SudokuState {
 			System.out.println(s.inSection(2, 4, 4));
 			System.out.println(s.inSection(7, 8, 8));
 			s.solve();
-			s.print2DBoard(s.board);
-			s.printTemps();
 			s.print2DBoard(s.board);
 		}
 }
