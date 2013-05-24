@@ -14,7 +14,7 @@ public class SudokuBoard implements Board {
 	 * @param size
 	 * @param difficulty
 	 */
-	public SudokuBoard(int size, int difficulty)
+	public SudokuBoard(int size)
 	{	
 		this.boardSize = size;
 		board = new ArrayList<ArrayList<BoardCell>>();
@@ -39,6 +39,19 @@ public class SudokuBoard implements Board {
 	{
 		reset();
 		this.currentlyGenerating = true;
+		
+		// Start Filler Shit
+		for (int i = 0; i < this.boardSize; i++)
+		{
+			for (int j = 0; j < this.boardSize; j++)
+			{
+				this.setCellValue(i, j, i + j);
+				this.setCellVisiblity(i, j, ((i + j)%2==0?true:false));
+			}
+		}
+		// End Filler Shit
+
+		
 		// TODO:
 		// LAURA EDIT UNDER HERE
 		//
@@ -78,7 +91,7 @@ public class SudokuBoard implements Board {
 	 */
 	public int getCellValue(int row, int col)
 	{
-		if (currentlyGenerating)
+		if (currentlyGenerating || isInitiallyVisibleCell(row, col))
 		{
 			return getCell(row, col).getFinalValue();
 		}
