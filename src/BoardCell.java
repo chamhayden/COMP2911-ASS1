@@ -14,9 +14,10 @@ public class BoardCell {
 	public BoardCell(int boardSize)
 	{		
 		this.boardSize = boardSize;
+		this.tempNumbers = new boolean[boardSize];
 		for (int i = 0; i < boardSize; i++)
 		{
-			tempNumbers[i] = false;
+			this.tempNumbers[i] = false;
 		}
 	}
 	

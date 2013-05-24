@@ -237,19 +237,19 @@ DIFFICULTY_HARD:int</string>
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double6"/>
-      <double>212.0</double>
+      <double>215.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double6"/>
-      <double>200.0</double>
+      <double>196.0</double>
      </void>
     </void>
     <void method="setLocation">
-     <double>212.0</double>
-     <double>200.0</double>
+     <double>215.0</double>
+     <double>196.0</double>
     </void>
    </object>
   </void>
