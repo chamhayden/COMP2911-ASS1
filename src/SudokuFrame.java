@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.lang.Integer;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.swing.*;
 
@@ -15,6 +16,7 @@ import javax.swing.*;
 
 /**
  * A frame with a panel button
+ * @param currentValue is the value the ActionListener uses to change grid labels
  */
 
 //NB: JFrame's default layoutManager is BorderLayout (so no need to setLayout unless we want to change it)
@@ -34,6 +36,7 @@ class SudokuFrame extends JFrame
 		 */
 		buttonGrid = new ArrayList<ArrayList<JButton>>(8);
 		buttonRow = new ArrayList<JButton>(8);
+		buttonValue = new LinkedList<JButton>();
 		
 		//button panel is created, which will be added to SudokuFrame
 		buttonPanel = new JPanel();
@@ -67,39 +70,39 @@ class SudokuFrame extends JFrame
 		
 		commandPanel = new JPanel();
 		commandPanel.setLayout(new FlowLayout());
-		makeMenuButton("NEW EASY", Color.PINK, commandPanel);
-		makeMenuButton("NEW MEDIUM", Color.CYAN, commandPanel);
-		makeMenuButton("NEW HARD", Color.RED, commandPanel);
-		makeMenuButton("Click for Hint", Color.BLUE, commandPanel);
-		makeMenuButton("Give up?", Color.GREEN, commandPanel);
+		easyButton = makeMenuButton("NEW EASY", Color.PINK, commandPanel);
+		mediumButton = makeMenuButton("NEW MEDIUM", Color.CYAN, commandPanel);
+		hardButton = makeMenuButton("NEW HARD", Color.RED, commandPanel);
+		hintButton = makeMenuButton("Click for Hint", Color.BLUE, commandPanel);
+		solutionButton = makeMenuButton("Give up?", Color.GREEN, commandPanel);
 		
-		makeMenuButton("DRAFT", Color.PINK, commandPanel);
-		makeMenuButton("WTF", Color.CYAN, commandPanel);
+		draftButton = makeMenuButton("DRAFT", Color.PINK, commandPanel);
+		checkButton = makeMenuButton("Check Square", Color.CYAN, commandPanel);
 		
 		scorePanel = new JPanel();
 		scorePanel.setLayout(new FlowLayout());
 		scorePanel.setVisible(true);
 		
 		makeMenuButton("PAUSE", Color.BLACK, scorePanel);
-		makeMenuButton("TIME ME", Color.DARK_GRAY, scorePanel);
+		timeButton = makeMenuButton("TIME ME", Color.DARK_GRAY, scorePanel);
 		
-		
+		//Initialise buttons that control currentValue to fill grid
 		String keyLabels = "123456789";
-		int count = 0;
 		
-		for (int i = 0; i < keyLabels.length(); i++,count++)
+		for (int i = 0; i < keyLabels.length(); i++)
 	      {
 	         final String label = keyLabels.substring(i, i + 1);
 	         JButton keyButton = new JButton(label);
 	         NumberSelect action = new NumberSelect(label);
 	         keyButton.addActionListener(action);
+	         buttonValue.add(keyButton);
 	         scorePanel.add(keyButton);
 	      }
 		
 		//add or nest panels to frame
 		add(buttonPanel,BorderLayout.CENTER);
-		add(commandPanel,BorderLayout.SOUTH);
-		add(scorePanel,BorderLayout.NORTH);
+		add(commandPanel,BorderLayout.NORTH);
+		add(scorePanel,BorderLayout.SOUTH);
 		
 	}
 	
@@ -145,6 +148,7 @@ class SudokuFrame extends JFrame
 		{
 			if(!getCurrentValue().equalsIgnoreCase("-1"))
 			b.setText(getCurrentValue());
+			//b.setFont(font)
 		}
 		private JButton b;
 		//private String newValue;
@@ -160,6 +164,7 @@ class SudokuFrame extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			currentValue = event.getActionCommand();
+			highlightValue(currentValue);
 		}
 		private String newCurrentValue;
 	}
@@ -184,13 +189,30 @@ class SudokuFrame extends JFrame
 		return this.currentValue;
 	}
 	
+	private void highlightValue(String current){
+		for(JButton jb: buttonValue){
+			if(jb.getText().equalsIgnoreCase(current))
+				jb.setBackground(Color.PINK);
+			else jb.setBackground(Color.GRAY);
+		}
+	}
+	
+	
+	private JButton easyButton;
+	private JButton mediumButton;
+	private JButton hardButton;
+	private JButton draftButton;
+	private JButton timeButton;
+	private JButton hintButton;
+	private JButton solutionButton;
+	private JButton checkButton;
 	private String currentValue;
-	//private int value;
 	private JPanel buttonPanel;
-	private JPanel hintPanel;
+	//private JPanel hintPanel;
 	private JPanel commandPanel;
-	private JPanel modePanel;
+	//private JPanel modePanel;
 	private JPanel scorePanel;
+	private LinkedList<JButton> buttonValue;
 	private ArrayList<ArrayList<JButton>> buttonGrid;
 	private ArrayList<JButton> buttonRow;
 
