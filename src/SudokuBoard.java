@@ -38,13 +38,14 @@ public class SudokuBoard implements Board {
 	public void generate(int difficulty)
 	{
 		reset();
+		
 		this.currentlyGenerating = true;
 		this.difficulty = difficulty;
 		
 		// Start Filler Shit
-		for (int i = 0; i < this.boardSize; i++)
+		for (int i = 1; i <= this.boardSize; i++)
 		{
-			for (int j = 0; j < this.boardSize; j++)
+			for (int j = 1; j <= this.boardSize; j++)
 			{
 				this.setCellValue(i, j, i + j);
 				this.setCellVisibility(i, j, ((i + j)%2==0?true:false));
@@ -179,11 +180,11 @@ public class SudokuBoard implements Board {
 	{
 		if (currentlyGenerating)
 		{
-			//getCell(row, col).isEmptyFinal();
+			getCell(row, col).isEmptyFinal();
 		}
 		else
 		{
-			//getCell(row, col).isEmptyInput();
+			getCell(row, col).isEmptyInput();
 		}
 	}
 			
@@ -224,9 +225,9 @@ public class SudokuBoard implements Board {
 	public boolean isCorrectBoard()
 	{
 		boolean allCorrect = true;
-		for (int i = 0; i < boardSize; i++)
+		for (int i = 1; i <= boardSize; i++)
 		{
-			for (int j = 0; i < boardSize; j++)
+			for (int j = 1; i <= boardSize; j++)
 			{
 				if (!isCorrectCell(i, j))
 				{
@@ -291,9 +292,9 @@ public class SudokuBoard implements Board {
 	 */
 	public void reset()
 	{
-		for (int i = 0; i < getBoardSize(); i++)
+		for (int i = 1; i <= getBoardSize(); i++)
 		{
-			for (int j = 0; j < getBoardSize(); j++)
+			for (int j = 1; j <= getBoardSize(); j++)
 			{
 				resetCell(i, j);				
 			}
@@ -310,11 +311,11 @@ public class SudokuBoard implements Board {
 	public boolean rowHas(int row, int value)
 	{
 		boolean result = false;
-		for (int i = 0; i < this.boardSize; i++)
+		for (int i = 1; i <= this.boardSize; i++)
 		{
-			if (getCellValue(row - 1, i) == value)
+			if (getCellValue(row, i) == value)
 			{
-				if(isInitiallyVisibleCell(row - 1, i)){
+				if(isInitiallyVisibleCell(row, i)){
 					result = true;
 				}
 			}
@@ -331,11 +332,11 @@ public class SudokuBoard implements Board {
 	public boolean columnHas(int col, int value)
 	{
 		boolean result = false;
-		for (int i = 0; i < this.boardSize; i++)
+		for (int i = 1; i <= this.boardSize; i++)
 		{
-			if (getCellValue(i, col - 1) == value)
+			if (getCellValue(i, col) == value)
 			{
-				if(isInitiallyVisibleCell(i, col - 1)){
+				if(isInitiallyVisibleCell(i, col)){
 					result = true;
 				}
 			}
@@ -352,9 +353,9 @@ public class SudokuBoard implements Board {
 	public boolean squareHas(int sqrId, int value)
 	{
 		boolean result = false;
-		for (int i = 0; i < this.boardSize; i++)
+		for (int i = 1; i <= this.boardSize; i++)
 		{
-			for (int j = 0; j < this.boardSize; j++)
+			for (int j = 1; j <= this.boardSize; j++)
 			{
 				if (squareSectionId(i, j) == sqrId)
 				{
@@ -425,7 +426,7 @@ public class SudokuBoard implements Board {
 	 */
 	private BoardCell getCell(int row, int col)
 	{
-		return board.get(row).get(col);
+		return board.get(row - 1).get(col - 1);
 	}	
 	
 	private ArrayList<ArrayList<BoardCell>> board;
