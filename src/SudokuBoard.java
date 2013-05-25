@@ -305,7 +305,9 @@ public class SudokuBoard implements Board {
 		{
 			if (getCellValue(row - 1, i) == value)
 			{
-				result = true;
+				if(isInitiallyVisibleCell(row - 1, i)){
+					result = true;
+				}
 			}
 		}
 		return result;
@@ -324,7 +326,9 @@ public class SudokuBoard implements Board {
 		{
 			if (getCellValue(i, col - 1) == value)
 			{
-				result = true;
+				if(isInitiallyVisibleCell(i, col - 1)){
+					result = true;
+				}
 			}
 		}
 		return result;
@@ -347,7 +351,9 @@ public class SudokuBoard implements Board {
 				{
 					if (getCellValue(i, j) == value)
 					{
-						result = true;
+						if(isInitiallyVisibleCell(i, j)){
+							result = true;
+						}
 					}
 				}
 			}
