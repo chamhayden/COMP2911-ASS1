@@ -134,4 +134,28 @@ public interface Board
 	 */
 	public void generate(int difficulty);
 	
+	/**
+	 * TODO: Fill
+	 * @param row
+	 * @param value
+	 * @return
+	 */
+	public boolean rowHas(int row, int value);
+	
+	/**
+	 * TODO: Fill
+	 * @param col
+	 * @param value
+	 * @return
+	 */
+	public boolean columnHas(int col, int value);
+	
+	/**
+	 * TODO: Fill 
+	 * @param sqr
+	 * @param value
+	 * @return
+	 */
+	public boolean squareHas(int sqr, int value);
+	
 }

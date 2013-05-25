@@ -275,13 +275,100 @@ public class SudokuBoard implements Board {
 		}
 	}
 	
-	
-	
-	
-	
+
+	/**
+	 * TODO: Fill
+	 * @param row
+	 * @param value
+	 * @return
+	 */
+	public boolean rowHas(int row, int value)
+	{
+		boolean result = false;
+		for (int i = 0; i < this.boardSize; i++)
+		{
+			if (getCellValue(row - 1, i) == value)
+			{
+				result = true;
+			}
+		}
+		return result;
+	}
 	
 	/**
-	 * 
+	 * TODO: Fill
+	 * @param col
+	 * @param value
+	 * @return
+	 */
+	public boolean columnHas(int col, int value)
+	{
+		boolean result = false;
+		for (int i = 0; i < this.boardSize; i++)
+		{
+			if (getCellValue(i, col - 1) == value)
+			{
+				result = true;
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * TODO: Fill 
+	 * @param sqr
+	 * @param value
+	 * @return
+	 */
+	public boolean squareHas(int sqrId, int value)
+	{
+		boolean result = false;
+		for (int i = 0; i < this.boardSize; i++)
+		{
+			for (int j = 0; j < this.boardSize; j++)
+			{
+				if (squareSectionId(i, j) == sqrId)
+				{
+					if (getCellValue(i, j) == value)
+					{
+						result = true;
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	
+	private int squareSectionId(int row, int col)
+	{
+		int sectionId = 0;
+		if (col >= 1 && col <= 3)
+		{
+			sectionId += 1;
+		}
+		else if (col >= 4 && col <= 6)
+		{
+			sectionId += 2;
+		}
+		else if (col >= 7 && col <= 9)
+		{
+			sectionId += 3;
+		}
+		
+		if (row <= 6)
+		{
+			sectionId += 3;
+		}
+		if (row <= 9)
+		{
+			sectionId += 3;
+		}
+		return sectionId;
+	}
+	
+	/**
+	 * TODO: Fill
 	 * @param row
 	 * @param col
 	 */
@@ -291,7 +378,7 @@ public class SudokuBoard implements Board {
 	}
 	
 	/**
-	 * 
+	 * TODO: Fill
 	 * @param row
 	 * @param col
 	 * @return
