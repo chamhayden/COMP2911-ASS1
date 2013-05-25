@@ -49,17 +49,44 @@ public interface Board
 	 * @param col Column cell is in
 	 * @param visiblity Whether the particular cell is visible or not
 	 */
-	public void setCellVisiblity(int row, int col, boolean visiblity);
+	public void setCellVisiblity(int row, int col, boolean visibility);
 	
-	// Cell Temp Values
+	/**
+	 * Check is a particular cell value's temporary value for a 
+	 *  particular number is visible
+	 * @param row Row cell is in
+	 * @param col Column Cell is in
+	 * @param number Number of the temporary value that needs to
+	 *  be checked if is visible
+	 * @return Whether a particular cell value's temporary value for
+	 *  a particular number is visible
+	 */
 	public boolean isVisibleCellTemp(int row, int col, int number);
-	public void setCellTemp(int row, int col, int number, boolean isSet);
+	
+	/**
+	 * Make a particular cell value's temporary value for a 
+	 *  particular number either visible or not visible
+	 * @param row Row cell is in
+	 * @param col Column Cell is in
+	 * @param number Number of the temporary value that needs to
+	 *  have it's visiblity changed
+	 * @param isSet Value to denote whether to have the cell visible
+	 *  or not visible
+	 */
+	public void setCellTempVisibility(int row, int col, int number, boolean isSet);
 	
 	/**
 	 * Return whether the board has been correctly filled out
 	 * @return Whether the board has been correctly filled out
 	 */
 	public boolean isCorrectBoard();
+	
+	/**
+	 * Remove the value stored in a cell
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 */
+	public void removeCellValue(int row, int col);
 	
 	/**
 	 * Return whether a particular cell in the board has been
@@ -94,5 +121,54 @@ public interface Board
 	 * @return Size of the board
 	 */
 	public int getBoardSize();
+	
+	/**
+	 * Reset all values in the board
+	 */
+	public void reset();
+	
+	/**
+	 * Generate a new board
+	 * @param difficulty The difficulty level the board
+	 *  should be generated with
+	 */
+	public void generate(int difficulty);
+	
+	/**
+	 * TODO: Fill
+	 * @param row
+	 * @param value
+	 * @return
+	 */
+	public boolean rowHas(int row, int value);
+	
+	/**
+	 * TODO: Fill
+	 * @param col
+	 * @param value
+	 * @return
+	 */
+	public boolean columnHas(int col, int value);
+	
+	/**
+	 * TODO: Fill 
+	 * @param sqr
+	 * @param value
+	 * @return
+	 */
+	public boolean squareHas(int sqr, int value);
+	
+	/**
+	 * TODO:
+	 * @param row
+	 * @param col
+	 */
+	public void isEmptyCell(int row, int col);
+	
+	/**
+	 * TODO:
+	 * @return
+	 */
+	public int getDifficulty();
 	
 }

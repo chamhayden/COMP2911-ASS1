@@ -1,6 +1,11 @@
 
 public class BoardGenerator {
 	
+	public BoardGenerator(Board board)
+	{
+		// use the board at your own discretion
+	}
+	
 	public BoardGenerator(int difficulty, int boardSize){
 		BoardGen b = new BoardGen(difficulty, boardSize);
 		Removal r = new Removal(difficulty, b);
