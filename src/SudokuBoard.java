@@ -47,7 +47,7 @@ public class SudokuBoard implements Board {
 			for (int j = 0; j < this.boardSize; j++)
 			{
 				this.setCellValue(i, j, i + j);
-				this.setCellVisiblity(i, j, ((i + j)%2==0?true:false));
+				this.setCellVisibility(i, j, ((i + j)%2==0?true:false));
 			}
 		}
 		// End Filler Shit
@@ -151,7 +151,7 @@ public class SudokuBoard implements Board {
 	 * @param col Column cell is in
 	 * @param visiblity Whether the particular cell is visible or not
 	 */
-	public void setCellVisiblity(int row, int col, boolean visibility)
+	public void setCellVisibility(int row, int col, boolean visibility)
 	{
 		if (currentlyGenerating)
 		{
