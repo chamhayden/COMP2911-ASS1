@@ -86,9 +86,10 @@ public class SudokuState {
 		/**
 		 * Solves for cells which have all but 1 number missing in a column, row or square.
 		 */
-		public void solveSimpleSteps() {
+		public void solveSimpleSteps()
+		{
 			boolean cellsFilled = false;
-			for(int row = 0; row < BOARD_SIZE; row++) {
+			for(int row = 0; row < BOARD_SIZE; row++){
 				for(int col = 0; col < BOARD_SIZE; col++) {
 					if(this.board[row][col] == EMPTY) {
 						int cellVal = this.getTempFinalVal(row, col);
