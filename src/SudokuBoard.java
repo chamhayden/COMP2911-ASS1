@@ -406,9 +406,9 @@ public class SudokuBoard implements Board {
 	private ArrayList<ArrayList<BoardCell>> board;
 	private int boardSize;
 	private boolean currentlyGenerating;
-	private static final int DIFFICULTY_EASY = 1;
-	private static final int DIFFICULTY_MEDIUM = 2;
-	private static final int DIFFICULTY_HARD = 3;
+	private static final int DIFFICULTY_EASY = 0;
+	private static final int DIFFICULTY_MEDIUM = 1;
+	private static final int DIFFICULTY_HARD = 2;
 	
 	
 }
