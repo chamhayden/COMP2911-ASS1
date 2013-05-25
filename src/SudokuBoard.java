@@ -161,6 +161,21 @@ public class SudokuBoard implements Board {
 			getCell(row, col).setCurrentlyVisible(visibility);
 		}
 	}
+	
+	/**
+	 * TODO:
+	 */
+	public void isEmptyCell(int row, int col)
+	{
+		if (currentlyGenerating)
+		{
+			getCell(row, col).isEmptyFinal();
+		}
+		else
+		{
+			getCell(row, col).isEmptyInput();
+		}
+	}
 			
 	/**
 	 * Check is a particular cell value's temporary value for a 

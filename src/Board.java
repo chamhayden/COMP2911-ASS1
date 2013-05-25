@@ -158,4 +158,11 @@ public interface Board
 	 */
 	public boolean squareHas(int sqr, int value);
 	
+	/**
+	 * TODO:
+	 * @param row
+	 * @param col
+	 */
+	public void isEmptyCell(int row, int col);
+	
 }

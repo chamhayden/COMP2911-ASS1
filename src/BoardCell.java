@@ -8,7 +8,7 @@
 public class BoardCell {
 
 	/**
-	 * 
+	 * TODO:
 	 * @param boardSize
 	 */
 	public BoardCell(int boardSize)
@@ -22,7 +22,7 @@ public class BoardCell {
 	}
 	
 	/**
-	 * 
+	 * TODO:
 	 * @return
 	 */
 	public int getFinalValue()
@@ -31,7 +31,7 @@ public class BoardCell {
 	}
 	
 	/**
-	 * 
+	 * TODO:
 	 * @return
 	 */
 	public int getInputValue()
@@ -40,7 +40,7 @@ public class BoardCell {
 	}
 		
 	/**
-	 * 
+	 * TODO:
 	 * @param number
 	 */
 	public void setFinalValue(int number)
@@ -49,7 +49,7 @@ public class BoardCell {
 	}
 	
 	/**
-	 * 
+	 * TODO:
 	 * @param number
 	 */
 	public void setInputValue(int number)
@@ -58,7 +58,7 @@ public class BoardCell {
 	}
 	
 	/**
-	 * 
+	 * TODO:
 	 */
 	public void removeInputValue()
 	{
@@ -66,7 +66,7 @@ public class BoardCell {
 	}
 	
 	/**
-	 * 
+	 * TODO:
 	 */
 	public void removeFinalValue()
 	{
@@ -74,7 +74,7 @@ public class BoardCell {
 	}
 	
 	/**
-	 * 
+	 * TODO:
 	 * @return
 	 */
 	public boolean isCurrentlyVisible()
@@ -83,7 +83,7 @@ public class BoardCell {
 	}
 	
 	/**
-	 * 
+	 * TODO:
 	 * @return
 	 */
 	public boolean isInitiallyVisible()
@@ -92,7 +92,7 @@ public class BoardCell {
 	}
 
 	/**
-	 * 
+	 * TODO:
 	 * @param isVisible
 	 */
 	public void setCurrentlyVisible(boolean isVisible)
@@ -101,7 +101,7 @@ public class BoardCell {
 	}
 	
 	/**
-	 * 
+	 * TODO:
 	 * @param isVisible
 	 */
 	public void setInitiallyVisible(boolean isVisible)
@@ -110,7 +110,7 @@ public class BoardCell {
 	}
 	
 	/**
-	 * 
+	 * TODO:
 	 * @param number
 	 * @return
 	 */
@@ -120,7 +120,7 @@ public class BoardCell {
 	}
 
 	/**
-	 * 
+	 * TODO:
 	 * @param number
 	 * @param isSet
 	 */
@@ -130,7 +130,7 @@ public class BoardCell {
 	}
 	
 	/**
-	 * 
+	 * TODO:
 	 */
 	public void reset()
 	{
@@ -142,6 +142,32 @@ public class BoardCell {
 		{
 			tempNumbers[i] = false;
 		}
+	}
+	
+	/**
+	 * TODO:
+	 * @return
+	 */
+	public boolean isEmptyFinal()
+	{
+		if (this.valueFinal == -1)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * TODO:
+	 * @return
+	 */
+	public boolean isEmptyInput()
+	{
+		if (this.valueInput == -1)
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	/**
