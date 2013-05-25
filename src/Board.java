@@ -165,4 +165,10 @@ public interface Board
 	 */
 	public void isEmptyCell(int row, int col);
 	
+	/**
+	 * TODO:
+	 * @return
+	 */
+	public int getDifficulty();
+	
 }

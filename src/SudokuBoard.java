@@ -39,6 +39,7 @@ public class SudokuBoard implements Board {
 	{
 		reset();
 		this.currentlyGenerating = true;
+		this.difficulty = difficulty;
 		
 		// Start Filler Shit
 		for (int i = 0; i < this.boardSize; i++)
@@ -354,6 +355,15 @@ public class SudokuBoard implements Board {
 		return result;
 	}
 	
+	/**
+	 * TODO:
+	 * @return
+	 */
+	public int getDifficulty()
+	{
+		return this.difficulty;
+	}
+	
 	
 	private int squareSectionId(int row, int col)
 	{
@@ -405,6 +415,7 @@ public class SudokuBoard implements Board {
 	
 	private ArrayList<ArrayList<BoardCell>> board;
 	private int boardSize;
+	private int difficulty;
 	private boolean currentlyGenerating;
 	private static final int DIFFICULTY_EASY = 0;
 	private static final int DIFFICULTY_MEDIUM = 1;
