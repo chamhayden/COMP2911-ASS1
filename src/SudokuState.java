@@ -7,6 +7,8 @@ import java.util.Scanner;
  * Holds the current board and evaluation state required to solve a puzzle
  */
 
+//TODO STEVEN I have commented out a couple of bits to get it to compile, they are marked with TODO - laura
+
 public class SudokuState {
 		private int board[][];
 		private int temp[][][];
@@ -92,13 +94,15 @@ public class SudokuState {
 		/**
 		 * Solves for cells which have all but 1 number missing in a column, row or square.
 		 */
-<<<<<<< HEAD
+//TODO This stuff prevented comilation so i commented it out - laura
+/*<<<<<<< HEAD
 		public boolean solveSimpleSteps() {
 			boolean stepsSolved = false;
 =======
+*/
 		public void solveSimpleSteps()
 		{
->>>>>>> b15af50f3288580a53cb4cba497a5c14d7e681e6
+//>>>>>>> b15af50f3288580a53cb4cba497a5c14d7e681e6
 			boolean cellsFilled = false;
 			for(int row = 0; row < BOARD_SIZE; row++){
 				for(int col = 0; col < BOARD_SIZE; col++) {
@@ -117,9 +121,12 @@ public class SudokuState {
 			}
 			if(cellsFilled) {
 				this.solveSimpleSteps();
-				stepsSolved = true;
+				//TODO I COMMENTED OUT THIS - laura
+				//stepsSolved = true;
 			}
-			return stepsSolved;
+			//TODO AND THIS - laura
+			//return stepsSolved;
+			
 		}
 
 		/**
