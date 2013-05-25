@@ -36,7 +36,7 @@ public class BoardFiller {
 				k = squareNo(i, j);
 				// TODO THIS IS A NICE PLACE TO WATCH FROM IF YOU WANT TO =)
 				System.out.printf("\n\n\n\n");
-				printBoard();
+				//printBoard();
 				System.out.printf("\n\n\n");
 				//remove to here
 				for(int m = 1; m < 10; m++){
@@ -50,9 +50,9 @@ public class BoardFiller {
 					if(i%3 == 2){
 						resetPoint = ((int)Math.floor(j/3)*3);
 					} else {
-						resetPoint = 0;
+						resetPoint = 1;
 					}
-					for(int p = resetPoint; p < 9; p++){
+					for(int p = resetPoint; p < 10; p++){
 						b.removeCellValue(i, p);
 					}
 					j = resetPoint;
@@ -63,6 +63,7 @@ public class BoardFiller {
 					}
 					continue;
 				}
+				System.out.println("Setting, " + i + " " + j);
 				b.setCellValue(i, j, x);
 				j++;
 			}
