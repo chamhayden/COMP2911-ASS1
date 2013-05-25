@@ -56,6 +56,15 @@ public class SudokuBoard implements Board {
 		// TODO:
 		// LAURA EDIT UNDER HERE
 		//
+		BoardFiller filler = new BoardFiller(this);
+		Removal r = new Removal(this);
+		boolean filled = false;
+		while(filled){
+			filler.fillBoard();
+		}
+
+		filler.fillBoard();
+		r.remove();
 		// I dont know, something like this:
 		// BoardFiller boardFiller = new BoardFiller();
 		// boardFiller.fill(board);
@@ -164,17 +173,17 @@ public class SudokuBoard implements Board {
 	}
 	
 	/**
-	 * TODO:
+	 * TODO: HAYDEN I JUST COMMENTED THIS OUT FOR NOW TO MAKE IT COMPILE - Laura
 	 */
 	public void isEmptyCell(int row, int col)
 	{
 		if (currentlyGenerating)
 		{
-			getCell(row, col).isEmptyFinal();
+			//getCell(row, col).isEmptyFinal();
 		}
 		else
 		{
-			getCell(row, col).isEmptyInput();
+			//getCell(row, col).isEmptyInput();
 		}
 	}
 			

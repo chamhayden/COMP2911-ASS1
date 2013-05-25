@@ -3,25 +3,24 @@ import java.util.Random;
 
 public class Removal {
 	
-	public Removal(int difficulty, BoardGen b){
-		this.difficulty = difficulty;
+	public Removal(Board b){
 		this.b = b;
-		game = b.getBoardValues();
-		visibility = new boolean[9][9];
-		for(int i = 0; i < 9; i++){
-			for(int j = 0; j < 9; j++){
-				visibility[i][j] = true;
-			}
+		if(b.getDifficulty() == b.difficultyValueEasy()){
+			difficulty = EASY;
+		} else if (b.getDifficulty() == b.difficultyValueMedium()){
+			difficulty = MEDIUM;
+		} else {
+			difficulty = HARD;
 		}
+		checker = new SudokuSolver();
 	}
 	
-	public boolean[][] remove(){
+	public void remove(){
 		simpleRemove();
-		//isSudokuSolutionUnique(game);
+		checker.isSudokuSolutionUnique(b);
 		if (difficulty > 1){
-			//complexRemove();
+			complexRemove();
 		}
-		return visibility;
 	}
 	
 	private void simpleRemove(){
@@ -41,9 +40,9 @@ public class Removal {
 		while(toRemove > 0){
 			x = r.nextInt(9);
 			y = r.nextInt(9);
-			z = b.getValue(x, y);
+			z = b.getCellValue(x, y);
 			can = true;
-			if(visibility[x][y] == false){
+			if(b.isInitiallyVisibleCell(x, y) == false){
 				continue;
 			}
 			//TODO the randomness and trial and error nature of this seems inefficient
@@ -52,7 +51,7 @@ public class Removal {
 			}
 			for(int i = 1; i < 10; i++){
 				if(i != z){
-					if (!(b.row[x].has(i) || b.collumn[y].has(i) || b.square[b.squareNo(x,y)].has(i))){
+					if (!(b.rowHas(x, i) || b.columnHas(y, i) || b.squareHas(x,y))){
 						can = false;
 						count++;
 						break;
@@ -60,15 +59,12 @@ public class Removal {
 				}
 			}
 			if(can){
-				visibility[x][y] = false;
-				game[x][y] = MISSING;
-				b.row[x].remove(y);
+				b.setCellVisibility(x, y, false);
 				toRemove--;
 			}
 		}
 	}
 	
-	/*
 	private void complexRemove(){
 		int complexity = difficulty*DIFF_CALIBRATION;
 		int i = 0;
@@ -78,22 +74,23 @@ public class Removal {
 		while (i < complexity){
 			x = r.nextInt();
 			y = r.nextInt();
-			z = game[x][y];
-			game[x][y] = MISSING;
-			diff = isSudokuSolutionUnique(game);
-			if(diff < difficulty){
-				visibility[x][y] = false;
-				i += diff;
+			b.setCellVisibility(x, y, false);
+			//diff = checker.isSudokuSolutionUnique(b);
+			//if(diff < difficulty){
+			if(checker.isSudokuSolutionUnique(b)){
+				i += 1;//diff;
 			} else {
-				game[x][y] = z;
+				b.setCellVisibility(x, y, false);
 			}
 		}
-	}*/
+	}
 	
-	private boolean[][] visibility;
-	private int[][] game;
-	private BoardGen b;
+	private Board b;
 	private int difficulty;
+	SudokuSolver checker;
+	private static final int EASY = 1;
+	private static final int MEDIUM = 2;
+	private static final int HARD = 3;
 	private static final int MISSING = -1;
 	private static final int DIFF_CALIBRATION = 10;
 }
