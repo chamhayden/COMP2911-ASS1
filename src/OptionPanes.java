@@ -21,16 +21,18 @@ public class OptionPanes {
 	public int chooseLevel(){
 		
 		String[] buttons = { "Easy", "Medium", "Hard", "Exit" };
-		difficulty = JOptionPane.showOptionDialog(null, "Choose your difficulty:", "Welcome to Sudoku Fun!",
-		        JOptionPane.WARNING_MESSAGE, 0, null, buttons, buttons[2]);
+		difficulty = JOptionPane.showOptionDialog(null, "To start, choose your difficulty:", "Welcome to Sudoku Fun!",
+		        JOptionPane.PLAIN_MESSAGE, 0, null, buttons, buttons[2]);
 		return difficulty;
 	
 	}
 	
-	public int exitMessageStart(){
+	public boolean exitMessageStart(){
 		value = JOptionPane.showConfirmDialog(null,"So soon? Are you sure?", "Aurevoir Sudoku Fun!",
 		        JOptionPane.YES_NO_OPTION);
-		return value;
+		if(value == JOptionPane.YES_NO_OPTION)
+			return true;
+		else return false;
 	}
 	
 	public boolean exitMessageInGame(){

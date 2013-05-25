@@ -93,11 +93,13 @@ class SudokuFrame extends JFrame
 	      {
 	         final String label = keyLabels.substring(i, i + 1);
 	         JButton keyButton = new JButton(label);
+	         DEFAULT_COLOR = keyButton.getBackground();
 	         NumberSelect action = new NumberSelect(label);
 	         keyButton.addActionListener(action);
 	         buttonValue.add(keyButton);
 	         scorePanel.add(keyButton);
 	      }
+		
 		
 		//add or nest panels to frame
 		add(buttonPanel,BorderLayout.CENTER);
@@ -163,8 +165,12 @@ class SudokuFrame extends JFrame
 		
 		public void actionPerformed(ActionEvent event)
 		{
-			currentValue = event.getActionCommand();
-			highlightValue(currentValue);
+			if(currentValue.equalsIgnoreCase(event.getActionCommand())){
+				highlightValue(resetCurrentValue());
+			}else{
+				currentValue = event.getActionCommand();
+				highlightValue(currentValue);
+			}
 		}
 		private String newCurrentValue;
 	}
@@ -180,9 +186,15 @@ class SudokuFrame extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			buttonPanel.setBackground(backgroundColor);
+			highlightValue(resetCurrentValue());
 		}
 		
 		private Color backgroundColor;
+	}
+	
+	public String resetCurrentValue(){
+		this.currentValue = "-1";
+		return currentValue;
 	}
 	
 	public String getCurrentValue(){
@@ -193,11 +205,11 @@ class SudokuFrame extends JFrame
 		for(JButton jb: buttonValue){
 			if(jb.getText().equalsIgnoreCase(current))
 				jb.setBackground(Color.PINK);
-			else jb.setBackground(Color.GRAY);
+			else jb.setBackground(DEFAULT_COLOR);
 		}
 	}
 	
-	
+	private Color DEFAULT_COLOR;
 	private JButton easyButton;
 	private JButton mediumButton;
 	private JButton hardButton;
