@@ -24,7 +24,7 @@ public class SudokuManager {
 		 * so essentially ditching board interface getDifficulty methods for the moment -
 		 */
 		board = new SudokuBoard(BOARD_SIZE);
-		board.generate(difficulty);
+		//board.generate(difficulty);
 		
 		//board.generate(board.difficultyValueEasy());
 		
