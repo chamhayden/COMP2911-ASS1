@@ -26,9 +26,9 @@ public class SudokuManager {
 		  CODE BELOW LINKS GUI TO BACK-END
 		  comment back in to re-link
 		 
-		board.generate(difficulty);
+		board.generate(difficulty);//->generator used
 		
-		//board.generate(board.difficultyValueEasy());
+		//board.generate(board.difficultyValueEasy()); ->not used for the moment
 		
 		
 		for (int i = 0; i < board.getBoardSize(); i++)

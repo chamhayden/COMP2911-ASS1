@@ -59,12 +59,7 @@ class SudokuFrame extends JFrame
 			}
 			buttonGrid.add(buttonRow);
 		}
-		
-		/*
-		 * buttons are set in a grid layout
-		 * NB: I have read that GridBagLayout is a slightly more complex but highly customizable layout manager (we can determine the size of each button individually)
-		 * - this can be looked into later
-		 */
+
 		buttonPanel.setLayout(new GridLayout(9,9));
 		
 		//creating panels
@@ -91,9 +86,9 @@ class SudokuFrame extends JFrame
 	      {
 	         final String label = LABELS.substring(i, i + 1);
 	         JButton keyButton = new JButton(label);
-	         DEFAULT_COLOR = keyButton.getBackground();
 	         NumberSelect action = new NumberSelect(label);
 	         keyButton.addActionListener(action);
+	         keyButton.setBackground(DEFAULT_COLOR);
 	         buttonValue.add(keyButton);
 	         scorePanel.add(keyButton);
 	      }
@@ -112,7 +107,7 @@ class SudokuFrame extends JFrame
 		panel.add(button);
 		NumberInsert insert = new NumberInsert(button);
 		button.addActionListener(insert);
-		
+		button.setBackground(DEFAULT_COLOR);
 		button.setLayout(new GridLayout(3,3));
 		for (int i = 0; i < LABELS.length(); i++)
 	      {
@@ -265,7 +260,7 @@ class SudokuFrame extends JFrame
 	
 	
 	private boolean draftMode;
-	private Color DEFAULT_COLOR;
+	private Color DEFAULT_COLOR = new Color(238,238,238);
 	private JButton easyButton;
 	private JButton mediumButton;
 	private JButton hardButton;
