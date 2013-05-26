@@ -27,7 +27,8 @@ class SudokuFrame extends JFrame
 		setTitle("SudokuFrame");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		
-		currentValue = "-1";
+		currentValue = BLANK;
+		draftMode = false;
 		
 		/*
 		 * 
@@ -52,21 +53,16 @@ class SudokuFrame extends JFrame
 				}
 				else
 				{
-					cellVal = "";
+					cellVal = BLANK;
 				}
 				buttonRow.add(makeGridButton(i, j ,cellVal, currentValue, buttonPanel));
 			}
 			buttonGrid.add(buttonRow);
 		}
-		
-		/*
-		 * buttons are set in a grid layout
-		 * NB: I have read that GridBagLayout is a slightly more complex but highly customizable layout manager (we can determine the size of each button individually)
-		 * - this can be looked into later
-		 */
+
 		buttonPanel.setLayout(new GridLayout(9,9));
 		
-		//creating a list of panels
+		//creating panels
 		
 		commandPanel = new JPanel();
 		commandPanel.setLayout(new FlowLayout());
@@ -76,7 +72,7 @@ class SudokuFrame extends JFrame
 		hintButton = makeMenuButton("Click for Hint", Color.BLUE, commandPanel);
 		solutionButton = makeMenuButton("Give up?", Color.GREEN, commandPanel);
 		
-		draftButton = makeMenuButton("DRAFT", Color.PINK, commandPanel);
+		draftButton = makeDraftButton("DRAFT", commandPanel);
 		checkButton = makeMenuButton("Check Square", Color.CYAN, commandPanel);
 		
 		scorePanel = new JPanel();
@@ -86,16 +82,13 @@ class SudokuFrame extends JFrame
 		makeMenuButton("PAUSE", Color.BLACK, scorePanel);
 		timeButton = makeMenuButton("TIME ME", Color.DARK_GRAY, scorePanel);
 		
-		//Initialise buttons that control currentValue to fill grid
-		String keyLabels = "123456789";
-		
-		for (int i = 0; i < keyLabels.length(); i++)
+		for (int i = 0; i < LABELS.length(); i++)
 	      {
-	         final String label = keyLabels.substring(i, i + 1);
+	         final String label = LABELS.substring(i, i + 1);
 	         JButton keyButton = new JButton(label);
-	         DEFAULT_COLOR = keyButton.getBackground();
 	         NumberSelect action = new NumberSelect(label);
 	         keyButton.addActionListener(action);
+	         keyButton.setBackground(DEFAULT_COLOR);
 	         buttonValue.add(keyButton);
 	         scorePanel.add(keyButton);
 	      }
@@ -108,20 +101,22 @@ class SudokuFrame extends JFrame
 		
 	}
 	
-	/*
-	 * makeButton makes a JButton, which is then added to the buttonPanel, with an attached ActionListener
-	 * ActionListener should be detached to add different functionality to different buttons
-	 * in the future, add 1 more argument to represent a type of ActionListener
-	 */
 	public JButton makeGridButton(int row, int col, String name, String currentValue, JPanel panel)
 	{
-		
-		
 		JButton button = new JButton(name);
 		panel.add(button);
 		NumberInsert insert = new NumberInsert(button);
 		button.addActionListener(insert);
-
+		button.setBackground(DEFAULT_COLOR);
+		button.setLayout(new GridLayout(3,3));
+		for (int i = 0; i < LABELS.length(); i++)
+	      {
+		    String label = LABELS.substring(i, i + 1);
+		    JLabel l = new JLabel(label);
+		    l.setVisible(false);
+			button.add(l);
+	      }
+		
 		return button;
 	}
 	
@@ -134,26 +129,53 @@ class SudokuFrame extends JFrame
 		return button;
 	}
 	
+	public JButton makeDraftButton(String name, JPanel panel)
+	{
+		JButton button = new JButton(name);
+		panel.add(button);
+		DraftFunction action = new DraftFunction();
+		button.addActionListener(action);
+		return button;
+	}
 /**
- * An action listener that sets the panel's background color
+ * An action listener that sets the
  */
 	
 	private class NumberInsert implements ActionListener
 	{
 		public NumberInsert(JButton button)
 		{
-			//newValue = getCurrentValue();
 			b = button;
 		}
 		
 		public void actionPerformed(ActionEvent event)
 		{
-			if(!getCurrentValue().equalsIgnoreCase("-1"))
-			b.setText(getCurrentValue());
-			//b.setFont(font)
+			if(!getCurrentValue().equalsIgnoreCase(BLANK)){
+				if(!draftMode){
+					b.setText(getCurrentValue());
+					for(Component labels:b.getComponents()){
+						labels.setVisible(false);
+					}
+					//b.setFont(font)
+				} else{
+					toggleDraftValues(getCurrentValue(), b);
+				}
+			}
 		}
 		private JButton b;
-		//private String newValue;
+	}
+	
+	public void toggleDraftValues(String value, JButton b){
+		Component label = b.getComponent(Integer.parseInt(value)-1);
+		if(label.isVisible()){
+			label.setVisible(false);
+		} else label.setVisible(true);
+			if(!b.getText().equalsIgnoreCase(BLANK)){
+				Component label2 = b.getComponent(Integer.parseInt(b.getText())-1);
+				b.setText(BLANK);
+				if(!label2.isVisible())
+					label2.setVisible(true);
+			}
 	}
 	
 	private class NumberSelect implements ActionListener
@@ -175,6 +197,33 @@ class SudokuFrame extends JFrame
 		private String newCurrentValue;
 	}
 	
+	private class DraftFunction implements ActionListener
+	{
+		public DraftFunction()
+		{
+			//might not pass in values
+			//newCurrentValue = select;
+		}
+		
+		public void actionPerformed(ActionEvent event)
+		{
+			if(draftButton.getBackground().equals(DEFAULT_COLOR)){
+				draftButton.setBackground(Color.RED);
+				setDraftMode(true);
+			}else {
+				draftButton.setBackground(DEFAULT_COLOR);
+				setDraftMode(false);
+			}
+			
+			
+		}
+		//private String newCurrentValue;
+	}
+	
+	public void setDraftMode(boolean enable){
+		draftMode = enable;
+	}
+	
 	//Dummy actionListner to be modified / deleted
 	private class NumberAction implements ActionListener
 	{
@@ -193,7 +242,7 @@ class SudokuFrame extends JFrame
 	}
 	
 	public String resetCurrentValue(){
-		this.currentValue = "-1";
+		this.currentValue.equalsIgnoreCase(BLANK);
 		return currentValue;
 	}
 	
@@ -209,7 +258,9 @@ class SudokuFrame extends JFrame
 		}
 	}
 	
-	private Color DEFAULT_COLOR;
+	
+	private boolean draftMode;
+	private Color DEFAULT_COLOR = new Color(238,238,238);
 	private JButton easyButton;
 	private JButton mediumButton;
 	private JButton hardButton;
@@ -228,7 +279,9 @@ class SudokuFrame extends JFrame
 	private ArrayList<ArrayList<JButton>> buttonGrid;
 	private ArrayList<JButton> buttonRow;
 
-	
+	public static final String LABELS = "123456789";
+	//public static final String EMPTY = "-1";
+	public static final String BLANK = "";
 	public static final int DEFAULT_WIDTH = 900;
 	public static final int DEFAULT_HEIGHT = 700;
 }
