@@ -43,9 +43,9 @@ class SudokuFrame extends JFrame
 		buttonPanel = new JPanel();
 		
 		//create buttons - the makebutton method adds the buttons automatically to buttonPanel 
-		for(int i = 0; i<9; i++)
+		for(int i = 1; i<=9; i++)
 		{
-			for(int j = 0; j<9; j++){
+			for(int j = 1; j<=9; j++){
 				String cellVal;
 				if (board.isCurrentlyVisibleCell(i,j))
 				{

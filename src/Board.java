@@ -163,7 +163,7 @@ public interface Board
 	 * @param row
 	 * @param col
 	 */
-	public void isEmptyCell(int row, int col);
+	public boolean isEmptyCell(int row, int col);
 	
 	/**
 	 * TODO:

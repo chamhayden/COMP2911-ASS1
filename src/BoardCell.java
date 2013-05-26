@@ -136,8 +136,8 @@ public class BoardCell {
 	{
 		this.valueFinal = -1;
 		this.valueInput = -1;
-		this.isCurrentlyVisible = false;
-		this.isInitiallyVisible = false;
+		this.isCurrentlyVisible = true;
+		this.isInitiallyVisible = true;
 		for (int i = 0; i < boardSize; i++)
 		{
 			tempNumbers[i] = false;

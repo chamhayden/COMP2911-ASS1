@@ -10,6 +10,8 @@ public class SudokuManager {
 	public SudokuManager()
 	{
 		
+		board = new SudokuBoard(BOARD_SIZE);
+		
 		pane = new OptionPanes();
 		difficulty = pane.chooseLevel();
 		
@@ -19,7 +21,8 @@ public class SudokuManager {
 			} else difficulty = pane.chooseLevel();
 		}
 
-		board = new SudokuBoard(BOARD_SIZE);
+		
+		board.generate(difficulty);
 		
 		/*
 		  

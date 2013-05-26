@@ -42,22 +42,15 @@ public class SudokuBoard implements Board {
 		this.currentlyGenerating = true;
 		this.difficulty = difficulty;
 		
-		// Start Filler Shit
-		for (int i = 1; i <= this.boardSize; i++)
+		for (int i = 1; i <= boardSize; i++)
 		{
-			for (int j = 1; j <= this.boardSize; j++)
+			for (int j = 1; j <= boardSize; j++)
 			{
 				this.setCellValue(i, j, i + j);
-				this.setCellVisibility(i, j, ((i + j)%2==0?true:false));
 			}
 		}
-		// End Filler Shit
-
 		
-		// TODO:
-		// LAURA EDIT UNDER HERE
-		//
-		BoardFiller filler = new BoardFiller(this);
+		/*BoardFiller filler = new BoardFiller(this);
 		Removal r = new Removal(this);
 		boolean filled = false;
 		while(filled){
@@ -65,15 +58,8 @@ public class SudokuBoard implements Board {
 		}
 
 		filler.fillBoard();
-		r.remove();
-		// I dont know, something like this:
-		// BoardFiller boardFiller = new BoardFiller();
-		// boardFiller.fill(board);
-		//
-		// BoardRemover boardRemover = new BoardRemover();
-		// boardRemover.remove(board);
-		//
-		// LAURA EDIT ABOVE HERE
+		r.remove();*/
+
 		this.currentlyGenerating = false;
 	}
 	
@@ -84,15 +70,8 @@ public class SudokuBoard implements Board {
 	 */
 	public void removeCellValue(int row, int col)
 	{
-		System.out.println("Row: " + row + ", Col: " + col);
-		if (currentlyGenerating)
-		{
-			getCell(row, col).removeFinalValue();
-		}
-		else
-		{
-			getCell(row, col).removeInputValue();
-		}
+		getCell(row, col).removeFinalValue();
+		getCell(row, col).removeInputValue();
 	}
 	
 	/**
@@ -103,7 +82,8 @@ public class SudokuBoard implements Board {
 	 */
 	public int getCellValue(int row, int col)
 	{
-		if (currentlyGenerating || isInitiallyVisibleCell(row, col))
+		//System.out.println("fc: getCellValue("+row+","+col+")");
+		if (currentlyGenerating || isEmptyCell(row, col))
 		{
 			return getCell(row, col).getFinalValue();
 		}
@@ -177,15 +157,15 @@ public class SudokuBoard implements Board {
 	/**
 	 * TODO: HAYDEN I JUST COMMENTED THIS OUT FOR NOW TO MAKE IT COMPILE - Laura
 	 */
-	public void isEmptyCell(int row, int col)
+	public boolean isEmptyCell(int row, int col)
 	{
 		if (currentlyGenerating)
 		{
-			getCell(row, col).isEmptyFinal();
+			return getCell(row, col).isEmptyFinal();
 		}
 		else
 		{
-			getCell(row, col).isEmptyInput();
+			return getCell(row, col).isEmptyInput();
 		}
 	}
 			
@@ -427,13 +407,14 @@ public class SudokuBoard implements Board {
 	 */
 	private BoardCell getCell(int row, int col)
 	{
+		//System.out.println("fc: getCell("+row+","+col+")");
 		return board.get(row - 1).get(col - 1);
 	}	
 	
 	private ArrayList<ArrayList<BoardCell>> board;
 	private int boardSize;
 	private int difficulty;
-	private boolean currentlyGenerating;
+	public boolean currentlyGenerating;
 	private static final int DIFFICULTY_EASY = 0;
 	private static final int DIFFICULTY_MEDIUM = 1;
 	private static final int DIFFICULTY_HARD = 2;
