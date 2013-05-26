@@ -84,6 +84,7 @@ public class SudokuBoard implements Board {
 	 */
 	public void removeCellValue(int row, int col)
 	{
+		System.out.println("Row: " + row + ", Col: " + col);
 		if (currentlyGenerating)
 		{
 			getCell(row, col).removeFinalValue();
