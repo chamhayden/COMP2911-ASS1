@@ -18,25 +18,31 @@ public class SudokuManager {
 				System.exit(0);
 			} else difficulty = pane.chooseLevel();
 		}
-		/*
-		 * using Board interface methods to get difficulty adds more code as we need to compare which difficulty to fetch and pass
-		 * when at this point there is no need to know what we are passing through 
-		 * so essentially ditching board interface getDifficulty methods for the moment -
-		 */
+
 		board = new SudokuBoard(BOARD_SIZE);
-		//board.generate(difficulty);
+		
+		/*
+		  
+		  CODE BELOW LINKS GUI TO BACK-END
+		  comment back in to re-link
+		 
+		board.generate(difficulty);
 		
 		//board.generate(board.difficultyValueEasy());
 		
 		
-		/*for (int i = 0; i < board.getBoardSize(); i++)
+		for (int i = 0; i < board.getBoardSize(); i++)
 		{
 			for (int j = 0; j < board.getBoardSize(); j++)
 			{
 				System.out.print(board.getCellValue(i, j) + " ");
 			}
 			System.out.println();
-		}*/
+		}
+		
+		*/
+		
+		
 		//initialises frame with events handler
 		EventQueue.invokeLater(new Runnable(){
 			public void run()
