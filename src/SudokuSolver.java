@@ -9,9 +9,9 @@ public class SudokuSolver implements UniqueChecker {
 		for(int row = 1; row <= this.BOARD_SIZE; row++) {
 			for(int col = 1; col <= this.BOARD_SIZE; col++) {
 				if(boardToSolve.isCurrentlyVisibleCell(row, col)) {
-					board[row][col] = boardToSolve.getCellValue(row, col);	
+					board[row-1][col-1] = boardToSolve.getCellValue(row, col);	
 				} else {
-					board[row][col] = this.EMPTY;
+					board[row-1][col-1] = this.EMPTY;
 				}
 			}
 		}
