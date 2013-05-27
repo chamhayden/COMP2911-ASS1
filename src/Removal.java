@@ -31,9 +31,10 @@ public class Removal {
 		Random r = new Random();
 		int toRemove;
 		int index;
-		int x, y;
+		int row, col;
 		Point p;
 		int z;
+		Point removed;
 		int count = 0;
 		boolean can;
 		if(difficulty <= 1){
@@ -43,22 +44,16 @@ public class Removal {
 		} else {
 			toRemove = 80;
 		}
-		while(toRemove > 0){
-			index = r.nextInt(removable.size());
-			p = removable.get(index);
-			x = p.getRow();
-			y = p.getCol();
-			z = b.getCellValue(x+1, y+1);
+		while(toRemove > 0 && count < 1000){
+			removed = removeRandom();
+			row = removed.getRow();
+			col = removed.getCol();
+			z = b.getCellValue(row+1, col+1);
 			can = true;
-			if(b.isInitiallyVisibleCell(x+1, y+1) == false){
-				continue;
-			}
-			if (count > 1000){
-				break;
-			}
+
 			for(int i = 1; i < 10; i++){
 				if(i != z){
-					if (!(b.rowHas(x+1, i) || b.columnHas(y+1, i) || b.squareHas(squareNo(x,y), i))){
+					if (!(b.rowHas(row+1, i) || b.columnHas(col+1, i) || b.squareHas(squareNo(row,col), i))){
 						can = false;
 						count++;
 						break;
@@ -66,50 +61,56 @@ public class Removal {
 				}
 			}
 			if(can){
-				b.setCellVisibility(x+1, y+1, false);
-				removable.remove(index);
 				toRemove--;
 				System.out.println("");
-				System.out.println(x + " " + y);
+				System.out.println(row + " " + col);
 				printBoard();
 				System.out.println("");
+			} else {
+				putBack(removed);
 			}
 		}
 	}
 	
 	private void harderRemove(){
-		int x, y;
-		int index;
-		Random r = new Random();
-		Point p;
-		index = r.nextInt(removable.size());
-		p = removable.get(index);
-		x = p.getRow();
-		y = p.getCol();
+		
 	}
 	
 	private void complexRemove(){
 		int complexity = difficulty*DIFF_CALIBRATION;
 		int i = 0;
-		int x, y, z;
-		int index;
-		Point p;
+		Point removed;
 		int diff;
 		Random r = new Random();
 		while (i < complexity){
-			index = r.nextInt(removable.size());
-			p = removable.get(index);
-			x = p.getRow();
-			y = p.getCol();
-			b.setCellVisibility(x+1, y+1, false);
+			removed = removeRandom();
 			//diff = checker.isSudokuSolutionUnique(b);
 			//if(diff < difficulty){
 			if(checker.isSudokuSolutionUnique(b)){
 				i += 1;//diff;
 			} else {
-				b.setCellVisibility(x+1, y+1, false);
+				putBack(removed);
 			}
 		}
+	}
+	
+	private Point removeRandom(){
+		Random r = new Random();
+		Point p;
+		int x,y;
+		r.nextInt(removable.size());
+		p = removable.remove(r.nextInt(removable.size()));
+		x = p.getRow();
+		y = p.getCol();
+		b.setCellVisibility(x+1, y+1, false);
+		return p;
+	}
+	
+	private void putBack(Point removed){
+		int row = removed.getRow();
+		int col = removed.getCol();
+		removable.add(new Point(row, col));
+		b.setCellVisibility(row+1, col+1, true);
 	}
 	
 	private void initialise(){
