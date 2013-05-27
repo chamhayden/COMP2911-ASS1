@@ -64,11 +64,8 @@ public class SudokuState {
 		public void solve() {
 			debug("Updating Temp Vals");
 			this.updateTempVals();
-
 			System.out.println("_______________");
 			this.print2DBoard(this.board);
-
-			
 			if(this.solved()) {
 				debug("Is Solved and Valid");
 			} else {
@@ -100,9 +97,10 @@ public class SudokuState {
 			boolean stepsSolved = false;
 =======
 */
-		public void solveSimpleSteps()
+		public boolean solveSimpleSteps()
 		{
 //>>>>>>> b15af50f3288580a53cb4cba497a5c14d7e681e6
+			boolean stepsSolved = false;
 			boolean cellsFilled = false;
 			for(int row = 0; row < BOARD_SIZE; row++){
 				for(int col = 0; col < BOARD_SIZE; col++) {
@@ -113,19 +111,17 @@ public class SudokuState {
 							this.updateCellsFilled();
 							this.updateTempVals();
 							cellsFilled = true;
-						} else {
-							// **************************
-						}
+						} 
 					}
 				}
 			}
 			if(cellsFilled) {
 				this.solveSimpleSteps();
 				//TODO I COMMENTED OUT THIS - laura
-				//stepsSolved = true;
+				stepsSolved = true;
 			}
 			//TODO AND THIS - laura
-			//return stepsSolved;
+			return stepsSolved;
 			
 		}
 
