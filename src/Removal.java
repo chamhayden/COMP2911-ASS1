@@ -30,9 +30,7 @@ public class Removal {
 	private void simpleRemove(){
 		Random r = new Random();
 		int toRemove;
-		int index;
 		int row, col;
-		Point p;
 		int z;
 		Point removed;
 		int count = 0;
@@ -62,10 +60,10 @@ public class Removal {
 			}
 			if(can){
 				toRemove--;
-				System.out.println("");
-				System.out.println(row + " " + col);
-				printBoard();
-				System.out.println("");
+				//System.out.println("");
+				//System.out.println(row + " " + col);
+				//printBoard();
+				//System.out.println("");
 			} else {
 				putBack(removed);
 			}
@@ -73,7 +71,32 @@ public class Removal {
 	}
 	
 	private void harderRemove(){
-		
+		Point removed = removeRandom();
+		int row = removed.getRow();
+		int col = removed.getCol();
+		int removedVal = b.getCellValue(row+1, col+1);
+		int[] adjRows = findAdj(row);
+		int[] adjCols = findAdj(col);
+		int[] adjSquares = findAdjSquares(row, col);
+		assert(findAdj(0)[0] == 1);
+		assert(findAdj(0)[1] == 2);
+		assert(findAdj(1)[0] == 0);
+		assert(findAdj(1)[1] == 2);
+		assert(findAdj(2)[0] == 0);
+		assert(findAdj(2)[1] == 1);
+		assert(findAdj(3)[0] == 4);
+		assert(findAdj(3)[1] == 5);
+		assert(findAdj(4)[0] == 3);
+		assert(findAdj(4)[1] == 5);
+		assert(findAdj(5)[0] == 3);
+		assert(findAdj(5)[1] == 4);
+		assert(findAdj(6)[0] == 7);
+		assert(findAdj(6)[1] == 8);
+		assert(findAdj(7)[0] == 6);
+		assert(findAdj(7)[1] == 8);
+		assert(findAdj(8)[0] == 6);
+		assert(findAdj(8)[1] == 7);
+		//TODO test findAdjSquares
 	}
 	
 	private void complexRemove(){
@@ -111,6 +134,45 @@ public class Removal {
 		int col = removed.getCol();
 		removable.add(new Point(row, col));
 		b.setCellVisibility(row+1, col+1, true);
+	}
+	
+	private int[] findAdj(int position){
+		int[] adj = new int[2];
+		int x = ((int)Math.floor(position/3)*3);
+		int y = position%3;
+		if(y == 0){
+			adj[0] = x+1;
+			adj[1] = x+2;
+		} else if (y == 1){
+			adj[0] = x;
+			adj[1] = x + 2;
+		} else {
+			adj[0] = x;
+			adj[1] = x + 1;
+		}
+		return adj;
+	}
+	
+	private int[] findAdjSquares(int row, int col){
+		int[] adj = new int[4];
+		int x = (int)Math.floor(row/3);
+		int y = (int)Math.floor(col/3);
+		int i, j, k;
+		k = 0;
+		for(i = 0; i < 3; i++){
+			if (i == x){
+				continue;
+			}
+			for(j = 0; j < 3; j++){
+				if (j == y){
+					continue;
+				}
+				adj[k] = i*3+j;
+				k++;
+			}
+		}
+		
+		return adj;
 	}
 	
 	private void initialise(){
