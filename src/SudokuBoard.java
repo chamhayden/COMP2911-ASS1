@@ -42,6 +42,7 @@ public class SudokuBoard implements Board {
 		this.currentlyGenerating = true;
 		this.difficulty = difficulty;
 		
+		/*
 		for (int i = 1; i <= boardSize; i++)
 		{
 			for (int j = 1; j <= boardSize; j++)
@@ -49,16 +50,15 @@ public class SudokuBoard implements Board {
 				this.setCellValue(i, j, i + j);
 			}
 		}
+		*/
 		
-		/*BoardFiller filler = new BoardFiller(this);
+		BoardFiller filler = new BoardFiller(this);
 		Removal r = new Removal(this);
 		boolean filled = false;
-		while(filled){
-			filler.fillBoard();
+		while(!filled){
+			filled = filler.fillBoard();
 		}
-
-		filler.fillBoard();
-		r.remove();*/
+		r.remove();
 
 		this.currentlyGenerating = false;
 	}
@@ -148,16 +148,18 @@ public class SudokuBoard implements Board {
 	 * @param col Column cell is in
 	 * @param visiblity Whether the particular cell is visible or not
 	 */
+	
+	//HAYDEN I CHANGED THIS SO THAT SETTING INITIALLY VISIBLE ALSO SETS CURRENTLY VISIBLE
 	public void setCellVisibility(int row, int col, boolean visibility)
 	{
 		if (currentlyGenerating)
 		{
 			getCell(row, col).setInitiallyVisible(visibility);
 		}
-		else
-		{
+		//else
+		//{
 			getCell(row, col).setCurrentlyVisible(visibility);
-		}
+		//}
 	}
 	
 	/**
@@ -384,11 +386,18 @@ public class SudokuBoard implements Board {
 			sectionId += 3;
 		}
 		
-		if (row <= 6)
+		//HAYDEN I CHANGED THESE SO THEY WORK FOR ME, I AM NUMBERING ROWS
+		//1 -9 FROM THE TOP DOWN, PERHAPS YOU ARE NUMBERING FROM THE BOTTOM UP
+		//THIS IS THE ONLY PLACE WHERE IT SEEMS TO BE AN ISSUE
+		//THIS WORKS NOW, THE ONLY REASON IT MAY BE AN ISSUE IS IF SOMEONE ELSE
+		//TRIES TO USE THIS FUNCTION LATER WITH A BOTTOM UP NUMBERING SYSTEM
+		//if (row <= 6)
+		if (row > 3)
 		{
 			sectionId += 3;
 		}
-		if (row <= 9)
+		//if (row <= 9)
+		if (row > 6)
 		{
 			sectionId += 3;
 		}

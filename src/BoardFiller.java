@@ -29,31 +29,31 @@ public class BoardFiller {
 		int counter = 0;
 		
 		
-		for(i = 1; i < 10; i++){
+		for(i = 0; i < 9; i++){
 			counter = 0;
-			j = 1;
-			while(j < 10){				
+			j = 0;
+			while(j < 9){				
 				k = squareNo(i, j);
 				// TODO THIS IS A NICE PLACE TO WATCH FROM IF YOU WANT TO =)
-				System.out.printf("\n\n\n\n");
+				//System.out.printf("\n\n\n\n");
 				//printBoard();
-				System.out.printf("\n\n\n");
+				//System.out.printf("\n\n\n");
 				//remove to here
 				for(int m = 1; m < 10; m++){
 					l.add(m);
 				}
 				do{
 					x = l.remove(r.nextInt(l.size()));
-				} while(!l.isEmpty() && (b.rowHas(i, x) || b.columnHas(j, x) || b.squareHas(k, x)));
+				} while(!l.isEmpty() && (b.rowHas(i+1, x) || b.columnHas(j+1, x) || b.squareHas(k+1, x)));
 				
 				if(l.isEmpty()){
 					if(i%3 == 2){
 						resetPoint = ((int)Math.floor(j/3)*3);
 					} else {
-						resetPoint = 1;
+						resetPoint = 0;
 					}
-					for(int p = resetPoint; p < 10; p++){
-						b.removeCellValue(i, p);
+					for(int p = resetPoint; p < 9; p++){
+						b.removeCellValue(i+1, p+1);
 					}
 					j = resetPoint;
 					counter++;
@@ -63,8 +63,8 @@ public class BoardFiller {
 					}
 					continue;
 				}
-				System.out.println("Setting, " + i + " " + j);
-				b.setCellValue(i, j, x);
+				//System.out.println("Setting, " + i + " " + j);
+				b.setCellValue(i+1, j+1, x);
 				j++;
 			}
 		}
@@ -73,14 +73,10 @@ public class BoardFiller {
 	}
 	
 	public int squarePos(int row, int collumn){
-		row--;
-		collumn--;
 		return (collumn % 3) + 3*((row % 3));
 	}
 	
 	public int squareNo(int row, int collumn){
-		row--;
-		collumn--;
 		return ((int)Math.floor(collumn/3) + (int)Math.floor(row/3)*3);
 	}
 	
@@ -88,11 +84,11 @@ public class BoardFiller {
 	//TODO remove after debugging is finished
 	public void printBoard(){
 		int i,j;
-		for(i = 1; i < 10; i++){
-			for(j = 1; j < 10; j++){
-				System.out.println("checking if " + i + " " + j + " is initially visible");
-				if(b.isInitiallyVisibleCell(i, j)){
-					System.out.printf("%d" , b.getCellValue(i, j));
+		for(i = 0; i < 9; i++){
+			for(j = 0; j < 9; j++){
+				//System.out.println("checking if " + i + " " + j + " is initially visible");
+				if(b.isInitiallyVisibleCell(i+1, j+1)){
+					System.out.printf("%d" , b.getCellValue(i+1, j+1));
 				} else {
 					System.out.printf("%d", 0);
 				}

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -13,13 +14,15 @@ public class Removal {
 			difficulty = HARD;
 		}
 		checker = new SudokuSolver();
+		removable = new ArrayList<Point>();
+		initialise();
 	}
 	
 	public void remove(){
 		simpleRemove();
-		checker.isSudokuSolutionUnique(b);
+		//checker.isSudokuSolutionUnique(b);
 		if (difficulty > 1){
-			complexRemove();
+			//complexRemove();
 		}
 	}
 	
@@ -40,18 +43,18 @@ public class Removal {
 		while(toRemove > 0){
 			x = r.nextInt(9);
 			y = r.nextInt(9);
-			z = b.getCellValue(x, y);
+			z = b.getCellValue(x+1, y+1);
 			can = true;
-			if(b.isInitiallyVisibleCell(x, y) == false){
+			if(b.isInitiallyVisibleCell(x+1, y+1) == false){
 				continue;
 			}
 			//TODO the randomness and trial and error nature of this seems inefficient
 			if (count > 1000){
 				break;
 			}
-			for(int i = 1; i < 10; i++){
+			for(int i = 0; i < 9; i++){
 				if(i != z){
-					if (!(b.rowHas(x, i) || b.columnHas(y, i) || b.squareHas(x,y))){
+					if (!(b.rowHas(x+1, i) || b.columnHas(y+1, i) || b.squareHas(x+1,y))){
 						can = false;
 						count++;
 						break;
@@ -59,7 +62,7 @@ public class Removal {
 				}
 			}
 			if(can){
-				b.setCellVisibility(x, y, false);
+				b.setCellVisibility(x+1, y+1, false);
 				toRemove--;
 			}
 		}
@@ -72,15 +75,24 @@ public class Removal {
 		int diff;
 		Random r = new Random();
 		while (i < complexity){
-			x = r.nextInt();
-			y = r.nextInt();
-			b.setCellVisibility(x, y, false);
+			x = r.nextInt(9);
+			y = r.nextInt(9);
+			b.setCellVisibility(x+1, y+1, false);
 			//diff = checker.isSudokuSolutionUnique(b);
 			//if(diff < difficulty){
 			if(checker.isSudokuSolutionUnique(b)){
 				i += 1;//diff;
 			} else {
-				b.setCellVisibility(x, y, false);
+				b.setCellVisibility(x+1, y+1, false);
+			}
+		}
+	}
+	
+	private void initialise(){
+		int row, col;
+		for(row = 0; row < 9; row++){
+			for(col = 0; col < 9; col++){
+				removable.add(new Point(row, col));
 			}
 		}
 	}
@@ -88,6 +100,7 @@ public class Removal {
 	private Board b;
 	private int difficulty;
 	SudokuSolver checker;
+	ArrayList<Point> removable;
 	private static final int EASY = 1;
 	private static final int MEDIUM = 2;
 	private static final int HARD = 3;
