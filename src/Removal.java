@@ -22,6 +22,7 @@ public class Removal {
 		simpleRemove();
 		//checker.isSudokuSolutionUnique(b);
 		if (difficulty > 1){
+			harderRemove();
 			//complexRemove();
 		}
 	}
@@ -74,6 +75,17 @@ public class Removal {
 				System.out.println("");
 			}
 		}
+	}
+	
+	private void harderRemove(){
+		int x, y;
+		int index;
+		Random r = new Random();
+		Point p;
+		index = r.nextInt(removable.size());
+		p = removable.get(index);
+		x = p.getRow();
+		y = p.getCol();
 	}
 	
 	private void complexRemove(){
