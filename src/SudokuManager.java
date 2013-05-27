@@ -68,5 +68,5 @@ public class SudokuManager {
 	private int difficulty;
 	private SudokuBoard board;
 	private static final int BOARD_SIZE = 9;
-	private final int EXIT_VALUE = 4;
+	private final int EXIT_VALUE = 3;
 }

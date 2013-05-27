@@ -6,6 +6,10 @@ import javax.swing.JOptionPane;
  */
 public class OptionPanes {
 	
+	public OptionPanes(){
+		
+	}
+	
 	public int closedOption(){
 		return JOptionPane.CLOSED_OPTION;
 	}

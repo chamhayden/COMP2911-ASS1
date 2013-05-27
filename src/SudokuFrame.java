@@ -22,8 +22,9 @@ import javax.swing.*;
 //NB: JFrame's default layoutManager is BorderLayout (so no need to setLayout unless we want to change it)
 class SudokuFrame extends JFrame
 {
-	public SudokuFrame(Board board)
+	public SudokuFrame(Board sBoard)
 	{
+		this.board = sBoard;
 		setTitle("SudokuFrame");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		
@@ -39,23 +40,23 @@ class SudokuFrame extends JFrame
 		buttonRow = new ArrayList<JButton>(8);
 		buttonValue = new LinkedList<JButton>();
 		
-		//button panel is created, which will be added to SudokuFrame
 		buttonPanel = new JPanel();
 		
-		//create buttons - the makebutton method adds the buttons automatically to buttonPanel 
 		for(int i = 1; i<=9; i++)
 		{
 			for(int j = 1; j<=9; j++){
 				String cellVal;
+				boolean given = false;
 				if (board.isCurrentlyVisibleCell(i,j))
 				{
 					cellVal = Integer.toString(board.getCellValue(i,j));
+					given = true;
 				}
 				else
 				{
 					cellVal = BLANK;
 				}
-				buttonRow.add(makeGridButton(i, j ,cellVal, currentValue, buttonPanel));
+				buttonRow.add(makeGridButton(i, j ,cellVal, currentValue, buttonPanel, given));
 			}
 			buttonGrid.add(buttonRow);
 		}
@@ -88,7 +89,7 @@ class SudokuFrame extends JFrame
 	         JButton keyButton = new JButton(label);
 	         NumberSelect action = new NumberSelect(label);
 	         keyButton.addActionListener(action);
-	         keyButton.setBackground(DEFAULT_COLOR);
+	         keyButton.setBackground(DEFAULT_COLOR_INPUT);
 	         buttonValue.add(keyButton);
 	         scorePanel.add(keyButton);
 	      }
@@ -101,22 +102,28 @@ class SudokuFrame extends JFrame
 		
 	}
 	
-	public JButton makeGridButton(int row, int col, String name, String currentValue, JPanel panel)
+	public JButton makeGridButton(int row, int col, String name, String currentValue, JPanel panel, boolean given)
 	{
 		JButton button = new JButton(name);
 		panel.add(button);
-		NumberInsert insert = new NumberInsert(button);
-		button.addActionListener(insert);
-		button.setBackground(DEFAULT_COLOR);
-		button.setLayout(new GridLayout(3,3));
-		for (int i = 0; i < LABELS.length(); i++)
-	      {
-		    String label = LABELS.substring(i, i + 1);
-		    JLabel l = new JLabel(label);
-		    l.setVisible(false);
-			button.add(l);
-	      }
-		
+		button.setBackground(DEFAULT_COLOR_GRID);
+		button.setFont(ARIALBOLD);
+		if(!given){
+			NumberInsert insert = new NumberInsert(button);
+			button.addActionListener(insert);
+			button.setForeground(userTemp);
+			//setting GridLayout on button for draft values
+			button.setLayout(new GridLayout(3,3));
+			for (int i = 0; i < LABELS.length(); i++)
+			{
+			    String label = LABELS.substring(i, i + 1);
+			    JLabel l = new JLabel(label);
+			    l.setVisible(false);
+			    l.setFont(DRAFTSMALL);
+				l.setForeground(draftColor);
+				button.add(l);
+			}
+		}
 		return button;
 	}
 	
@@ -156,12 +163,14 @@ class SudokuFrame extends JFrame
 					for(Component labels:b.getComponents()){
 						labels.setVisible(false);
 					}
-					//b.setFont(font)
+					location = buttonRow.indexOf(b);
+					board.setCellTempVisibility(rowVal(location), colVal(location), Integer.parseInt(b.getText()), true);
 				} else{
 					toggleDraftValues(getCurrentValue(), b);
 				}
 			}
 		}
+		int location;
 		private JButton b;
 	}
 	
@@ -207,11 +216,11 @@ class SudokuFrame extends JFrame
 		
 		public void actionPerformed(ActionEvent event)
 		{
-			if(draftButton.getBackground().equals(DEFAULT_COLOR)){
+			if(draftButton.getBackground().equals(DEFAULT_COLOR_GRID)){
 				draftButton.setBackground(Color.RED);
 				setDraftMode(true);
 			}else {
-				draftButton.setBackground(DEFAULT_COLOR);
+				draftButton.setBackground(DEFAULT_COLOR_GRID);
 				setDraftMode(false);
 			}
 			
@@ -242,7 +251,7 @@ class SudokuFrame extends JFrame
 	}
 	
 	public String resetCurrentValue(){
-		this.currentValue.equalsIgnoreCase(BLANK);
+		this.currentValue = BLANK;
 		return currentValue;
 	}
 	
@@ -254,13 +263,27 @@ class SudokuFrame extends JFrame
 		for(JButton jb: buttonValue){
 			if(jb.getText().equalsIgnoreCase(current))
 				jb.setBackground(Color.PINK);
-			else jb.setBackground(DEFAULT_COLOR);
+			else jb.setBackground(DEFAULT_COLOR_INPUT);
 		}
 	}
 	
+	private int rowVal(int index){
+		int row = (int)Math.floor(index/9);
+		return row;
+	}
 	
+	private int colVal(int index){
+		int col = index%9;
+		return col;
+	}
+	
+	public Color DEFAULT_COLOR_INPUT = new Color(238,238,238);
+	public Color userTemp = Color.BLUE;
+	public Color draftColor = Color.LIGHT_GRAY;
+	public Font DRAFTSMALL = new Font("Courrier",Font.CENTER_BASELINE ,15);
+	public Font ARIALBOLD = new Font("Arial", Font.BOLD, 20);
 	private boolean draftMode;
-	private Color DEFAULT_COLOR = new Color(238,238,238);
+	private Color DEFAULT_COLOR_GRID = new Color(238,238,238);
 	private JButton easyButton;
 	private JButton mediumButton;
 	private JButton hardButton;
@@ -279,6 +302,7 @@ class SudokuFrame extends JFrame
 	private ArrayList<ArrayList<JButton>> buttonGrid;
 	private ArrayList<JButton> buttonRow;
 
+	public Board board;
 	public static final String LABELS = "123456789";
 	//public static final String EMPTY = "-1";
 	public static final String BLANK = "";
