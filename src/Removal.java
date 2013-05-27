@@ -55,9 +55,9 @@ public class Removal {
 			if (count > 1000){
 				break;
 			}
-			for(int i = 0; i < 9; i++){
+			for(int i = 1; i < 10; i++){
 				if(i != z){
-					if (!(b.rowHas(x+1, i) || b.columnHas(y+1, i) || b.squareHas(x+1,y))){
+					if (!(b.rowHas(x+1, i) || b.columnHas(y+1, i) || b.squareHas(squareNo(x,y), i))){
 						can = false;
 						count++;
 						break;
@@ -68,6 +68,10 @@ public class Removal {
 				b.setCellVisibility(x+1, y+1, false);
 				removable.remove(index);
 				toRemove--;
+				System.out.println("");
+				System.out.println(x + " " + y);
+				printBoard();
+				System.out.println("");
 			}
 		}
 	}
@@ -102,6 +106,27 @@ public class Removal {
 			for(col = 0; col < 9; col++){
 				removable.add(new Point(row, col));
 			}
+		}
+	}
+	
+	public int squareNo(int row, int collumn){
+		return ((int)Math.floor(collumn/3) + (int)Math.floor(row/3)*3);
+	}
+	
+	//FOR DEBUGGING PURPOSES ONLY DO NOT USE
+	//TODO remove after debugging is finished
+	public void printBoard(){
+		int i,j;
+		for(i = 0; i < 9; i++){
+			for(j = 0; j < 9; j++){
+				//System.out.println("checking if " + i + " " + j + " is initially visible");
+				if(b.isInitiallyVisibleCell(i+1, j+1)){
+					System.out.printf("%d" , b.getCellValue(i+1, j+1));
+				} else {
+					System.out.printf("%d", 0);
+				}
+			}
+			System.out.printf("\n");
 		}
 	}
 	
