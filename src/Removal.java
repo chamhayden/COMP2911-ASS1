@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Removal {
 	
-	public Removal(Board b){
+	public Removal(Board board){
 		this.board = board;
 		checker = new SudokuSolver();
 		removable = new ArrayList<Point>();
