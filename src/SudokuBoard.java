@@ -70,8 +70,14 @@ public class SudokuBoard implements Board {
 	 */
 	public void removeCellValue(int row, int col)
 	{
-		getCell(row, col).removeFinalValue();
-		getCell(row, col).removeInputValue();
+		if (currentlyGenerating)
+		{
+			getCell(row, col).removeFinalValue();
+		}
+		else
+		{
+			getCell(row, col).removeInputValue();
+		}
 	}
 	
 	/**
