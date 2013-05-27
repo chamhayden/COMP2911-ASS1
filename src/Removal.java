@@ -1,12 +1,18 @@
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
 
 public class Removal {
 	
-	public Removal(Board board){
-		this.board = board;
+	public Removal(Board b){
+		this.b = b;
+		if(b.getDifficulty() == b.difficultyValueEasy()){
+			difficulty = EASY;
+		} else if (b.getDifficulty() == b.difficultyValueMedium()){
+			difficulty = MEDIUM;
+		} else {
+			difficulty = HARD;
+		}
 		checker = new SudokuSolver();
 		removable = new ArrayList<Point>();
 		initialise();
@@ -15,7 +21,7 @@ public class Removal {
 	public void remove(){
 		simpleRemove();
 		//checker.isSudokuSolutionUnique(b);
-		if (difficulty > board.difficultyValueEasy()){
+		if (difficulty > 1){
 			//complexRemove();
 		}
 	}
@@ -27,9 +33,9 @@ public class Removal {
 		int z;
 		int count = 0;
 		boolean can;
-		if(difficulty <= board.difficultyValueEasy()){
+		if(difficulty <= 1){
 			toRemove = 20;
-		} else if (difficulty <= board.difficultyValueMedium()){
+		} else if (difficulty <= 2){
 			toRemove = 30;
 		} else {
 			toRemove = 80;
@@ -37,9 +43,9 @@ public class Removal {
 		while(toRemove > 0){
 			x = r.nextInt(9);
 			y = r.nextInt(9);
-			z = board.getCellValue(x+1, y+1);
+			z = b.getCellValue(x+1, y+1);
 			can = true;
-			if(board.isInitiallyVisibleCell(x+1, y+1) == false){
+			if(b.isInitiallyVisibleCell(x+1, y+1) == false){
 				continue;
 			}
 			//TODO the randomness and trial and error nature of this seems inefficient
@@ -48,7 +54,7 @@ public class Removal {
 			}
 			for(int i = 0; i < 9; i++){
 				if(i != z){
-					if (!(board.rowHas(x+1, i) || board.columnHas(y+1, i) || board.squareHas(x+1,y))){
+					if (!(b.rowHas(x+1, i) || b.columnHas(y+1, i) || b.squareHas(x+1,y))){
 						can = false;
 						count++;
 						break;
@@ -56,14 +62,14 @@ public class Removal {
 				}
 			}
 			if(can){
-				board.setCellVisibility(x+1, y+1, false);
+				b.setCellVisibility(x+1, y+1, false);
 				toRemove--;
 			}
 		}
 	}
 	
 	private void complexRemove(){
-		int complexity = (difficulty+1)*DIFF_CALIBRATION;
+		int complexity = difficulty*DIFF_CALIBRATION;
 		int i = 0;
 		int x, y, z;
 		int diff;
@@ -71,13 +77,13 @@ public class Removal {
 		while (i < complexity){
 			x = r.nextInt(9);
 			y = r.nextInt(9);
-			board.setCellVisibility(x+1, y+1, false);
+			b.setCellVisibility(x+1, y+1, false);
 			//diff = checker.isSudokuSolutionUnique(b);
 			//if(diff < difficulty){
-			if(checker.isSudokuSolutionUnique(board)){
+			if(checker.isSudokuSolutionUnique(b)){
 				i += 1;//diff;
 			} else {
-				board.setCellVisibility(x+1, y+1, false);
+				b.setCellVisibility(x+1, y+1, false);
 			}
 		}
 	}
@@ -91,10 +97,13 @@ public class Removal {
 		}
 	}
 	
-	private Board board;
+	private Board b;
 	private int difficulty;
 	SudokuSolver checker;
 	ArrayList<Point> removable;
+	private static final int EASY = 1;
+	private static final int MEDIUM = 2;
+	private static final int HARD = 3;
 	private static final int MISSING = -1;
 	private static final int DIFF_CALIBRATION = 10;
 }
