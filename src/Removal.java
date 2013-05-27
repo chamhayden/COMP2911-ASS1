@@ -95,9 +95,6 @@ public class Removal {
 	private int difficulty;
 	SudokuSolver checker;
 	ArrayList<Point> removable;
-	private static final int EASY = 1;
-	private static final int MEDIUM = 2;
-	private static final int HARD = 3;
 	private static final int MISSING = -1;
 	private static final int DIFF_CALIBRATION = 10;
 }
