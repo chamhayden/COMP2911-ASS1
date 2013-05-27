@@ -29,7 +29,9 @@ public class Removal {
 	private void simpleRemove(){
 		Random r = new Random();
 		int toRemove;
+		int index;
 		int x, y;
+		Point p;
 		int z;
 		int count = 0;
 		boolean can;
@@ -41,14 +43,15 @@ public class Removal {
 			toRemove = 80;
 		}
 		while(toRemove > 0){
-			x = r.nextInt(9);
-			y = r.nextInt(9);
+			index = r.nextInt(removable.size());
+			p = removable.get(index);
+			x = p.getRow();
+			y = p.getCol();
 			z = b.getCellValue(x+1, y+1);
 			can = true;
 			if(b.isInitiallyVisibleCell(x+1, y+1) == false){
 				continue;
 			}
-			//TODO the randomness and trial and error nature of this seems inefficient
 			if (count > 1000){
 				break;
 			}
@@ -63,6 +66,7 @@ public class Removal {
 			}
 			if(can){
 				b.setCellVisibility(x+1, y+1, false);
+				removable.remove(index);
 				toRemove--;
 			}
 		}
@@ -72,11 +76,15 @@ public class Removal {
 		int complexity = difficulty*DIFF_CALIBRATION;
 		int i = 0;
 		int x, y, z;
+		int index;
+		Point p;
 		int diff;
 		Random r = new Random();
 		while (i < complexity){
-			x = r.nextInt(9);
-			y = r.nextInt(9);
+			index = r.nextInt(removable.size());
+			p = removable.get(index);
+			x = p.getRow();
+			y = p.getCol();
 			b.setCellVisibility(x+1, y+1, false);
 			//diff = checker.isSudokuSolutionUnique(b);
 			//if(diff < difficulty){
