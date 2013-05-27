@@ -25,6 +25,7 @@ public class Removal {
 			harderRemove();
 			//complexRemove();
 		}
+		simpleRemove();
 	}
 	
 	private void simpleRemove(){
@@ -71,13 +72,7 @@ public class Removal {
 	}
 	
 	private void harderRemove(){
-		Point removed = removeRandom();
-		int row = removed.getRow();
-		int col = removed.getCol();
-		int removedVal = b.getCellValue(row+1, col+1);
-		int[] adjRows = findAdj(row);
-		int[] adjCols = findAdj(col);
-		int[] adjSquares = findAdjSquares(row, col);
+		
 		assert(findAdj(0)[0] == 1);
 		assert(findAdj(0)[1] == 2);
 		assert(findAdj(1)[0] == 0);
@@ -97,6 +92,33 @@ public class Removal {
 		assert(findAdj(8)[0] == 6);
 		assert(findAdj(8)[1] == 7);
 		//TODO test findAdjSquares
+		
+		
+		int count = 0;
+		int sucess = 0;
+		while(count < 1000){
+			Point removed = removeRandom();
+			int row = removed.getRow();
+			int col = removed.getCol();
+			int removedVal = b.getCellValue(row+1, col+1);
+			int[] adjRows = findAdj(row);
+			int[] adjCols = findAdj(col);
+			int[] adjSquares = findAdjSquares(row, col);
+	
+			
+			boolean inAdjRows = (b.rowHas(adjRows[0]+1, removedVal) && b.rowHas(adjRows[1]+1, removedVal));
+			boolean inAdjCols = (b.columnHas(adjCols[0]+1, removedVal) && b.columnHas(adjCols[1]+1, removedVal));
+			
+			if(inAdjRows && inAdjCols){
+				count++;
+				sucess++;
+			} else {
+				putBack(removed);
+				count++;
+			}
+		}
+		System.out.println("Harder Remove got " + sucess + " values");
+		
 	}
 	
 	private void complexRemove(){
