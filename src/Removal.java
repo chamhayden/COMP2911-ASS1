@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -6,13 +7,6 @@ public class Removal {
 	
 	public Removal(Board b){
 		this.b = b;
-		if(b.getDifficulty() == b.difficultyValueEasy()){
-			difficulty = EASY;
-		} else if (b.getDifficulty() == b.difficultyValueMedium()){
-			difficulty = MEDIUM;
-		} else {
-			difficulty = HARD;
-		}
 		checker = new SudokuSolver();
 		removable = new ArrayList<Point>();
 		initialise();
@@ -21,7 +15,7 @@ public class Removal {
 	public void remove(){
 		simpleRemove();
 		//checker.isSudokuSolutionUnique(b);
-		if (difficulty > 1){
+		if (difficulty > b.difficultyValueEasy()){
 			//complexRemove();
 		}
 	}
@@ -33,9 +27,9 @@ public class Removal {
 		int z;
 		int count = 0;
 		boolean can;
-		if(difficulty <= 1){
+		if(difficulty <= b.difficultyValueEasy()){
 			toRemove = 20;
-		} else if (difficulty <= 2){
+		} else if (difficulty <= b.difficultyValueMedium()){
 			toRemove = 30;
 		} else {
 			toRemove = 80;
@@ -69,7 +63,7 @@ public class Removal {
 	}
 	
 	private void complexRemove(){
-		int complexity = difficulty*DIFF_CALIBRATION;
+		int complexity = (difficulty+1)*DIFF_CALIBRATION;
 		int i = 0;
 		int x, y, z;
 		int diff;
