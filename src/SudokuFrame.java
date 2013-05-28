@@ -77,6 +77,7 @@ public class SudokuFrame extends JFrame
 		
 		eraseButton = makeCommandButton("Rubber", commandPanel, new eraseFunction());
 		draftButton = makeCommandButton("DRAFT", commandPanel, new draftFunction());
+		
 		scorePanel = new JPanel();
 		scorePanel.setLayout(new FlowLayout());
 		scorePanel.setVisible(true);
@@ -145,7 +146,7 @@ public class SudokuFrame extends JFrame
 		return button;
 	}
 
-	/**
+/**
  * An action listener that sets the
  */
 	
@@ -158,6 +159,8 @@ public class SudokuFrame extends JFrame
 		
 		public void actionPerformed(ActionEvent event)
 		{
+			location = buttonRow.indexOf(b);
+			boolean toggle = true;
 			if(!isEraseToggled()){
 				if(!getCurrentValue().equalsIgnoreCase(BLANK)){
 					if(!draftMode){
@@ -165,10 +168,22 @@ public class SudokuFrame extends JFrame
 						for(Component labels:b.getComponents()){
 							labels.setVisible(false);
 						}
-						location = buttonRow.indexOf(b);
 						board.setCellValue(rowVal(location), colVal(location), Integer.parseInt(b.getText()));
 					} else{
 						toggleDraftValues(getCurrentValue(), b);
+						
+						
+						/*
+						 * 
+						 * 
+						 * /below RECODE to include in toggledraftvalues
+						 *
+						 *
+						 */
+						if(board.isVisibleCellDraft(rowVal(location), colVal(location), Integer.parseInt(b.getText())))
+								toggle = false;
+						board.setCellDraftVisibility(rowVal(location), colVal(location), Integer.parseInt(b.getText()), toggle);
+
 					}
 				}
 			} else{
@@ -192,26 +207,22 @@ public class SudokuFrame extends JFrame
 		if(label.isVisible()){
 			label.setVisible(false);
 		} else label.setVisible(true);
-			if(!b.getText().equalsIgnoreCase(BLANK)){
-				Component label2 = b.getComponent(Integer.parseInt(b.getText())-1);
-				b.setText(BLANK);
-				if(!label2.isVisible())
-					label2.setVisible(true);
-			}
+		if(!b.getText().equalsIgnoreCase(BLANK)){
+			Component label2 = b.getComponent(Integer.parseInt(b.getText())-1);
+			b.setText(BLANK);
+			//if(!label2.isVisible())
+				label2.setVisible(true);
+		}
 	}
 	
 	private class eraseFunction implements ActionListener
 	{
-		
 		public void actionPerformed(ActionEvent event)
 		{
-			
 			toggleErase();
 			resetCurrentValue();
 			highlightValue(BLANK);
-			
 		}
-		
 	}
 	
 	public boolean isEraseToggled(){
@@ -291,7 +302,7 @@ public class SudokuFrame extends JFrame
 	private void highlightValue(String current){
 		for(JButton jb: buttonValue){
 			if(jb.getText().equalsIgnoreCase(current))
-				jb.setBackground(Color.PINK);
+				jb.setBackground(INPUT_HIGHLIGHTS);
 			else jb.setBackground(DEFAULT_COLOR_INPUT);
 		}
 	}
@@ -306,6 +317,7 @@ public class SudokuFrame extends JFrame
 		return col;
 	}
 	
+	public Color INPUT_HIGHLIGHTS = Color.pink;
 	public Color ERASE_TOGGLED = Color.yellow;
 	public Color DEFAULT_COLOR_INPUT = new Color(238,238,238);
 	public Color userTempColor = Color.BLUE;
