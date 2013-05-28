@@ -146,7 +146,12 @@ public class BoardCell implements Cell {
 	
 	public void restart()
 	{
-		
+		removeInputValue();
+		this.isCurrentlyVisible = false;
+		for (int i = 0; i < boardSize; i++)
+		{
+			tempNumbers[i] = false;
+		}
 	}
 	
 	/**
