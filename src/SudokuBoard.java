@@ -269,15 +269,23 @@ public class SudokuBoard implements Board {
 	/**
 	 * Reset all values in the board
 	 */
-	public void reset()
+	public void clear()
 	{
 		for (int i = 1; i <= getBoardSize(); i++)
 		{
 			for (int j = 1; j <= getBoardSize(); j++)
 			{
-				resetCell(i, j);				
+				clearCell(i, j);				
 			}
 		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void restart()
+	{
+		
 	}
 	
 
@@ -376,17 +384,10 @@ public class SudokuBoard implements Board {
 			sectionId += 3;
 		}
 		
-		//HAYDEN I CHANGED THESE SO THEY WORK FOR ME, I AM NUMBERING ROWS
-		//1 -9 FROM THE TOP DOWN, PERHAPS YOU ARE NUMBERING FROM THE BOTTOM UP
-		//THIS IS THE ONLY PLACE WHERE IT SEEMS TO BE AN ISSUE
-		//THIS WORKS NOW, THE ONLY REASON IT MAY BE AN ISSUE IS IF SOMEONE ELSE
-		//TRIES TO USE THIS FUNCTION LATER WITH A BOTTOM UP NUMBERING SYSTEM
-		//if (row <= 6)
 		if (row > 3)
 		{
 			sectionId += 3;
 		}
-		//if (row <= 9)
 		if (row > 6)
 		{
 			sectionId += 3;
@@ -399,9 +400,9 @@ public class SudokuBoard implements Board {
 	 * @param row
 	 * @param col
 	 */
-	private void resetCell(int row, int col)
+	private void clearCell(int row, int col)
 	{
-		getCell(row, col).reset();
+		getCell(row, col).clear();
 	}
 	
 	/**

@@ -132,7 +132,7 @@ public class BoardCell implements Cell {
 	/**
 	 * TODO:
 	 */
-	public void reset()
+	public void clear()
 	{
 		this.valueFinal = -1;
 		this.valueInput = -1;

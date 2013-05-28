@@ -125,7 +125,10 @@ public interface Board
 	/**
 	 * Reset all values in the board
 	 */
-	public void reset();
+	public void clear();
+	
+	
+	//public 
 	
 	/**
 	 * Generate a new board

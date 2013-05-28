@@ -58,7 +58,7 @@ public class BoardFiller {
 					j = resetPoint;
 					counter++;
 					if (counter > 50){
-						b.reset();
+						b.clear();
 						return false;
 					}
 					continue;
