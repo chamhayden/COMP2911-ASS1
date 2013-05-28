@@ -36,7 +36,7 @@ class SudokuFrame extends JFrame
 		 * Lists added in order to quickly find each button location via row and column (might be needed)
 		 * 
 		 */
-		buttonGrid = new ArrayList<ArrayList<JButton>>(8);
+		//buttonGrid = new ArrayList<ArrayList<JButton>>(8);
 		buttonRow = new ArrayList<JButton>(8);
 		buttonValue = new LinkedList<JButton>();
 		
@@ -58,7 +58,7 @@ class SudokuFrame extends JFrame
 				}
 				buttonRow.add(makeGridButton(i, j ,cellVal, currentValue, buttonPanel, given));
 			}
-			buttonGrid.add(buttonRow);
+			//buttonGrid.add(buttonRow);
 		}
 
 		buttonPanel.setLayout(new GridLayout(9,9));
@@ -299,7 +299,7 @@ class SudokuFrame extends JFrame
 	//private JPanel modePanel;
 	private JPanel scorePanel;
 	private LinkedList<JButton> buttonValue;
-	private ArrayList<ArrayList<JButton>> buttonGrid;
+	//private ArrayList<ArrayList<JButton>> buttonGrid;
 	private ArrayList<JButton> buttonRow;
 
 	public Board board;
