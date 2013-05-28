@@ -177,7 +177,7 @@ public class SudokuBoard implements Board {
 	 * @return Whether a particular cell value's temporary value for
 	 *  a particular number is visible
 	 */
-	public boolean isVisibleCellTemp(int row, int col, int number)
+	public boolean isVisibleCellDraft(int row, int col, int number)
 	{
 		return getCell(row, col).issetTemp(number);
 	}
@@ -192,7 +192,7 @@ public class SudokuBoard implements Board {
 	 * @param isSet Value to denote whether to have the cell visible
 	 *  or not visible
 	 */
-	public void setCellTempVisibility(int row, int col, int number, boolean isSet)
+	public void setCellDraftVisibility(int row, int col, int number, boolean isSet)
 	{
 		getCell(row, col).setTemp(number, isSet);
 	}
