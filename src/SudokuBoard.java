@@ -336,11 +336,21 @@ public class SudokuBoard implements Board {
 	}
 	
 	/**
-	 * Determine whether a square (arbitrary collection of
-	 *  items that fall into both a set of rows and columns) 
-	 *  contains a particular value
-	 * @param sqr Arbitrary collection of items that fall into
-	 *  both a set of rows and columns
+	 * Determine whether a square contains a particular value
+	 * @param sqr As defined below for a 9x9 board
+	 * 
+	 * 1 1 1 | 2 2 2 | 3 3 3
+	 * 1 1 1 | 2 2 2 | 3 3 3
+	 * 1 1 1 | 2 2 2 | 3 3 3
+	 * ---------------------
+	 * 4 4 4 | 5 5 5 | 6 6 6
+	 * 4 4 4 | 5 5 5 | 6 6 6
+	 * 4 4 4 | 5 5 5 | 6 6 6
+	 * ---------------------
+	 * 7 7 7 | 8 8 8 | 9 9 9
+	 * 7 7 7 | 8 8 8 | 9 9 9
+	 * 7 7 7 | 8 8 8 | 9 9 9
+	 * 
 	 * @param value Value to check if exists in a square
 	 * @return Whether a square contains a particular value
 	 */
