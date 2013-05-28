@@ -164,7 +164,7 @@ class SudokuFrame extends JFrame
 						labels.setVisible(false);
 					}
 					location = buttonRow.indexOf(b);
-					board.setCellTempVisibility(rowVal(location), colVal(location), Integer.parseInt(b.getText()), true);
+					board.setCellValue(rowVal(location), colVal(location), Integer.parseInt(b.getText()));
 				} else{
 					toggleDraftValues(getCurrentValue(), b);
 				}
