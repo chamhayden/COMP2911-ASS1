@@ -1,15 +1,16 @@
 /**
  * Class to store and access values associated with an individual
- *  cell in the grid
- * @author Hayden, Laura, Jerome, Steven
- * @version 0.1
- * 
+ *  cell on a board of cells. It contains extensive information
+ *  as to a cell's correct value, user input value, and draft values
+ * @author Hayden Smith, Laura Hodges, Jerome Bird, Steven Falconieri
+ * @version 1.2 
  */
 public class BoardCell implements Cell {
 
 	/**
-	 * TODO:
-	 * @param boardSize
+	 * Construct a Board Cell
+	 * @param boardSize size of the board the 
+	 *  cell is contained within
 	 */
 	public BoardCell(int boardSize)
 	{		
@@ -22,17 +23,17 @@ public class BoardCell implements Cell {
 	}
 	
 	/**
-	 * TODO:
-	 * @return
+	 * Get what the final value of the cell should be
+	 * @return Final value of the cell
 	 */
-	public int getFinalValue()
+	public int getCorrectValue()
 	{
 		return valueFinal;
 	}
 	
 	/**
-	 * TODO:
-	 * @return
+	 * Get the value of the cell inputted by the user
+	 * @return Value of the cell inputted by the user
 	 */
 	public int getInputValue()
 	{
@@ -40,17 +41,17 @@ public class BoardCell implements Cell {
 	}
 		
 	/**
-	 * TODO:
-	 * @param number
+	 * Set what the final value of the cell should be
+	 * @param number What the final value of the cell should be
 	 */
-	public void setFinalValue(int number)
+	public void setCorrectValue(int number)
 	{
 		valueFinal = number;
 	}
 	
 	/**
-	 * TODO:
-	 * @param number
+	 * Set what the user input value should be
+	 * @param number What the user input value should be
 	 */
 	public void setInputValue(int number)
 	{
@@ -58,24 +59,24 @@ public class BoardCell implements Cell {
 	}
 	
 	/**
-	 * TODO:
+	 * Remove/reset the final value of the cell
 	 */
-	public void removeInputValue()
-	{
-		this.valueInput = -1;
-	}
-	
-	/**
-	 * TODO:
-	 */
-	public void removeFinalValue()
+	public void removeCorrectValue()
 	{
 		this.valueFinal = -1;
 	}
 	
 	/**
-	 * TODO:
-	 * @return
+	 * Remove/reset the user input value of the cell
+	 */
+	public void removeInputValue()
+	{
+		this.valueInput = -1;
+	}	
+	
+	/**
+	 * Determine whether the cell is currently a visible one
+	 * @return Whether the cell is currently a visible one
 	 */
 	public boolean isCurrentlyVisible()
 	{
@@ -83,8 +84,8 @@ public class BoardCell implements Cell {
 	}
 	
 	/**
-	 * TODO:
-	 * @return
+	 * Determine whether the cell was initially a visible one
+	 * @return Whether the cell was initially a visible one
 	 */
 	public boolean isInitiallyVisible()
 	{
@@ -92,8 +93,8 @@ public class BoardCell implements Cell {
 	}
 
 	/**
-	 * TODO:
-	 * @param isVisible
+	 * Set whether the cell is a currently visible one
+	 * @param isVisible Whether the cell is a currently visible one
 	 */
 	public void setCurrentlyVisible(boolean isVisible)
 	{
@@ -101,8 +102,8 @@ public class BoardCell implements Cell {
 	}
 	
 	/**
-	 * TODO:
-	 * @param isVisible
+	 * Set whether the cell is an initially visible one
+	 * @param isVisible Whether the cell is an initially visible one
 	 */
 	public void setInitiallyVisible(boolean isVisible)
 	{
@@ -110,9 +111,9 @@ public class BoardCell implements Cell {
 	}
 	
 	/**
-	 * TODO:
-	 * @param number
-	 * @return
+	 * Check if a draft value for a particular cell is set
+	 * @param number Number to check if is set
+	 * @return Whether a draft value for a particular cell is set
 	 */
 	public boolean issetDraft(int number)
 	{
@@ -120,9 +121,9 @@ public class BoardCell implements Cell {
 	}
 
 	/**
-	 * TODO:
-	 * @param number
-	 * @param isSet
+	 * Set/unset a draft value for a particular cell
+	 * @param number Number to set as draft value
+	 * @param isSet Whether to set or unset the draft value
 	 */
 	public void setDraft(int number, boolean isSet)
 	{
@@ -130,7 +131,7 @@ public class BoardCell implements Cell {
 	}
 	
 	/**
-	 * TODO:
+	 * Reset all cell fields/data to default
 	 */
 	public void clear()
 	{
@@ -144,6 +145,10 @@ public class BoardCell implements Cell {
 		}
 	}
 	
+	/**
+	 * Reset all cell data to its original values 
+	 *  just after generation
+	 */
 	public void restart()
 	{
 		removeInputValue();
@@ -155,10 +160,10 @@ public class BoardCell implements Cell {
 	}
 	
 	/**
-	 * TODO:
-	 * @return
+	 * Check if the final value of this cell is empty
+	 * @return If the final value of this cell is empty
 	 */
-	public boolean isEmptyFinal()
+	public boolean isEmptyCorrect()
 	{
 		if (this.valueFinal == -1)
 		{
@@ -168,8 +173,8 @@ public class BoardCell implements Cell {
 	}
 	
 	/**
-	 * TODO:
-	 * @return
+	 * Check if the user input value of this cell is empty
+	 * @return If the user input value of this cell is empty
 	 */
 	public boolean isEmptyInput()
 	{
@@ -181,8 +186,9 @@ public class BoardCell implements Cell {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Determine whether the cell's input value is correct (i.e.
+	 *  matches the final)
+	 * @return Whether the cell's input value is correct
 	 */
 	public boolean isCorrect()
 	{

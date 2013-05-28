@@ -1,8 +1,7 @@
 /**
 * Class that allows creation, modification and access to
 *  a board
-* @author Hayden
-* @version 0.1
+* @author Hayden Smith, Laura Hodes, Jerome Bird, Steven Falconieri
 * 
 */
 public interface Board
@@ -123,11 +122,14 @@ public interface Board
 	public int getBoardSize();
 	
 	/**
-	 * Reset all values in the board
+	 * Clear all values in the board to empty/clear values
 	 */
 	public void clear();
 	
-	
+	/**
+	 * Reset the board to its original state
+	 *  after generation
+	 */
 	public void restart();
 	
 	/**
@@ -138,39 +140,44 @@ public interface Board
 	public void generate(int difficulty);
 	
 	/**
-	 * TODO: Fill
-	 * @param row
-	 * @param value
-	 * @return
+	 * For a given row determine if a value exists in it
+	 * @param row Row to check if number exists in
+	 * @param value Value to check if exists in row
+	 * @return Whether a value exists in a particular row
 	 */
 	public boolean rowHas(int row, int value);
 	
 	/**
-	 * TODO: Fill
-	 * @param col
-	 * @param value
-	 * @return
+	 * For a given column determine if a value exists in it
+	 * @param row Column to check if number exists in
+	 * @param value Value to check if exists in column
+	 * @return Whether a value exists in a particular column
 	 */
 	public boolean columnHas(int col, int value);
 	
 	/**
-	 * TODO: Fill 
-	 * @param sqr
-	 * @param value
-	 * @return
+	 * Determine whether a square (arbitrary collection of
+	 *  items that fall into both a set of rows and columns) 
+	 *  contains a particular value
+	 * @param sqr Arbitrary collection of items that fall into
+	 *  both a set of rows and columns
+	 * @param value Value to check if exists in a square
+	 * @return Whether a square contains a particular value
 	 */
 	public boolean squareHas(int sqr, int value);
 	
 	/**
-	 * TODO:
-	 * @param row
-	 * @param col
+	 * Check if a given cell (for row, column) is empty
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 * @return Whether a given cell (for row, column) is empty
 	 */
 	public boolean isEmptyCell(int row, int col);
 	
 	/**
-	 * TODO:
-	 * @return
+	 * Return the difficulty of the current board that has
+	 *  been generated
+	 * @return Difficulty of current board that has been generated
 	 */
 	public int getDifficulty();
 	

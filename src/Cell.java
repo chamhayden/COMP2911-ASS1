@@ -1,9 +1,7 @@
 /**
  * Class to store and access values associated with an individual
  *  cell in the grid
- * @author Hayden, Laura, Jerome, Steven
- * @version 0.1
- * 
+ * @author Hayden Smith, Laura Hodges, Jerome Bird, Steven Falconieri
  */
 public interface Cell {
 
@@ -11,7 +9,7 @@ public interface Cell {
 	 * Get what the final value of the cell should be
 	 * @return Final value of the cell
 	 */
-	public int getFinalValue();
+	public int getCorrectValue();
 	
 	/**
 	 * Get the value of the cell inputted by the user
@@ -23,7 +21,7 @@ public interface Cell {
 	 * Set what the final value of the cell should be
 	 * @param number What the final value of the cell should be
 	 */
-	public void setFinalValue(int number);
+	public void setCorrectValue(int number);
 	
 	/**
 	 * Set what the user input value should be
@@ -34,7 +32,7 @@ public interface Cell {
 	/**
 	 * Remove/reset the final value of the cell
 	 */
-	public void removeFinalValue();
+	public void removeCorrectValue();
 	
 	/**
 	 * Remove/reset the user input value of the cell
@@ -66,16 +64,16 @@ public interface Cell {
 	public void setInitiallyVisible(boolean isVisible);
 	
 	/**
-	 * 
-	 * @param number
-	 * @return
+	 * Check if a draft value for a particular cell is set
+	 * @param number Number to check if is set
+	 * @return Whether a draft value for a particular cell is set
 	 */
 	public boolean issetDraft(int number);
 	
 	/**
-	 * 
-	 * @param number
-	 * @param isSet
+	 * Set/unset a draft value for a particular cell
+	 * @param number Number to set as draft value
+	 * @param isSet Whether to set or unset the draft value
 	 */
 	public void setDraft(int number, boolean isSet);
 	
@@ -91,14 +89,14 @@ public interface Cell {
 	public void restart();
 	
 	/**
-	 * 
-	 * @return
+	 * Check if the final value of this cell is empty
+	 * @return If the final value of this cell is empty
 	 */
-	public boolean isEmptyFinal();
+	public boolean isEmptyCorrect();
 	
 	/**
-	 * 
-	 * @return
+	 * Check if the user input value of this cell is empty
+	 * @return If the user input value of this cell is empty
 	 */
 	public boolean isEmptyInput();
 	

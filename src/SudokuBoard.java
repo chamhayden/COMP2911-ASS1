@@ -3,10 +3,9 @@ import java.util.ArrayList;
 /**
 * Class that allows creation, modification and access to
 *  a Sudoku board
-* @author Hayden
-* @version 0.1
-* 
-*/
+* @author Hayden Smith, Laura Hodes, Jerome Bird, Steven Falconieri
+* @version 2.2
+* */
 public class SudokuBoard implements Board {
 
 	/**
@@ -62,7 +61,7 @@ public class SudokuBoard implements Board {
 	{
 		if (currentlyGenerating)
 		{
-			getCell(row, col).removeFinalValue();
+			getCell(row, col).removeCorrectValue();
 		}
 		else
 		{
@@ -78,10 +77,9 @@ public class SudokuBoard implements Board {
 	 */
 	public int getCellValue(int row, int col)
 	{
-		//System.out.println("fc: getCellValue("+row+","+col+")");
 		if (currentlyGenerating || isEmptyCell(row, col))
 		{
-			return getCell(row, col).getFinalValue();
+			return getCell(row, col).getCorrectValue();
 		}
 		else
 		{
@@ -99,7 +97,7 @@ public class SudokuBoard implements Board {
 	{
 		if (currentlyGenerating)
 		{
-			getCell(row, col).setFinalValue(number);
+			getCell(row, col).setCorrectValue(number);
 		}
 		else
 		{
@@ -139,27 +137,26 @@ public class SudokuBoard implements Board {
 	 * @param visiblity Whether the particular cell is visible or not
 	 */
 	
-	//HAYDEN I CHANGED THIS SO THAT SETTING INITIALLY VISIBLE ALSO SETS CURRENTLY VISIBLE
 	public void setCellVisibility(int row, int col, boolean visibility)
 	{
 		if (currentlyGenerating)
 		{
 			getCell(row, col).setInitiallyVisible(visibility);
 		}
-		//else
-		//{
-			getCell(row, col).setCurrentlyVisible(visibility);
-		//}
+		getCell(row, col).setCurrentlyVisible(visibility);
 	}
 	
 	/**
-	 * TODO: HAYDEN I JUST COMMENTED THIS OUT FOR NOW TO MAKE IT COMPILE - Laura
+	 * Check if a given cell (for row, column) is empty
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 * @return Whether a given cell (for row, column) is empty
 	 */
 	public boolean isEmptyCell(int row, int col)
 	{
 		if (currentlyGenerating)
 		{
-			return getCell(row, col).isEmptyFinal();
+			return getCell(row, col).isEmptyCorrect();
 		}
 		else
 		{
@@ -281,7 +278,8 @@ public class SudokuBoard implements Board {
 	}
 	
 	/**
-	 * 
+	 * Reset the board to its original state
+	 *  after generation
 	 */
 	public void restart()
 	{
@@ -296,10 +294,10 @@ public class SudokuBoard implements Board {
 	
 
 	/**
-	 * TODO: Fill
-	 * @param row
-	 * @param value
-	 * @return
+	 * For a given row determine if a value exists in it
+	 * @param row Row to check if number exists in
+	 * @param value Value to check if exists in row
+	 * @return Whether a value exists in a particular row
 	 */
 	public boolean rowHas(int row, int value)
 	{
@@ -317,10 +315,10 @@ public class SudokuBoard implements Board {
 	}
 	
 	/**
-	 * TODO: Fill
-	 * @param col
-	 * @param value
-	 * @return
+	 * For a given column determine if a value exists in it
+	 * @param row Column to check if number exists in
+	 * @param value Value to check if exists in column
+	 * @return Whether a value exists in a particular column
 	 */
 	public boolean columnHas(int col, int value)
 	{
@@ -338,10 +336,13 @@ public class SudokuBoard implements Board {
 	}
 	
 	/**
-	 * TODO: Fill 
-	 * @param sqr
-	 * @param value
-	 * @return
+	 * Determine whether a square (arbitrary collection of
+	 *  items that fall into both a set of rows and columns) 
+	 *  contains a particular value
+	 * @param sqr Arbitrary collection of items that fall into
+	 *  both a set of rows and columns
+	 * @param value Value to check if exists in a square
+	 * @return Whether a square contains a particular value
 	 */
 	public boolean squareHas(int sqrId, int value)
 	{
@@ -365,8 +366,9 @@ public class SudokuBoard implements Board {
 	}
 	
 	/**
-	 * TODO:
-	 * @return
+	 * Return the difficulty of the current board that has
+	 *  been generated
+	 * @return Difficulty of current board that has been generated
 	 */
 	public int getDifficulty()
 	{
