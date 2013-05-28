@@ -42,16 +42,6 @@ public class SudokuBoard implements Board {
 		this.currentlyGenerating = true;
 		this.difficulty = difficulty;
 		
-		/*
-		for (int i = 1; i <= boardSize; i++)
-		{
-			for (int j = 1; j <= boardSize; j++)
-			{
-				this.setCellValue(i, j, i + j);
-			}
-		}
-		*/
-		
 		BoardFiller filler = new BoardFiller(this);
 		Removal r = new Removal(this);
 		boolean filled = false;
