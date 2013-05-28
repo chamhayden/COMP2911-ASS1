@@ -20,7 +20,7 @@ import javax.swing.*;
  */
 
 //NB: JFrame's default layoutManager is BorderLayout (so no need to setLayout unless we want to change it)
-class SudokuFrame extends JFrame
+public class SudokuFrame extends JFrame
 {
 	public SudokuFrame(Board sBoard)
 	{
@@ -67,15 +67,16 @@ class SudokuFrame extends JFrame
 		
 		commandPanel = new JPanel();
 		commandPanel.setLayout(new FlowLayout());
+		
 		easyButton = makeMenuButton("NEW EASY", Color.PINK, commandPanel);
 		mediumButton = makeMenuButton("NEW MEDIUM", Color.CYAN, commandPanel);
 		hardButton = makeMenuButton("NEW HARD", Color.RED, commandPanel);
-		hintButton = makeMenuButton("Click for Hint", Color.BLUE, commandPanel);
 		solutionButton = makeMenuButton("Give up?", Color.GREEN, commandPanel);
-		
-		draftButton = makeDraftButton("DRAFT", commandPanel);
 		checkButton = makeMenuButton("Check Square", Color.CYAN, commandPanel);
+				
 		
+		eraseButton = makeCommandButton("Rubber", commandPanel, new eraseFunction());
+		draftButton = makeCommandButton("DRAFT", commandPanel, new draftFunction());
 		scorePanel = new JPanel();
 		scorePanel.setLayout(new FlowLayout());
 		scorePanel.setVisible(true);
@@ -87,7 +88,7 @@ class SudokuFrame extends JFrame
 	      {
 	         final String label = LABELS.substring(i, i + 1);
 	         JButton keyButton = new JButton(label);
-	         NumberSelect action = new NumberSelect(label);
+	         NumberSelect action = new NumberSelect();
 	         keyButton.addActionListener(action);
 	         keyButton.setBackground(DEFAULT_COLOR_INPUT);
 	         buttonValue.add(keyButton);
@@ -111,7 +112,7 @@ class SudokuFrame extends JFrame
 		if(!given){
 			NumberInsert insert = new NumberInsert(button);
 			button.addActionListener(insert);
-			button.setForeground(userTemp);
+			button.setForeground(userTempColor);
 			//setting GridLayout on button for draft values
 			button.setLayout(new GridLayout(3,3));
 			for (int i = 0; i < LABELS.length(); i++)
@@ -127,6 +128,14 @@ class SudokuFrame extends JFrame
 		return button;
 	}
 	
+	public JButton makeCommandButton(String name, JPanel panel, ActionListener action)
+	{
+		JButton button = new JButton(name);
+		panel.add(button);
+		button.addActionListener(action);
+		return button;
+	}
+	
 	public JButton makeMenuButton(String name, Color backgroundColor, JPanel panel)
 	{
 		JButton button = new JButton(name);
@@ -135,16 +144,8 @@ class SudokuFrame extends JFrame
 		button.addActionListener(action);
 		return button;
 	}
-	
-	public JButton makeDraftButton(String name, JPanel panel)
-	{
-		JButton button = new JButton(name);
-		panel.add(button);
-		DraftFunction action = new DraftFunction();
-		button.addActionListener(action);
-		return button;
-	}
-/**
+
+	/**
  * An action listener that sets the
  */
 	
@@ -157,21 +158,33 @@ class SudokuFrame extends JFrame
 		
 		public void actionPerformed(ActionEvent event)
 		{
-			if(!getCurrentValue().equalsIgnoreCase(BLANK)){
-				if(!draftMode){
-					b.setText(getCurrentValue());
-					for(Component labels:b.getComponents()){
-						labels.setVisible(false);
+			if(!isEraseToggled()){
+				if(!getCurrentValue().equalsIgnoreCase(BLANK)){
+					if(!draftMode){
+						b.setText(getCurrentValue());
+						for(Component labels:b.getComponents()){
+							labels.setVisible(false);
+						}
+						location = buttonRow.indexOf(b);
+						board.setCellValue(rowVal(location), colVal(location), Integer.parseInt(b.getText()));
+					} else{
+						toggleDraftValues(getCurrentValue(), b);
 					}
-					location = buttonRow.indexOf(b);
-					board.setCellValue(rowVal(location), colVal(location), Integer.parseInt(b.getText()));
-				} else{
-					toggleDraftValues(getCurrentValue(), b);
 				}
+			} else{
+				toggleDraftFalse(b);
+				b.setText(resetCurrentValue());
+				toggleErase();
 			}
 		}
 		int location;
 		private JButton b;
+	}
+	
+	public void toggleDraftFalse(JButton button){
+		for(Component label: button.getComponents()){
+			label.setVisible(false);
+		}
 	}
 	
 	public void toggleDraftValues(String value, JButton b){
@@ -187,12 +200,38 @@ class SudokuFrame extends JFrame
 			}
 	}
 	
+	private class eraseFunction implements ActionListener
+	{
+		
+		public void actionPerformed(ActionEvent event)
+		{
+			
+			toggleErase();
+			resetCurrentValue();
+			highlightValue(BLANK);
+			
+		}
+		
+	}
+	
+	public boolean isEraseToggled(){
+		if(eraseButton.getBackground().equals(ERASE_TOGGLED))
+			return true;
+		else return false;
+	}
+	
+	public boolean toggleErase(){
+		boolean toggled = false;
+		if(!eraseButton.getBackground().equals(ERASE_TOGGLED)){
+			eraseButton.setBackground(ERASE_TOGGLED);
+			toggled = true;
+		}
+		else eraseButton.setBackground(DEFAULT_COLOR_GRID);
+		return toggled;
+	}
+	
 	private class NumberSelect implements ActionListener
 	{
-		public NumberSelect(String select)
-		{
-			newCurrentValue = select;
-		}
 		
 		public void actionPerformed(ActionEvent event)
 		{
@@ -203,17 +242,10 @@ class SudokuFrame extends JFrame
 				highlightValue(currentValue);
 			}
 		}
-		private String newCurrentValue;
 	}
 	
-	private class DraftFunction implements ActionListener
+	private class draftFunction implements ActionListener
 	{
-		public DraftFunction()
-		{
-			//might not pass in values
-			//newCurrentValue = select;
-		}
-		
 		public void actionPerformed(ActionEvent event)
 		{
 			if(draftButton.getBackground().equals(DEFAULT_COLOR_GRID)){
@@ -223,10 +255,7 @@ class SudokuFrame extends JFrame
 				draftButton.setBackground(DEFAULT_COLOR_GRID);
 				setDraftMode(false);
 			}
-			
-			
 		}
-		//private String newCurrentValue;
 	}
 	
 	public void setDraftMode(boolean enable){
@@ -277,8 +306,9 @@ class SudokuFrame extends JFrame
 		return col;
 	}
 	
+	public Color ERASE_TOGGLED = Color.yellow;
 	public Color DEFAULT_COLOR_INPUT = new Color(238,238,238);
-	public Color userTemp = Color.BLUE;
+	public Color userTempColor = Color.BLUE;
 	public Color draftColor = Color.LIGHT_GRAY;
 	public Font DRAFTSMALL = new Font("Courrier",Font.CENTER_BASELINE ,15);
 	public Font ARIALBOLD = new Font("Arial", Font.BOLD, 20);
@@ -289,7 +319,7 @@ class SudokuFrame extends JFrame
 	private JButton hardButton;
 	private JButton draftButton;
 	private JButton timeButton;
-	private JButton hintButton;
+	private JButton eraseButton;
 	private JButton solutionButton;
 	private JButton checkButton;
 	private String currentValue;
