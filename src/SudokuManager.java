@@ -21,30 +21,7 @@ public class SudokuManager {
 			} else difficulty = pane.chooseLevel();
 		}
 
-		
 		board.generate(difficulty);
-		
-		/*
-		  
-		  CODE BELOW LINKS GUI TO BACK-END
-		  comment back in to re-link
-		 
-		board.generate(difficulty);//->generator used
-		
-		//board.generate(board.difficultyValueEasy()); ->not used for the moment
-		
-		
-		for (int i = 0; i < board.getBoardSize(); i++)
-		{
-			for (int j = 0; j < board.getBoardSize(); j++)
-			{
-				System.out.print(board.getCellValue(i, j) + " ");
-			}
-			System.out.println();
-		}
-		
-		*/
-		
 		
 		//initialises frame with events handler
 		EventQueue.invokeLater(new Runnable(){

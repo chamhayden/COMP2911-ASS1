@@ -15,12 +15,17 @@ public class OptionPanes {
 	}
 	
 	public int chooseLevel(){
-		
 		String[] buttons = {"Easy", "Medium", "Hard", "Exit" };
 		difficulty = JOptionPane.showOptionDialog(null, "To start, choose your difficulty:", "Welcome to Sudoku Fun!",
 		        JOptionPane.PLAIN_MESSAGE, 0, null, buttons, buttons[3]);
 		return difficulty;
+	}
 	
+	public int chooseLevelInGame(){
+		String[] buttons = {"Easy", "Medium", "Hard"};
+		difficulty = JOptionPane.showOptionDialog(null, "Here we go again! Choose your difficulty:", "Welcome to Sudoku Fun!",
+		        JOptionPane.PLAIN_MESSAGE, 0, null, buttons, buttons[2]);
+		return difficulty;
 	}
 	
 	public boolean exitMessageStart(){
@@ -41,6 +46,14 @@ public class OptionPanes {
 	
 	public boolean exitMessageInGame(){
 		value = JOptionPane.showConfirmDialog(null, "Really? Your progress will not be saved.", "Aurevoir Sudoku Fun!",
+		        JOptionPane.YES_NO_OPTION);
+		if(value == JOptionPane.YES_OPTION)
+			return true;
+		else return false;
+	}
+	
+	public boolean newGameInGame(){
+		value = JOptionPane.showConfirmDialog(null, "Start another game?", "New Game",
 		        JOptionPane.YES_NO_OPTION);
 		if(value == JOptionPane.YES_OPTION)
 			return true;

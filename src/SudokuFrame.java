@@ -21,7 +21,6 @@ import javax.swing.*;
  * @param currentValue is the value the ActionListener uses to change grid labels
  */
 
-//NB: JFrame's default layoutManager is BorderLayout (so no need to setLayout unless we want to change it)
 public class SudokuFrame extends JFrame
 {
 	public SudokuFrame(Board sBoard)
@@ -34,13 +33,10 @@ public class SudokuFrame extends JFrame
 		draftMode = false;
 		
 		/*
-		 * 
 		 * Lists added in order to quickly find each button location via row and column (might be needed)
-		 * 
 		 */
-		//buttonGrid = new ArrayList<ArrayList<JButton>>(8);
 		buttonRow = new ArrayList<JButton>(8);
-		buttonValue = new LinkedList<JButton>();
+		buttonInputs = new LinkedList<JButton>();
 		
 		buttonPanel = new JPanel();
 		
@@ -60,19 +56,15 @@ public class SudokuFrame extends JFrame
 				}
 				buttonRow.add(makeGridButton(i, j ,cellVal, currentValue, buttonPanel, given));
 			}
-			//buttonGrid.add(buttonRow);
 		}
 
 		buttonPanel.setLayout(new GridLayout(9,9));
 		
-		//creating panels
-		
 		commandPanel = new JPanel();
 		commandPanel.setLayout(new FlowLayout());
 		
-		easyButton = makeMenuButton("NEW EASY", Color.PINK, commandPanel);
-		mediumButton = makeMenuButton("NEW MEDIUM", Color.CYAN, commandPanel);
-		hardButton = makeMenuButton("NEW HARD", Color.RED, commandPanel);
+
+		newGame = makeCommandButton("NEW GAME", commandPanel, new newGamePop());
 		
 		
 		checkButton = makeCommandButton("Check Square", commandPanel, new checkFunction());
@@ -85,7 +77,6 @@ public class SudokuFrame extends JFrame
 		scorePanel.setVisible(true);
 		
 		solutionButton = makeMenuButton("Check my solution!", Color.BLACK, scorePanel);
-		timeButton = makeMenuButton("TIME ME", Color.DARK_GRAY, scorePanel);
 		
 		for (int i = 0; i < LABELS.length(); i++)
 	      {
@@ -94,7 +85,7 @@ public class SudokuFrame extends JFrame
 	         NumberSelect action = new NumberSelect();
 	         keyButton.addActionListener(action);
 	         keyButton.setBackground(DEFAULT_COMMAND);
-	         buttonValue.add(keyButton);
+	         buttonInputs.add(keyButton);
 	         scorePanel.add(keyButton);
 	      }
 		
@@ -161,7 +152,6 @@ public class SudokuFrame extends JFrame
 		
 		public void actionPerformed(ActionEvent event)
 		{
-			boolean toggle = true;
 			if(isButtonToggled(eraseButton, DEFAULT_COMMAND)){
 				toggleDraftFalse(b);
 				b.setText(resetCurrentValue());
@@ -220,6 +210,7 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	
 	public boolean isButtonToggled(JButton button, Color defaultColour){
 		if(!button.getBackground().equals(defaultColour))
 			return true;
@@ -244,6 +235,17 @@ public class SudokuFrame extends JFrame
 			}else{
 				currentValue = event.getActionCommand();
 				highlightValue(currentValue);
+			}
+		}
+	}
+	
+	private class newGamePop implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			if(pane.newGameInGame()){
+				board.clear();
+				board.generate(pane.chooseLevelInGame());
 			}
 		}
 	}
@@ -364,7 +366,7 @@ public class SudokuFrame extends JFrame
 	}
 	
 	private void highlightValue(String current){
-		for(JButton jb: buttonValue){
+		for(JButton jb: buttonInputs){
 			if(jb.getText().equalsIgnoreCase(current))
 				jb.setBackground(INPUT_HIGHLIGHTS);
 			else jb.setBackground(DEFAULT_INPUT);
@@ -408,11 +410,8 @@ public class SudokuFrame extends JFrame
 	private boolean draftMode;
 	private Color DEFAULT_GRID = new Color(238,238,238);
 	private Color DEFAULT_COMMAND = new Color(238,238,238);
-	private JButton easyButton;
-	private JButton mediumButton;
-	private JButton hardButton;
+	private JButton newGame;
 	private JButton draftButton;
-	private JButton timeButton;
 	private JButton eraseButton;
 	private JButton solutionButton;
 	private JButton revealButton;
@@ -421,7 +420,7 @@ public class SudokuFrame extends JFrame
 	private JPanel buttonPanel;
 	private JPanel commandPanel;
 	private JPanel scorePanel;
-	private LinkedList<JButton> buttonValue;
+	private LinkedList<JButton> buttonInputs;
 	private ArrayList<JButton> buttonRow;
 	
 	private OptionPanes pane = new OptionPanes();
