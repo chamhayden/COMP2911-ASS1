@@ -5,7 +5,7 @@
  * @version 0.1
  * 
  */
-public class BoardCell {
+public class BoardCell implements Cell {
 
 	/**
 	 * TODO:
@@ -114,7 +114,7 @@ public class BoardCell {
 	 * @param number
 	 * @return
 	 */
-	public boolean issetTemp(int number)
+	public boolean issetDraft(int number)
 	{
 		return tempNumbers[number - 1];
 	}
@@ -124,7 +124,7 @@ public class BoardCell {
 	 * @param number
 	 * @param isSet
 	 */
-	public void setTemp(int number, boolean isSet)
+	public void setDraft(int number, boolean isSet)
 	{
 		tempNumbers[number - 1] = isSet;
 	}

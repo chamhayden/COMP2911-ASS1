@@ -179,7 +179,7 @@ public class SudokuBoard implements Board {
 	 */
 	public boolean isVisibleCellDraft(int row, int col, int number)
 	{
-		return getCell(row, col).issetTemp(number);
+		return getCell(row, col).issetDraft(number);
 	}
 	
 	/**
@@ -194,7 +194,7 @@ public class SudokuBoard implements Board {
 	 */
 	public void setCellDraftVisibility(int row, int col, int number, boolean isSet)
 	{
-		getCell(row, col).setTemp(number, isSet);
+		getCell(row, col).setDraft(number, isSet);
 	}
 			
 	/**

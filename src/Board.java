@@ -61,7 +61,7 @@ public interface Board
 	 * @return Whether a particular cell value's temporary value for
 	 *  a particular number is visible
 	 */
-	public boolean isVisibleCellTemp(int row, int col, int number);
+	public boolean isVisibleCellDraft(int row, int col, int number);
 	
 	/**
 	 * Make a particular cell value's temporary value for a 
@@ -73,7 +73,7 @@ public interface Board
 	 * @param isSet Value to denote whether to have the cell visible
 	 *  or not visible
 	 */
-	public void setCellTempVisibility(int row, int col, int number, boolean isSet);
+	public void setCellDraftVisibility(int row, int col, int number, boolean isSet);
 	
 	/**
 	 * Return whether the board has been correctly filled out
