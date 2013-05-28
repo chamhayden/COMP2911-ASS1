@@ -20,28 +20,37 @@ public class Removal {
 	
 	public void remove(){
 		simpleRemove();
-		//checker.isSudokuSolutionUnique(b);
-		if (difficulty > 1){
-			harderRemove();
-			//complexRemove();
+		if (checker.isSudokuSolutionUnique(b)){
+			System.out.println("Simple Remove Works!!!");
+			if (difficulty > 1){
+				harderRemove();
+				if (checker.isSudokuSolutionUnique(b)){
+					System.out.println("Harder Remove Works");
+					complexRemove();
+				} else {
+					System.out.println("Harder Remove Failed");
+				}
+			}
+		} else {
+			System.out.println("Simple Remove Failed");
 		}
-		simpleRemove();
 	}
 	
 	private void simpleRemove(){
 		Random r = new Random();
 		int toRemove;
+		int hasRemoved = 0;
 		int row, col;
 		int z;
 		Point removed;
 		int count = 0;
 		boolean can;
 		if(difficulty <= 1){
-			toRemove = 20;
+			toRemove = 10;
 		} else if (difficulty <= 2){
-			toRemove = 30;
+			toRemove = 15;
 		} else {
-			toRemove = 80;
+			toRemove = 20;
 		}
 		while(toRemove > 0 && count < 1000){
 			removed = removeRandom();
@@ -61,6 +70,7 @@ public class Removal {
 			}
 			if(can){
 				toRemove--;
+				hasRemoved++;
 				//System.out.println("");
 				//System.out.println(row + " " + col);
 				//printBoard();
@@ -69,6 +79,7 @@ public class Removal {
 				putBack(removed);
 			}
 		}
+		System.out.println("Simple remove got " + hasRemoved + " values");
 	}
 	
 	private void harderRemove(){
@@ -96,7 +107,7 @@ public class Removal {
 		
 		int count = 0;
 		int sucess = 0;
-		while(count < 1000){
+		while(count < 10000){
 			Point removed = removeRandom();
 			int row = removed.getRow();
 			int col = removed.getCol();
@@ -108,17 +119,51 @@ public class Removal {
 			
 			boolean inAdjRows = (b.rowHas(adjRows[0]+1, removedVal) && b.rowHas(adjRows[1]+1, removedVal));
 			boolean inAdjCols = (b.columnHas(adjCols[0]+1, removedVal) && b.columnHas(adjCols[1]+1, removedVal));
+			boolean cellAdjRowsFull = adjFull(adjRows, adjCols, col);
+			boolean cellAdjColsFull = adjFull(adjCols, adjRows, row);
+
 			
 			if(inAdjRows && inAdjCols){
-				count++;
 				sucess++;
+				System.out.println("");
+				System.out.println("1");
+				System.out.println(row + " " + col);
+				printBoard();
+				System.out.println("");
+			} else if (inAdjRows && cellAdjColsFull){
+				sucess++;
+				System.out.println("");
+				System.out.println("2");
+				System.out.println(row + " " + col);
+				printBoard();
+				System.out.println("");
+			} else if (inAdjCols && cellAdjRowsFull){
+				sucess++;
+				System.out.println("");
+				System.out.println("3");
+				System.out.println(row + " " + col);
+				printBoard();
+				System.out.println("");
 			} else {
 				putBack(removed);
-				count++;
 			}
+			count++;
 		}
 		System.out.println("Harder Remove got " + sucess + " values");
 		
+	}
+	
+	private boolean adjFull(int[] dir1, int[] direction2, int position){
+		int[] dir2 = new int[] {direction2[0], direction2[1], position};
+		for(int i = 0; i < 2; i++){
+			for (int j = 0; j < 3; j++){
+				if(!b.isInitiallyVisibleCell(dir1[i]+1, dir2[j]+1)){
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 	
 	private void complexRemove(){
