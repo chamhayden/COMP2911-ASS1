@@ -20,6 +20,7 @@ public class Removal {
 	
 	public void remove(){
 		simpleRemove();
+		
 		if (checker.isSudokuSolutionUnique(b)){
 			System.out.println("Simple Remove Works!!!");
 			if (difficulty > 1){
