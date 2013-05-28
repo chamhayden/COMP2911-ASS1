@@ -128,7 +128,7 @@ public interface Board
 	public void clear();
 	
 	
-	//public 
+	public void restart();
 	
 	/**
 	 * Generate a new board

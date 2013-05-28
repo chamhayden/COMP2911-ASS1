@@ -144,6 +144,11 @@ public class BoardCell implements Cell {
 		}
 	}
 	
+	public void restart()
+	{
+		
+	}
+	
 	/**
 	 * TODO:
 	 * @return

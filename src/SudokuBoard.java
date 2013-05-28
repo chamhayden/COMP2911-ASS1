@@ -37,7 +37,7 @@ public class SudokuBoard implements Board {
 	 */
 	public void generate(int difficulty)
 	{
-		reset();
+		clear();
 		
 		this.currentlyGenerating = true;
 		this.difficulty = difficulty;
@@ -285,7 +285,13 @@ public class SudokuBoard implements Board {
 	 */
 	public void restart()
 	{
-		
+		for (int i = 1; i <= getBoardSize(); i++)
+		{
+			for (int j = 1; j <= getBoardSize(); j++)
+			{
+				getCell(i, j).restart();				
+			}
+		}
 	}
 	
 
