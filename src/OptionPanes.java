@@ -31,14 +31,6 @@ public class OptionPanes {
 		else return false;
 	}
 	
-	public boolean revealMessage(){
-		value = JOptionPane.showConfirmDialog(null,"Give up, eh? Are you sure?", "Sudoku Fun GAME OVER!",
-		        JOptionPane.YES_NO_OPTION);
-		if(value == JOptionPane.YES_NO_OPTION)
-			return true;
-		else return false;
-	}
-	
 	public boolean exitMessageInGame(){
 		value = JOptionPane.showConfirmDialog(null, "Really? Your progress will not be saved.", "Aurevoir Sudoku Fun!",
 		        JOptionPane.YES_NO_OPTION);
