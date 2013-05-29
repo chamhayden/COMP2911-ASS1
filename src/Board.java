@@ -183,5 +183,7 @@ public interface Board
 	
 	public void takeSnapShot(int row, int col);
 	
+	public void undoLast();
+	
 	
 }
