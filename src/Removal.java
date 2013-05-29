@@ -21,19 +21,11 @@ public class Removal {
 	public void remove(){
 		simpleRemove();
 		
-		if (checker.isSudokuSolutionUnique(b)){
-			System.out.println("Simple Remove Works!!!");
-			if (difficulty > 1){
-				harderRemove();
-				if (checker.isSudokuSolutionUnique(b)){
-					System.out.println("Harder Remove Works");
-					complexRemove();
-				} else {
-					System.out.println("Harder Remove Failed");
-				}
+		if (difficulty > 1){
+			harderRemove();
+			if (difficulty > 2){
+				complexRemove();
 			}
-		} else {
-			System.out.println("Simple Remove Failed");
 		}
 	}
 	
@@ -47,9 +39,9 @@ public class Removal {
 		int count = 0;
 		boolean can;
 		if(difficulty <= 1){
-			toRemove = 10;
+			toRemove = 40;
 		} else if (difficulty <= 2){
-			toRemove = 15;
+			toRemove = 25;
 		} else {
 			toRemove = 20;
 		}
