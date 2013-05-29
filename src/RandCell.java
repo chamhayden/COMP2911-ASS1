@@ -11,13 +11,13 @@ public class RandCell {
 	}
 	
 	public Point randRemove(){
-		System.out.println("");
-		System.out.println("called");
+		//System.out.println("");
+		//System.out.println("called");
 		Random r = new Random();
 		Point p;
 		int x,y;
 		int toRemove = indices.remove(r.nextInt(indices.size()));
-		System.out.println("Trying to remove " + toRemove);
+		//System.out.println("Trying to remove " + toRemove);
 		p = cells.get(toRemove);
 		x = p.getRow();
 		y = p.getCol();
