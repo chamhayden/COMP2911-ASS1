@@ -3,9 +3,7 @@ import java.awt.event.*;
 import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.TimerTask;
-
 import javax.swing.*;
 
 /**
@@ -39,26 +37,7 @@ public class SudokuFrame extends JFrame
 		buttonInputs = new LinkedList<JButton>();
 		
 		buttonPanel = new JPanel();
-		
-		for(int i = 1; i<=9; i++)
-		{
-			for(int j = 1; j<=9; j++){
-				String cellVal;
-				boolean given = false;
-				if (board.isCurrentlyVisibleCell(i,j))
-				{
-					cellVal = Integer.toString(board.getCellValue(i,j));
-					given = true;
-				}
-				else
-				{
-					cellVal = BLANK;
-				}
-				buttonRow.add(makeGridButton(i, j ,cellVal, currentValue, buttonPanel, given));
-			}
-		}
-
-		buttonPanel.setLayout(new GridLayout(9,9));
+		setUpGrid();
 		
 		commandPanel = new JPanel();
 		commandPanel.setLayout(new FlowLayout());
@@ -97,7 +76,31 @@ public class SudokuFrame extends JFrame
 		
 	}
 	
-	public JButton makeGridButton(int row, int col, String name, String currentValue, JPanel panel, boolean given)
+	private void setUpGrid(){
+		
+		buttonPanel.removeAll();
+		buttonPanel.setLayout(new GridLayout(9,9));
+		buttonRow.removeAll(buttonRow);
+		for(int i = 1; i<=9; i++)
+		{
+			for(int j = 1; j<=9; j++){
+				String cellVal;
+				boolean given = false;
+				if (board.isCurrentlyVisibleCell(i,j))
+				{
+					cellVal = Integer.toString(board.getCellValue(i,j));
+					given = true;
+				}
+				else
+				{
+					cellVal = BLANK;
+				}
+				buttonRow.add(makeGridButton(cellVal, currentValue, buttonPanel, given));
+			}
+		}
+	}
+	
+	public JButton makeGridButton( String name, String currentValue, JPanel panel, boolean given)
 	{
 		JButton button = new JButton(name);
 		panel.add(button);
@@ -246,6 +249,7 @@ public class SudokuFrame extends JFrame
 			if(pane.newGameInGame()){
 				board.clear();
 				board.generate(pane.chooseLevelInGame());
+				setUpGrid();
 			}
 		}
 	}
