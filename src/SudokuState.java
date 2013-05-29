@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 
 /**
+ * CURRENT VERSION
  * @author Steven Falconieri <br/>
  * <h3> Class Description</h3>
  * Holds the current board and evaluation state required to solve a puzzle.
