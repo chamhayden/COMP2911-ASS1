@@ -53,7 +53,7 @@ public class SudokuFrame extends JFrame
 		resetGame = makeCommandButton("Restart game", commandPanel, new resetFunction());
 		revealButton = makeCommandButton("Reveal ALL", commandPanel, new revealFunction());
 		solutionButton = makeCommandButton("Check my solution!", commandPanel, new solutionFunction());
-		
+		undoButton = makeCommandButton("Undo my last", commandPanel, new undoFunction());
 		draftButton = makeCommandButton("DRAFT", scorePanel, new draftFunction());
 		eraseButton = makeCommandButton("Rubber", scorePanel, new eraseFunction());
 
@@ -123,29 +123,29 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
-private void labelGrid(){
-	JButton b;
-	for(int i = 1; i<=9; i++)
-	{
-		for(int j = 1; j<=9; j++){
-			b = buttonRow.get(findIndex(i,j));
-			if(!board.isInitiallyVisibleCell(i, j)){
-				if (board.isCurrentlyVisibleCell(i,j))
-				{
-					b.setText(Integer.toString(board.getCellValue(i,j)));
-				}else{
-					b.setText(BLANK);
-					for(int draft = 1; draft <= 9; draft++){
-						if(board.isVisibleCellDraft(i, j, draft)){
-							toggleDraftValues(Integer.toString(draft), b);
+	private void labelGrid(){
+		JButton b;
+		for(int i = 1; i<=9; i++)
+		{
+			for(int j = 1; j<=9; j++){
+				b = buttonRow.get(findIndex(i,j));
+				if(!board.isInitiallyVisibleCell(i, j)){
+					if (board.isCurrentlyVisibleCell(i,j))
+					{
+						b.setText(Integer.toString(board.getCellValue(i,j)));
+					}else{
+						b.setText(BLANK);
+						for(int draft = 1; draft <= 9; draft++){
+							if(board.isVisibleCellDraft(i, j, draft)){
+								toggleDraftValues(Integer.toString(draft), b);
+							}
 						}
+						
 					}
-					
 				}
 			}
 		}
 	}
-}
 	
 	
 	public JButton makeGridButton( String name, String currentValue, JPanel panel, boolean given)
@@ -195,6 +195,7 @@ private void labelGrid(){
 		
 		public void actionPerformed(ActionEvent event)
 		{
+			board.takeSnapShot(rowVal(b), colVal(b));
 			if(isButtonToggled(eraseButton, DEFAULT_COMMAND)){
 				toggleDraftFalse(b);
 				board.removeCellValue(rowVal(b), colVal(b));
@@ -289,6 +290,15 @@ private void labelGrid(){
 				//prepareForDifficulty();
 				setUpGrid();
 			}
+		}
+	}
+	
+	private class undoFunction implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			board.undoLast();
+			labelGrid();
 		}
 	}
 	
@@ -462,6 +472,7 @@ private void labelGrid(){
 	private Color DEFAULT_COMMAND = new Color(238,238,238);
 	private JButton newGame;
 	private JButton resetGame;
+	private JButton undoButton;
 	private JButton draftButton;
 	private JButton eraseButton;
 	private JButton solutionButton;

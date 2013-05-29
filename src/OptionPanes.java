@@ -17,14 +17,14 @@ public class OptionPanes {
 	public int chooseLevel(){
 		String[] buttons = {"Easy", "Medium", "Hard", "Exit" };
 		difficulty = JOptionPane.showOptionDialog(null, "To start, choose your difficulty:", "Welcome to Sudoku Fun!",
-		        JOptionPane.PLAIN_MESSAGE, 0, null, buttons, buttons[3]);
+		        JOptionPane.INFORMATION_MESSAGE, 0, null, buttons, buttons[3]);
 		return difficulty;
 	}
 	
 	public int chooseLevelInGame(){
 		String[] buttons = {"Easy", "Medium", "Hard"};
 		difficulty = JOptionPane.showOptionDialog(null, "Here we go again! Choose your difficulty:", "Welcome to Sudoku Fun!",
-		        JOptionPane.PLAIN_MESSAGE, 0, null, buttons, buttons[2]);
+		        JOptionPane.INFORMATION_MESSAGE, 0, null, buttons, buttons[2]);
 		return difficulty;
 	}
 	
