@@ -44,7 +44,6 @@ public class SudokuFrame extends JFrame
 		scorePanel.setLayout(new FlowLayout());
 		scorePanel.setVisible(true);
 
-		
 		resetGame = makeCommandButton("Restart game", commandPanel, new resetFunction());
 		newGame = makeCommandButton("NEW GAME", commandPanel, new newGamePop());
 		draftButton = makeCommandButton("DRAFT", commandPanel, new draftFunction());
@@ -54,16 +53,8 @@ public class SudokuFrame extends JFrame
 		
 		//prepareForDifficulty();
 		
-		for (int i = 0; i < LABELS.length(); i++)
-	      {
-	         final String label = LABELS.substring(i, i + 1);
-	         JButton keyButton = new JButton(label);
-	         keyButton.addActionListener(new NumberSelect());
-	         keyButton.setBackground(DEFAULT_COMMAND);
-	         buttonInputs.add(keyButton);
-	         scorePanel.add(keyButton);
-	      }
-
+		setUpButtonInputs();
+		
 		add(buttonPanel,BorderLayout.CENTER);
 		add(commandPanel,BorderLayout.NORTH);
 		add(scorePanel,BorderLayout.SOUTH);
@@ -83,7 +74,19 @@ public class SudokuFrame extends JFrame
 			
 		
 	}*/
-
+	private void setUpButtonInputs(){
+		for (int i = 0; i < LABELS.length(); i++)
+	      {
+	         final String label = LABELS.substring(i, i + 1);
+	         JButton keyButton = new JButton(label);
+	         keyButton.addActionListener(new NumberSelect());
+	         keyButton.setBackground(DEFAULT_COMMAND);
+	         buttonInputs.add(keyButton);
+	         scorePanel.add(keyButton);
+	      }
+	}
+	
+	
 	private void setUpGrid(){
 		
 		buttonPanel.removeAll();
@@ -232,7 +235,8 @@ public class SudokuFrame extends JFrame
 				currentValue = event.getActionCommand();
 				highlightValue(currentValue);
 			}
-			toggleButton(eraseButton, ERASE_TOGGLED, DEFAULT_COMMAND);
+			if(isButtonToggled(eraseButton, DEFAULT_COMMAND))
+				toggleButton(eraseButton, ERASE_TOGGLED, DEFAULT_COMMAND);
 		}
 	}
 	
@@ -266,15 +270,16 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-				toggleButton(solutionButton, CHECK_HIGHLIGHT, DEFAULT_COMMAND);
 				for(Component commands: commandPanel.getComponents()){
 					commands.setBackground(DEFAULT_COMMAND);
 				}
+				toggleButton(solutionButton, CHECK_HIGHLIGHT, DEFAULT_COMMAND);
+				blinkOut(solutionButton, DEFAULT_GRID,3);
 				highlightValue(BLANK);
 				for(JButton b: buttonRow){
 					if(!board.isInitiallyVisibleCell(rowVal(b), colVal(b)))
-						checkSquare(b,5);
-					blinkOut(b,DEFAULT_GRID,3);
+						checkSquare(b,8);
+					//blinkOut(b,DEFAULT_GRID,3);
 				}
 		}
 	}
