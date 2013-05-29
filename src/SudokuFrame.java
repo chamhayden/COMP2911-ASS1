@@ -73,10 +73,10 @@ public class SudokuFrame extends JFrame
 	
 	private void prepareForDifficulty() {
 
-		if(board.difficultyEasy()){
+		if(board.difficultyValueEasy()){
 			
 		}
-		if(board.difficultyMedium()){
+		if(board.difficultyValueMedium()){
 			
 		}else{
 			
@@ -142,7 +142,6 @@ public class SudokuFrame extends JFrame
 		return button;
 	}
 	
-
 /**
  * An action listener that sets the
  */
@@ -167,7 +166,8 @@ public class SudokuFrame extends JFrame
 						labels.setVisible(false);
 					}
 					board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(b.getText()));
-					checkSquare(b,2);
+					if(board.difficultyValueEasy())
+						checkSquare(b,2);
 					} else{
 						toggleDraftValues(getCurrentValue(), b);
 					}
@@ -209,7 +209,6 @@ public class SudokuFrame extends JFrame
 			highlightValue(BLANK);
 		}
 	}
-	
 	
 	public boolean isButtonToggled(JButton button, Color defaultColour){
 		if(!button.getBackground().equals(defaultColour))
