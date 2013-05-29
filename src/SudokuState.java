@@ -120,13 +120,12 @@ public class SudokuState {
 				debug("Is Not Solved or Valid");
 			}
 			while(this.solveMediumSteps() && this.pointingPairsAndTriplesAlgorithm()) {
-				this.printTemps();
 			}
 			debug("This is Valid = " + this.valid());
 			debug("This is Solved = " + this.solved());
 			if(this.solved()) {
 				debug("Is Solved and Valid");
-				this.print2DBoard(this.board);
+				//this.print2DBoard(this.board);
 			} else {
 				debug("Is Not Solved or Valid");
 			}
