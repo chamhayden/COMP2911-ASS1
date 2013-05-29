@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TimerTask;
 import javax.swing.*;
+import  java.awt.AWTKeyStroke;
 
 /**
  * 
@@ -24,16 +25,14 @@ public class SudokuFrame extends JFrame
 	public SudokuFrame(Board sBoard)
 	{
 		this.board = sBoard;
+		
 		setTitle("SUDOKU FUN!");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		
 		currentValue = BLANK;
 		draftMode = false;
 		
-		/*
-		 * Lists added in order to quickly find each button location via row and column (might be needed)
-		 */
-		buttonRow = new ArrayList<JButton>(8);
+		buttonRow = new ArrayList<JButton>();
 		buttonInputs = new LinkedList<JButton>();
 		
 		buttonPanel = new JPanel();
@@ -45,9 +44,11 @@ public class SudokuFrame extends JFrame
 		scorePanel = new JPanel();
 		scorePanel.setLayout(new FlowLayout());
 		scorePanel.setVisible(true);
+		//scorePanel.setFocusable(true);
+		//addKeyListener(new keyListen(this));
+		
 
 		solutionButton = makeCommandButton("Check my solution!", scorePanel, new solutionFunction());
-
 		
 		resetGame = makeCommandButton("Restart game", commandPanel, new resetFunction());
 		newGame = makeCommandButton("NEW GAME", commandPanel, new newGamePop());
@@ -59,13 +60,16 @@ public class SudokuFrame extends JFrame
 		
 		for (int i = 0; i < LABELS.length(); i++)
 	      {
+			
 	         final String label = LABELS.substring(i, i + 1);
 	         JButton keyButton = new JButton(label);
-	         NumberSelect action = new NumberSelect();
-	         keyButton.addActionListener(action);
+	         keyButton.addActionListener(new NumberSelect());
 	         keyButton.setBackground(DEFAULT_COMMAND);
+	         //keyButton.getInputMap().put(getKeyStroke(label), new NumberSelect());
+	         //keyButton.addKeyListener(new keyListen(this));
 	         buttonInputs.add(keyButton);
 	         scorePanel.add(keyButton);
+	         
 	      }
 		
 		
@@ -133,14 +137,6 @@ public class SudokuFrame extends JFrame
 		return button;
 	}
 	
-	public JButton makeMenuButton(String name, Color backgroundColor, JPanel panel)
-	{
-		JButton button = new JButton(name);
-		panel.add(button);
-		NumberAction action = new NumberAction(backgroundColor);
-		button.addActionListener(action);
-		return button;
-	}
 
 /**
  * An action listener that sets the
@@ -227,8 +223,37 @@ public class SudokuFrame extends JFrame
 		else button.setBackground(defaultColour);
 	}
 	
-	
-	
+	/*private class keyListen implements KeyListener
+	{
+		public keyListen(SudokuFrame frame){
+			sFrame = frame;
+		}
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+	            //char c = e.getKeyChar();
+	            //String.valueOf(c);
+	        	sFrame.highlightValue(String.valueOf(e.getKeyChar()));
+		}
+		
+		
+		private SudokuFrame sFrame;
+		
+	}
+*/	
 	private class NumberSelect implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
@@ -380,22 +405,6 @@ public class SudokuFrame extends JFrame
 		draftMode = enable;
 	}
 	
-	//Dummy actionListner to be modified / deleted
-	private class NumberAction implements ActionListener
-	{
-		public NumberAction(Color c)
-		{
-			backgroundColor = c;
-		}
-		
-		public void actionPerformed(ActionEvent event)
-		{
-			buttonPanel.setBackground(backgroundColor);
-			highlightValue(resetCurrentValue());
-		}
-		
-		private Color backgroundColor;
-	}
 	
 	public String resetCurrentValue(){
 		this.currentValue = BLANK;
@@ -406,7 +415,7 @@ public class SudokuFrame extends JFrame
 		return this.currentValue;
 	}
 	
-	private void highlightValue(String current){
+	public void highlightValue(String current){
 		for(JButton jb: buttonInputs){
 			if(jb.getText().equalsIgnoreCase(current))
 				jb.setBackground(INPUT_HIGHLIGHTS);
@@ -436,8 +445,8 @@ public class SudokuFrame extends JFrame
 		return col;
 	}
 	
-	Timer timer;
-	TimerTask task;
+	public Timer timer;
+	public TimerTask task;
 	public Color CORRECT = Color.GREEN;
 	public Color WRONG = Color.RED;
 	public Color CHECK_HIGHLIGHT = Color.RED;
@@ -462,10 +471,10 @@ public class SudokuFrame extends JFrame
 	private JPanel buttonPanel;
 	private JPanel commandPanel;
 	private JPanel scorePanel;
-	private LinkedList<JButton> buttonInputs;
+	public LinkedList<JButton> buttonInputs;
 	private ArrayList<JButton> buttonRow;
-	
 	private OptionPanes pane = new OptionPanes();
+
 	public Board board;
 	public static final String LABELS = "123456789";
 	public static final String BLANK = "";
