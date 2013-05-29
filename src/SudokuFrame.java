@@ -49,7 +49,7 @@ public class SudokuFrame extends JFrame
 		solutionButton = makeCommandButton("Check my solution!", scorePanel, new solutionFunction());
 
 		
-		
+		resetGame = makeCommandButton("Restart game", commandPanel, new resetFunction());
 		newGame = makeCommandButton("NEW GAME", commandPanel, new newGamePop());
 		checkButton = makeCommandButton("Check Square", commandPanel, new checkFunction());
 		revealButton = makeCommandButton("Reveal ALL", commandPanel, new revealFunction());
@@ -341,6 +341,25 @@ public class SudokuFrame extends JFrame
         private Color c;
 	}
 	
+	public void removeAll(){
+			
+		for(JButton b: buttonRow){
+			if (!board.isInitiallyVisibleCell(rowVal(b),colVal(b))){
+				toggleDraftFalse(b);
+				board.removeCellValue(rowVal(b), colVal(b));
+				b.setText(BLANK);
+			}
+		}
+	}
+	
+	private class resetFunction implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+				removeAll();
+		}
+	}
+	
 	public void revealAll(){
 		for(int i = 1; i<=9; i++)
 		{
@@ -433,6 +452,7 @@ public class SudokuFrame extends JFrame
 	private Color DEFAULT_GRID = new Color(238,238,238);
 	private Color DEFAULT_COMMAND = new Color(238,238,238);
 	private JButton newGame;
+	private JButton resetGame;
 	private JButton draftButton;
 	private JButton eraseButton;
 	private JButton solutionButton;
