@@ -184,21 +184,22 @@ public class Removal {
 		int i = 0;
 		Point removed;
 		int sizeIs = removable.size();
-		RandCell rC = new RandCell(removable, b);
+		CellSelector selector = new CellSelector(removable, b);
 		int sizeWas = sizeIs+1;
 		
 		while (i < complexity && sizeIs != sizeWas){
-			while(!rC.isEmpty()){
-				removed = rC.randRemove();
+			while(!selector.cycleDone()){
+				removed = selector.randChoose();
 				if(checker.isSudokuSolutionUnique(b)){
 					i += 1;
+					selector.confirmRemoval();
 				} else {
 					putBack(removed);
 				}
 			}
 			sizeWas = sizeIs;
 			sizeIs = removable.size();
-			rC.refresh();
+			selector.refresh();
 		}
 	}
 	
