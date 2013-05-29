@@ -112,8 +112,8 @@ public class SudokuState {
 		public void solve() {
 			debug("Updating Temp Vals");
 			this.updateTempVals();
-			System.out.println("_______________");
-			this.print2DBoard(this.board);
+			debug("_______________");
+			
 			if(this.solved()) {
 				debug("Is Solved and Valid");
 			} else {
@@ -122,13 +122,11 @@ public class SudokuState {
 			while(this.solveMediumSteps() && this.pointingPairsAndTriplesAlgorithm()) {
 				this.printTemps();
 			}
-			this.printTemps();
-			
-			//this.solveMediumSteps();
-			System.out.println("This is Valid = " + this.valid());
-			System.out.println("This is Solved = " + this.solved());
+			debug("This is Valid = " + this.valid());
+			debug("This is Solved = " + this.solved());
 			if(this.solved()) {
 				debug("Is Solved and Valid");
+				this.print2DBoard(this.board);
 			} else {
 				debug("Is Not Solved or Valid");
 			}
@@ -245,7 +243,7 @@ public class SudokuState {
 			boolean cellsFilled = true;
 			this.updateBoardVals();
 			this.updateTempVals();
-			System.out.println("Pointing pairs algorithm ************");
+			debug("Pointing pairs algorithm ************");
 			this.solveMediumSteps();
 			cellsFilled = false;
 			for(int row = 0; row < this.BOARD_SIZE; row++) {
@@ -260,7 +258,7 @@ public class SudokuState {
 					LinkedList<Integer> sectionPossibleVals = this.getSectionPossibleVals(row, col);
 					LinkedList<Integer> rowPossibleVals = this.getRowPossibleVals(row);
 					LinkedList<Integer> colPossibleVals = this.getColPossibleVals(col);
-					//this.printTempsSection(section);
+				
 					for(int num = 1; num <= this.BOARD_SIZE; num++) {
 						int numOccurrencesInSection = this.numberOccurances(num, sectionPossibleVals);
 						int numOccurrencesInSectionRow = this.numberOccurances(num, sectionRowPossibleVals);
@@ -292,7 +290,7 @@ public class SudokuState {
 												this.updateTempVals();
 											} else {
 												cellsFilled = true;
-												System.out.println("Removed possibility of " + num + " from (" + currentCol + ", " + row + ") From Section " + this.getSection(row, currentCol) + " due to Section " + section);
+												debug("Removed possibility of " + num + " from (" + currentCol + ", " + row + ") From Section " + this.getSection(row, currentCol) + " due to Section " + section);
 												this.updateBoardVals();
 											}
 										}
@@ -302,7 +300,7 @@ public class SudokuState {
 									debug("pairOrTriple in section col " + col);
 									debug("pair Or Triple in Section = " + pairOrTripleInSection + " in sectionRow = " + pairOrTripleInSectionRow + " in sectionCol = " + pairOrTripleInSectionCol);
 									debug("Num is " + num + " vals in section " + sectionPossibleVals + " vals in section row " + sectionRowPossibleVals + " vals in section col " + sectionColPossibleVals);
-									//this.printTempsSection(section);
+								
 									debug("# in section = # in col");
 									for(int currentRow = 0; currentRow < this.BOARD_SIZE; currentRow++) {
 										// Check if currentRow is not contained within this section of the board.
@@ -313,7 +311,7 @@ public class SudokuState {
 												this.updateTempVals();
 											} else {
 												cellsFilled = true;
-												System.out.println("Removed possibility of " + num + " from (" + col + ", " + currentRow + ") From Section " + this.getSection(currentRow, col) + " due to Section " + section);
+												debug("Removed possibility of " + num + " from (" + col + ", " + currentRow + ") From Section " + this.getSection(currentRow, col) + " due to Section " + section);
 												this.updateBoardVals();
 											}
 										}	
@@ -336,7 +334,7 @@ public class SudokuState {
 										if(!this.valid()) {
 											this.updateTempVals();
 										} else {
-											System.out.println("Removed possibility of " + num + " from (" + currentCol + ", " + currentRow + ") ");
+											debug("Removed possibility of " + num + " from (" + currentCol + ", " + currentRow + ") ");
 											cellsFilled = true;
 											this.updateBoardVals();
 										}
@@ -360,7 +358,7 @@ public class SudokuState {
 										if(!this.valid()) {
 											this.updateTempVals();
 										} else {
-											System.out.println("Removed possibility of " + num + " from (" + currentCol + ", " + currentRow + ") ");
+											debug("Removed possibility of " + num + " from (" + currentCol + ", " + currentRow + ") ");
 											cellsFilled = true;
 											this.updateBoardVals();
 										}
@@ -634,7 +632,7 @@ public class SudokuState {
 				for(int col = 0; col < BOARD_SIZE; col++) {
 					for(int number = 1; number <= BOARD_SIZE; number++) {
 						if(this.inColumn(number, col) > 1 || this.inRow(number, row) > 1 || this.inSection(number, row, col) > 1) {
-							System.out.println("row = " + row + " col = " + col);
+							debug("row = " + row + " col = " + col);
 							return false;
 						}
 					}
