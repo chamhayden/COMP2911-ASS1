@@ -42,20 +42,20 @@ public class SudokuFrame extends JFrame
 		commandPanel = new JPanel();
 		commandPanel.setLayout(new FlowLayout());
 		
+		scorePanel = new JPanel();
+		scorePanel.setLayout(new FlowLayout());
+		scorePanel.setVisible(true);
 
+		solutionButton = makeCommandButton("Check my solution!", scorePanel, new solutionFunction());
+
+		
+		
 		newGame = makeCommandButton("NEW GAME", commandPanel, new newGamePop());
-		
-		
 		checkButton = makeCommandButton("Check Square", commandPanel, new checkFunction());
 		revealButton = makeCommandButton("Reveal ALL", commandPanel, new revealFunction());
 		eraseButton = makeCommandButton("Rubber", commandPanel, new eraseFunction());
 		draftButton = makeCommandButton("DRAFT", commandPanel, new draftFunction());
 		
-		scorePanel = new JPanel();
-		scorePanel.setLayout(new FlowLayout());
-		scorePanel.setVisible(true);
-		
-		solutionButton = makeMenuButton("Check my solution!", Color.BLACK, scorePanel);
 		
 		for (int i = 0; i < LABELS.length(); i++)
 	      {
@@ -161,7 +161,7 @@ public class SudokuFrame extends JFrame
 				board.setCellValue(rowVal(b), colVal(b), -1);
 				toggleButton(eraseButton, ERASE_TOGGLED, DEFAULT_COMMAND);
 			} else if(isButtonToggled(checkButton, DEFAULT_COMMAND)){
-				checkSquare(b);
+				checkSquare(b,2);
 				
 			}else if(!getCurrentValue().equalsIgnoreCase(BLANK)){
 				if(!draftMode){
@@ -277,6 +277,24 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	
+	private class solutionFunction implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+				toggleButton(solutionButton, CHECK_HIGHLIGHT, DEFAULT_COMMAND);
+				for(Component commands: commandPanel.getComponents()){
+					commands.setBackground(DEFAULT_COMMAND);
+				}
+				highlightValue(BLANK);
+					for(JButton b: buttonRow){
+						if(!board.isInitiallyVisibleCell(rowVal(b), colVal(b)))
+							checkSquare(b,5);
+						blinkOut(b,DEFAULT_GRID,3);
+				}
+		}
+	}
+	
 	private class revealFunction implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
@@ -287,7 +305,7 @@ public class SudokuFrame extends JFrame
 		}
 	}
 
-	public void checkSquare(JButton b)
+	public void checkSquare(JButton b, int seconds)
 		{
 			if(!b.getText().equals(BLANK)){
 				if(board.isCorrectCell(rowVal(b),colVal(b))){
@@ -296,14 +314,14 @@ public class SudokuFrame extends JFrame
 				else {
 					b.setBackground(WRONG);
 				}
-				blinkOut(b,DEFAULT_GRID);
+				blinkOut(b,DEFAULT_GRID, seconds);
 
 			}
 		}
 	
-	private void blinkOut(JButton button , Color colour){
+	private void blinkOut(JButton button , Color colour, int seconds){
 		
-        Timer timer = new Timer(500, new blinkFunction(button, colour));
+        Timer timer = new Timer(seconds*1000, new blinkFunction(button, colour));
         timer.start(); 
         
     }
