@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TimerTask;
 import javax.swing.*;
-import  java.awt.AWTKeyStroke;
 
 /**
  * 
@@ -44,42 +43,48 @@ public class SudokuFrame extends JFrame
 		scorePanel = new JPanel();
 		scorePanel.setLayout(new FlowLayout());
 		scorePanel.setVisible(true);
-		//scorePanel.setFocusable(true);
-		//addKeyListener(new keyListen(this));
-		
 
-		solutionButton = makeCommandButton("Check my solution!", scorePanel, new solutionFunction());
 		
 		resetGame = makeCommandButton("Restart game", commandPanel, new resetFunction());
 		newGame = makeCommandButton("NEW GAME", commandPanel, new newGamePop());
-		checkButton = makeCommandButton("Check Square", commandPanel, new checkFunction());
-		revealButton = makeCommandButton("Reveal ALL", commandPanel, new revealFunction());
-		eraseButton = makeCommandButton("Rubber", commandPanel, new eraseFunction());
 		draftButton = makeCommandButton("DRAFT", commandPanel, new draftFunction());
-		
+		eraseButton = makeCommandButton("Rubber", commandPanel, new eraseFunction());
+		revealButton = makeCommandButton("Reveal ALL", commandPanel, new revealFunction());
+		checkButton = makeCommandButton("Check Square", commandPanel, new checkFunction());
+		solutionButton = makeCommandButton("Check my solution!", scorePanel, new solutionFunction());
+
+		prepareForDifficulty();
 		
 		for (int i = 0; i < LABELS.length(); i++)
 	      {
-			
 	         final String label = LABELS.substring(i, i + 1);
 	         JButton keyButton = new JButton(label);
 	         keyButton.addActionListener(new NumberSelect());
 	         keyButton.setBackground(DEFAULT_COMMAND);
-	         //keyButton.getInputMap().put(getKeyStroke(label), new NumberSelect());
-	         //keyButton.addKeyListener(new keyListen(this));
 	         buttonInputs.add(keyButton);
 	         scorePanel.add(keyButton);
-	         
 	      }
-		
-		
-		//add or nest panels to frame
+
 		add(buttonPanel,BorderLayout.CENTER);
 		add(commandPanel,BorderLayout.NORTH);
 		add(scorePanel,BorderLayout.SOUTH);
 		
 	}
 	
+	private void prepareForDifficulty() {
+
+		if(board.difficultyEasy()){
+			
+		}
+		if(board.difficultyMedium()){
+			
+		}else{
+			
+		}
+			
+		
+	}
+
 	private void setUpGrid(){
 		
 		buttonPanel.removeAll();
@@ -155,10 +160,6 @@ public class SudokuFrame extends JFrame
 				toggleDraftFalse(b);
 				b.setText(resetCurrentValue());
 				board.setCellValue(rowVal(b), colVal(b), -1);
-				toggleButton(eraseButton, ERASE_TOGGLED, DEFAULT_COMMAND);
-			} else if(isButtonToggled(checkButton, DEFAULT_COMMAND)){
-				checkSquare(b,2);
-				
 			}else if(!getCurrentValue().equalsIgnoreCase(BLANK)){
 				if(!draftMode){
 					b.setText(getCurrentValue());
@@ -166,7 +167,7 @@ public class SudokuFrame extends JFrame
 						labels.setVisible(false);
 					}
 					board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(b.getText()));
-					
+					checkSquare(b,2);
 					} else{
 						toggleDraftValues(getCurrentValue(), b);
 					}
@@ -223,37 +224,6 @@ public class SudokuFrame extends JFrame
 		else button.setBackground(defaultColour);
 	}
 	
-	/*private class keyListen implements KeyListener
-	{
-		public keyListen(SudokuFrame frame){
-			sFrame = frame;
-		}
-		@Override
-		public void keyPressed(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
-	            //char c = e.getKeyChar();
-	            //String.valueOf(c);
-	        	sFrame.highlightValue(String.valueOf(e.getKeyChar()));
-		}
-		
-		
-		private SudokuFrame sFrame;
-		
-	}
-*/	
 	private class NumberSelect implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
@@ -264,6 +234,7 @@ public class SudokuFrame extends JFrame
 				currentValue = event.getActionCommand();
 				highlightValue(currentValue);
 			}
+			toggleButton(eraseButton, ERASE_TOGGLED, DEFAULT_COMMAND);
 		}
 	}
 	
@@ -278,6 +249,7 @@ public class SudokuFrame extends JFrame
 			}
 		}
 	}
+	
 	
 	private class draftFunction implements ActionListener
 	{
@@ -301,7 +273,6 @@ public class SudokuFrame extends JFrame
 				
 		}
 	}
-	
 	
 	private class solutionFunction implements ActionListener
 	{
@@ -360,14 +331,12 @@ public class SudokuFrame extends JFrame
 		public void actionPerformed(ActionEvent e) {
 			b.setBackground(c);
 			
-			
 		}
 		private JButton b;
         private Color c;
 	}
 	
 	public void removeAll(){
-			
 		for(JButton b: buttonRow){
 			if (!board.isInitiallyVisibleCell(rowVal(b),colVal(b))){
 				toggleDraftFalse(b);
@@ -381,6 +350,7 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
+			if(pane.restartGame())
 				removeAll();
 		}
 	}

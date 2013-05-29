@@ -60,6 +60,14 @@ public class OptionPanes {
 		else return false;
 	}
 	
+	public boolean restartGame(){
+		value = JOptionPane.showConfirmDialog(null, "Restart? Are you sure?", "New Game",
+		        JOptionPane.YES_NO_OPTION);
+		if(value == JOptionPane.YES_OPTION)
+			return true;
+		else return false;
+	}
+	
 	private int difficulty;
 	private int value;
 }
