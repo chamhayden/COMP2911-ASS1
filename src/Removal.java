@@ -167,21 +167,46 @@ public class Removal {
 		return true;
 	}
 	
+	/*
 	private void complexRemove(){
 		int complexity = difficulty*DIFF_CALIBRATION;
 		int i = 0;
 		Point removed;
-		int diff;
-		Random r = new Random();
-		while (i < complexity){
+		int sizeIs = removable.size();
+		int sizeWas = sizeIs+1;
+		
+		while (i < complexity && sizeIs != sizeWas){
 			removed = removeRandom();
-			//diff = checker.isSudokuSolutionUnique(b);
-			//if(diff < difficulty){
 			if(checker.isSudokuSolutionUnique(b)){
-				i += 1;//diff;
+				i += 1;
 			} else {
 				putBack(removed);
 			}
+			sizeWas = sizeIs;
+			sizeIs = removable.size();
+		}
+	}*/
+	
+	private void complexRemove(){
+		int complexity = difficulty*DIFF_CALIBRATION;
+		int i = 0;
+		Point removed;
+		int sizeIs = removable.size();
+		RandCell rC = new RandCell(removable, b);
+		int sizeWas = sizeIs+1;
+		
+		while (i < complexity && sizeIs != sizeWas){
+			while(!rC.isEmpty()){
+				removed = rC.randRemove();
+				if(checker.isSudokuSolutionUnique(b)){
+					i += 1;
+				} else {
+					putBack(removed);
+				}
+			}
+			sizeWas = sizeIs;
+			sizeIs = removable.size();
+			rC.refresh();
 		}
 	}
 	
