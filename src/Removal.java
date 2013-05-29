@@ -16,6 +16,8 @@ public class Removal {
 		checker = new SudokuSolver();
 		removable = new ArrayList<Point>();
 		initialise();
+		selector = new CellSelector(removable, this.b);
+
 	}
 	
 	public void remove(){
@@ -159,33 +161,13 @@ public class Removal {
 		return true;
 	}
 	
-	/*
 	private void complexRemove(){
 		int complexity = difficulty*DIFF_CALIBRATION;
 		int i = 0;
 		Point removed;
 		int sizeIs = removable.size();
 		int sizeWas = sizeIs+1;
-		
-		while (i < complexity && sizeIs != sizeWas){
-			removed = removeRandom();
-			if(checker.isSudokuSolutionUnique(b)){
-				i += 1;
-			} else {
-				putBack(removed);
-			}
-			sizeWas = sizeIs;
-			sizeIs = removable.size();
-		}
-	}*/
-	
-	private void complexRemove(){
-		int complexity = difficulty*DIFF_CALIBRATION;
-		int i = 0;
-		Point removed;
-		int sizeIs = removable.size();
-		CellSelector selector = new CellSelector(removable, b);
-		int sizeWas = sizeIs+1;
+		selector = new CellSelector(removable, b);
 		
 		while (i < complexity && sizeIs != sizeWas){
 			while(!selector.cycleDone()){
@@ -293,8 +275,10 @@ public class Removal {
 	
 	private Board b;
 	private int difficulty;
-	SudokuSolver checker;
-	ArrayList<Point> removable;
+	private SudokuSolver checker;
+	private ArrayList<Point> removable;
+	private CellSelector selector;
+
 	private static final int EASY = 1;
 	private static final int MEDIUM = 2;
 	private static final int HARD = 3;
