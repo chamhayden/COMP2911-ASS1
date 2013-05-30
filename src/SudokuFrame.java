@@ -111,7 +111,7 @@ public class SudokuFrame extends JFrame
 			for(int j = 1; j<=9; j++){
 				String cellVal;
 				boolean given = false;
-				if (board.isInitiallyVisibleCell(i,j))
+				if (board.isInitiallySet(i,j))
 				{
 					cellVal = Integer.toString(board.getCellValue(i,j));
 					given = true;
@@ -129,15 +129,17 @@ public class SudokuFrame extends JFrame
 		{
 			for(int j = 1; j<=9; j++){
 				b = buttonRow.get(findIndex(i,j));
-				if(!board.isInitiallyVisibleCell(i, j)){
-					if (board.isCurrentlyVisibleCell(i,j))
+				if(!board.isInitiallySet(i, j)){
+					if (board.hasInput(i,j))
 					{
 						b.setText(Integer.toString(board.getCellValue(i,j)));
 					}else{
 						b.setText(BLANK);
-						for(int draft = 1; draft <= 9; draft++){
-							if(board.isVisibleCellDraft(i, j, draft)){
-								toggleDraftValues(Integer.toString(draft), b);
+						if(board.hasDraft()){
+							for(int draft = 1; draft <= 9; draft++){
+								if(board.isVisibleCellDraft(i, j, draft)){
+									toggleDraftValues(Integer.toString(draft), b);
+								}
 							}
 						}
 						
@@ -329,7 +331,7 @@ public class SudokuFrame extends JFrame
 				blinkOut(solutionButton, DEFAULT_COMMAND,2);
 				highlightValue(BLANK);
 				for(JButton b: buttonRow){
-					if(!board.isInitiallyVisibleCell(rowVal(b), colVal(b)))
+					if(!board.isInitiallySet(rowVal(b), colVal(b)))
 						checkSquare(b,4);
 				}
 		}
@@ -378,7 +380,7 @@ public class SudokuFrame extends JFrame
 	
 	public void removeAll(){
 		for(JButton b: buttonRow){
-			if (!board.isInitiallyVisibleCell(rowVal(b),colVal(b))){
+			if (!board.isInitiallySet(rowVal(b),colVal(b))){
 				toggleDraftFalse(b);
 				board.removeCellValue(rowVal(b), colVal(b));
 				board.setCellVisibility(rowVal(b), colVal(b), false);
@@ -405,7 +407,7 @@ public class SudokuFrame extends JFrame
 			for(int j = 1; j<=9; j++){
 				String cellVal;
 				cellVal = Integer.toString(board.getCellValue(i,j));
-				if (!board.isCurrentlyVisibleCell(i,j)){
+				if (!board.hasInput(i,j)){
 					finalButton = buttonRow.get(findIndex(i,j));
 					finalButton.setText(cellVal);
 					finalButton.setEnabled(false);
