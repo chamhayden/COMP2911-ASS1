@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
 * Class that allows creation, modification and access to
@@ -40,14 +41,22 @@ public class SudokuBoard implements Board {
 		
 		this.currentlyGenerating = true;
 		this.difficulty = difficulty;
+		Random n = new Random();
+		for (int i = 1; i <= 9; i++)
+		{
+			for (int j = 1; j <= 9; j++)
+			{
+				setCellValue(i, j, 5);
+			}
+		}
 		
-		BoardFiller filler = new BoardFiller(this);
+		/*BoardFiller filler = new BoardFiller(this);
 		Removal r = new Removal(this);
 		boolean filled = false;
 		while(!filled){
 			filled = filler.fillBoard();
 		}
-		r.remove();
+		r.remove();*/
 
 		this.currentlyGenerating = false;
 	}
@@ -120,7 +129,14 @@ public class SudokuBoard implements Board {
 	
 	public boolean hasDrafts(int row, int col)
 	{
-		return true;
+		for (int i = 1; i <= boardSize; i++)
+		{
+			if (isVisibleCellDraft(row, col, i))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
