@@ -15,16 +15,14 @@ public class Removal {
 		} else if (b.isDifficultyHard()) {
 			difficulty = HARD;
 		}
-		removable = new ArrayList<Point>();
+		removable = new ArrayList<Position>();
 		initialise();
-		checker = new SudokuSolver();
 	}
 	
 	public void remove(){
 		
 		removeValues(new SimpleRemover(b));
 		if (difficulty > 1){
-			//harderRemove();
 			removeValues(new HardRemover(b));
 			if (difficulty > 2){
 				removeValues(new ExhaustiveRemover(b));
@@ -34,6 +32,7 @@ public class Removal {
 	
 	public void removeValues(Removalist remover){
 		
+		//TODO get rid of numRemoved after debugging
 		int numRemoved = 0;
 		int pendingRemoval;
 		int size = removable.size();
@@ -74,7 +73,7 @@ public class Removal {
 		int row, col;
 		for(row = 0; row < 9; row++){
 			for(col = 0; col < 9; col++){
-				removable.add(new Point(row, col));
+				removable.add(new Position(row, col));
 			}
 		}
 	}
@@ -97,13 +96,10 @@ public class Removal {
 	}
 	
 	private Board b;
+	private ArrayList<Position> removable;
 	private int difficulty;
-	private ArrayList<Point> removable;
-	private SudokuSolver checker;
 
 	private static final int EASY = 1;
 	private static final int MEDIUM = 2;
 	private static final int HARD = 3;
-	private static final int MISSING = -1;
-	private static final int DIFF_CALIBRATION = 10;
 }

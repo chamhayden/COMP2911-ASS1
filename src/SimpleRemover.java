@@ -14,7 +14,7 @@ public class SimpleRemover implements Removalist {
 	}
 	
 	@Override
-	public boolean removed(Point p) {
+	public boolean removed(Position p) {
 		int row = p.getRow();
 		int col = p.getCol();
 		for(int i = 1; i < 10; i++){

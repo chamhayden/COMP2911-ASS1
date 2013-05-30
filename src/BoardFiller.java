@@ -6,9 +6,6 @@ import java.util.Random;
 /**
  * Generates a board
  * Randomly assigns values, checks they work, reassigns if required
- * Not very tidy, I'd rather not use a do while loop and so many break and continue statements
- * Ill neaten it up later
- * Yes I am aware that I have misspelt column
  * @author laura
  *
  */
@@ -20,7 +17,7 @@ public class BoardFiller {
 		this.b = b;
 	}
 	
-	public boolean fillBoard(){
+	public boolean fillBoardOld(){
 		int i, j, k;
 		int x = 0;
 		Random r = new Random();  
@@ -63,7 +60,6 @@ public class BoardFiller {
 					}
 					continue;
 				}
-				//System.out.println("Setting, " + i + " " + j);
 				b.setCellValue(i+1, j+1, x);
 				j++;
 			}
@@ -72,11 +68,62 @@ public class BoardFiller {
 		return true;
 	}
 	
-	public int squarePos(int row, int collumn){
-		return (collumn % 3) + 3*((row % 3));
+	public boolean fillBoard(){
+		int row, col, square;
+		int x = 0;
+		Random r = new Random();  
+		LinkedList<Integer> l = new LinkedList<Integer>();
+		int counter = 0;
+		
+		for(row = 0; row < 9; row++){
+			counter = 0;
+			col = 0;
+			while(col < 9){				
+				square = squareNo(row, col);
+				// TODO THIS IS A NICE PLACE TO WATCH FROM IF YOU WANT TO =)
+				//System.out.printf("\n\n\n\n");
+				//printBoard();
+				//System.out.printf("\n\n\n");
+				//remove to here
+				for(int m = 1; m < 10; m++){
+					l.add(m);
+				}
+				do{
+					x = l.remove(r.nextInt(l.size()));
+				} while(!l.isEmpty() && (b.rowHas(row+1, x) || b.columnHas(col+1, x) || b.squareHas(square+1, x)));
+				
+				if(l.isEmpty()){
+					col = reset(row, col);
+					counter++;
+					if (counter > ATTEMPT_LIMIT){
+						b.clear();
+						return false;
+						//TODO could change this to row = 0; continue; to avoid repeated calls in SudokuBoard
+					}
+				} else {
+					b.setCellValue(row+1, col+1, x);
+					col++;
+				}
+			}
+		}
+		printBoard();
+		return true;
 	}
 	
-	public int squareNo(int row, int collumn){
+	private int reset(int row, int col){
+		int resetPoint;
+		if(row%3 == 2){
+			resetPoint = ((int)Math.floor(col/3)*3);
+		} else {
+			resetPoint = 0;
+		}
+		for(int p = resetPoint; p < 9; p++){
+			b.removeCellValue(row+1, p+1);
+		}	
+		return resetPoint;
+	}
+	
+	private int squareNo(int row, int collumn){
 		return ((int)Math.floor(collumn/3) + (int)Math.floor(row/3)*3);
 	}
 	
@@ -99,4 +146,5 @@ public class BoardFiller {
 	
 	
 	private Board b;
+	private static final int ATTEMPT_LIMIT = 20;
 }
