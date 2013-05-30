@@ -6,9 +6,9 @@ public class Removal {
 	
 	public Removal(Board b){
 		this.b = b;
-		if(b.getDifficulty() == b.difficultyValueEasy()){
+		if(b.isDifficultyEasy()){
 			difficulty = EASY;
-		} else if (b.getDifficulty() == b.difficultyValueMedium()){
+		} else if (b.isDifficultyMedium()){
 			difficulty = MEDIUM;
 		} else {
 			difficulty = HARD;

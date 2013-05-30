@@ -76,10 +76,10 @@ public class SudokuFrame extends JFrame
 	
 	private void prepareForDifficulty() {
 
-		if(board.difficultyValueEasy() == 0){
+		if(board.isDifficultyEasy()){
 			solutionButton.setVisible(true);
 		}
-		if(board.difficultyValueMedium() ==1){
+		if(board.isDifficultyMedium()){
 			solutionButton.setVisible(true);
 		}else{
 			solutionButton.setVisible(false);

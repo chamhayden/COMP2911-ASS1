@@ -231,27 +231,39 @@ public class SudokuBoard implements Board {
 	 * Return the difficulty constant for "Easy"
 	 * @return Difficulty constant for "Easy"
 	 */
-	public int difficultyValueEasy()
+	public boolean isDifficultyEasy()
 	{
-		return DIFFICULTY_EASY;
+		if (this.difficulty == DIFFICULTY_EASY)
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	/**
 	 * Return the difficulty constant for "Medium"
 	 * @return Difficulty constant for "Medium"
 	 */
-	public int difficultyValueMedium()
+	public boolean isDifficultyMedium()
 	{
-		return DIFFICULTY_MEDIUM;
+		if (this.difficulty == DIFFICULTY_MEDIUM)
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	/**
 	 * Return the difficulty constant for "Hard"
 	 * @return Difficulty constant for "Hard"
 	 */
-	public int difficultyValueHard()
+	public boolean isDifficultyHard()
 	{
-		return DIFFICULTY_HARD;
+		if (this.difficulty == DIFFICULTY_HARD)
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -383,6 +395,11 @@ public class SudokuBoard implements Board {
 	public int getDifficulty()
 	{
 		return this.difficulty;
+	}
+	
+	public void undoLast()
+	{
+		
 	}
 	
 	

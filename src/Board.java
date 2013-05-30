@@ -101,19 +101,19 @@ public interface Board
 	 * Return the difficulty constant for "Easy"
 	 * @return Difficulty constant for "Easy"
 	 */
-	public int difficultyValueEasy();
+	public boolean isDifficultyEasy();
 	
 	/**
 	 * Return the difficulty constant for "Medium"
 	 * @return Difficulty constant for "Medium"
 	 */
-	public int difficultyValueMedium();
+	public boolean isDifficultyMedium();
 	
 	/**
 	 * Return the difficulty constant for "Hard"
 	 * @return Difficulty constant for "Hard"
 	 */
-	public int difficultyValueHard();
+	public boolean isDifficultyHard();
 	
 	/**
 	 * Get the size of the board
@@ -174,16 +174,7 @@ public interface Board
 	 */
 	public boolean isEmptyCell(int row, int col);
 	
-	/**
-	 * Return the difficulty of the current board that has
-	 *  been generated
-	 * @return Difficulty of current board that has been generated
-	 */
-	public int getDifficulty();
-	
-	//public void takeSnapShot(int row, int col);
-	
-	//public void undoLast();
+	public void undoLast();
 	
 	
 }
