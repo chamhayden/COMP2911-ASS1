@@ -42,6 +42,7 @@ public class SudokuBoard implements Board {
 		this.currentlyGenerating = true;
 		this.difficulty = difficulty;
 		
+		/*
 		// Debugging
 		Random n = new Random();
 		for (int i = 1; i <= 9; i++)
@@ -54,15 +55,15 @@ public class SudokuBoard implements Board {
 				if (l == 1) setIfInitiallySet(i, j, true);
 				if (l == 0) setIfInitiallySet(i, j, false);
 			}
-		}
+		}*/
 		
-		/*BoardFiller filler = new BoardFiller(this);
+		BoardFiller filler = new BoardFiller(this);
 		Removal r = new Removal(this);
 		boolean filled = false;
 		while(!filled){
 			filled = filler.fillBoard();
 		}
-		r.remove();*/
+		r.remove();
 
 		this.currentlyGenerating = false;
 	}
