@@ -41,14 +41,18 @@ public class SudokuBoard implements Board {
 		
 		this.currentlyGenerating = true;
 		this.difficulty = difficulty;
+		
+		// Debugging
 		Random n = new Random();
 		for (int i = 1; i <= 9; i++)
 		{
 			for (int j = 1; j <= 9; j++)
 			{
 				setCellValue(i, j, n.nextInt(9) + 1);
-				int l = n.nextInt(1);
-				//if (l == 1) setI
+				int l = n.nextInt(2);
+				System.out.println(l);
+				if (l == 1) setIfInitiallySet(i, j, true);
+				if (l == 0) setIfInitiallySet(i, j, false);
 			}
 		}
 		
