@@ -181,9 +181,9 @@ public interface Board
 	 */
 	public int getDifficulty();
 	
-	public void takeSnapShot(int row, int col);
+	//public void takeSnapShot(int row, int col);
 	
-	public void undoLast();
+	//public void undoLast();
 	
 	
 }

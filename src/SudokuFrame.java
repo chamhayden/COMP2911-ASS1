@@ -195,7 +195,7 @@ public class SudokuFrame extends JFrame
 		
 		public void actionPerformed(ActionEvent event)
 		{
-			board.takeSnapShot(rowVal(b), colVal(b));
+			//board.takeSnapShot(rowVal(b), colVal(b));
 			if(isButtonToggled(eraseButton, DEFAULT_COMMAND)){
 				toggleDraftFalse(b);
 				board.removeCellValue(rowVal(b), colVal(b));
@@ -297,7 +297,7 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			board.undoLast();
+			//board.undoLast();
 			labelGrid();
 		}
 	}
