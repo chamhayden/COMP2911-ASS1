@@ -50,7 +50,7 @@ public interface Board
 	 * @param col Column cell is in
 	 * @param visiblity Whether the particular cell is visible or not
 	 */
-	public void setCellVisibility(int row, int col, boolean visibility);
+	public void setIfInitiallySet(int row, int col, boolean visibility);
 	
 	/**
 	 * Check is a particular cell value's temporary value for a 

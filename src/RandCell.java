@@ -21,7 +21,7 @@ public class RandCell {
 		p = cells.get(toRemove);
 		x = p.getRow();
 		y = p.getCol();
-		b.setCellVisibility(x+1, y+1, false);
+		b.setIfInitiallySet(x+1, y+1, false);
 		return p;
 	}
 	

@@ -201,12 +201,12 @@ public class SudokuFrame extends JFrame
 			if(isButtonToggled(eraseButton, DEFAULT_COMMAND)){
 				toggleDraftFalse(b);
 				board.removeCellValue(rowVal(b), colVal(b));
-				board.setCellVisibility(rowVal(b), colVal(b), false);
+				board.setIfInitiallySet(rowVal(b), colVal(b), false);
 			}else if(!getCurrentValue().equalsIgnoreCase(BLANK)){
 				if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
 					toggleDraftFalse(b);
 					board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(getCurrentValue()));
-					board.setCellVisibility(rowVal(b), colVal(b), true);
+					board.setIfInitiallySet(rowVal(b), colVal(b), true);
 					if(board.isDifficultyEasy())
 						checkSquare(b,2);
 					} else{
@@ -383,7 +383,7 @@ public class SudokuFrame extends JFrame
 			if (!board.isInitiallySet(rowVal(b),colVal(b))){
 				toggleDraftFalse(b);
 				board.removeCellValue(rowVal(b), colVal(b));
-				board.setCellVisibility(rowVal(b), colVal(b), false);
+				board.setIfInitiallySet(rowVal(b), colVal(b), false);
 				//b.setText(BLANK);
 			}
 		}

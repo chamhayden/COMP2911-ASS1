@@ -46,7 +46,9 @@ public class SudokuBoard implements Board {
 		{
 			for (int j = 1; j <= 9; j++)
 			{
-				setCellValue(i, j, 5);
+				setCellValue(i, j, n.nextInt(9) + 1);
+				int l = n.nextInt(1);
+				//if (l == 1) setI
 			}
 		}
 		
@@ -158,7 +160,7 @@ public class SudokuBoard implements Board {
 	 * @param visiblity Whether the particular cell is visible or not
 	 */
 	
-	public void setCellVisibility(int row, int col, boolean visibility)
+	public void setIfInitiallySet(int row, int col, boolean visibility)
 	{
 		if (currentlyGenerating)
 		{
