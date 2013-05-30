@@ -97,6 +97,8 @@ public interface Board
 	 */
 	public boolean isCorrectCell(int row, int col);
 	
+	public boolean isCorrectInputForCell(int row, int col, int value);
+	
 	/**
 	 * Return the difficulty constant for "Easy"
 	 * @return Difficulty constant for "Easy"

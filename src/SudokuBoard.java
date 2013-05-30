@@ -452,6 +452,11 @@ public class SudokuBoard implements Board {
 		return board.get(row - 1).get(col - 1);
 	}	
 	
+	public boolean isCorrectInputForCell(int row, int col, int value)
+	{
+		return true;
+	}
+	
 	private ArrayList<ArrayList<BoardCell>> board;
 	private int boardSize;
 	private int difficulty;
