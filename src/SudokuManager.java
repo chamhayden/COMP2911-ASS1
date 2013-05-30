@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -58,10 +59,13 @@ public class SudokuManager {
 				//frame.addKeyListener(new Listeners(frame).inputShortCut());
 				frame.pack();
 				frame.setVisible(true);
+				frame.setMinimumSize(size);
+				
 			}
 		});
 	}
 	
+	private Dimension size = new Dimension(200,200);
 	private OptionPanes pane;
 	private int difficulty;
 	private SudokuBoard board;

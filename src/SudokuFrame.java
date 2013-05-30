@@ -57,7 +57,7 @@ public class SudokuFrame extends JFrame
 		draftButton = makeCommandButton("DRAFT", scorePanel, new draftFunction());
 		eraseButton = makeCommandButton("Rubber", scorePanel, new eraseFunction());
 
-		//prepareForDifficulty();
+		prepareForDifficulty();
 		
 		setUpButtonInputs();
 		
@@ -135,7 +135,7 @@ public class SudokuFrame extends JFrame
 						b.setText(Integer.toString(board.getCellValue(i,j)));
 					}else{
 						b.setText(BLANK);
-						if(board.hasDraft()){
+						if(board.hasDrafts(i,j)){
 							for(int draft = 1; draft <= 9; draft++){
 								if(board.isVisibleCellDraft(i, j, draft)){
 									toggleDraftValues(Integer.toString(draft), b);
@@ -207,7 +207,7 @@ public class SudokuFrame extends JFrame
 					toggleDraftFalse(b);
 					board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(getCurrentValue()));
 					board.setCellVisibility(rowVal(b), colVal(b), true);
-					//if(board.difficultyValueEasy() == 0)
+					if(board.isDifficultyEasy())
 						checkSquare(b,2);
 					} else{
 						toggleDraftValues(getCurrentValue(), b);
