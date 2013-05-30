@@ -14,7 +14,7 @@ public class HardRemover implements Removalist {
 	}
 	
 	@Override
-	public boolean removed(Position p) {
+	public boolean removeIfCan(Position p) {
 		int row = p.getRow();
 		int col = p.getCol();
 		int removedVal = b.getCellValue(row+1, col+1);

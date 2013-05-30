@@ -15,7 +15,7 @@ public class ExhaustiveRemover implements Removalist {
 	}
 
 	@Override
-	public boolean removed(Position p) {
+	public boolean removeIfCan(Position p) {
 		int row = p.getRow();
 		int col = p.getCol();
 		b.setIfInitiallySet(row+1, col+1, false);

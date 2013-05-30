@@ -58,7 +58,7 @@ public class Removal {
 		}
 		while(!indicesOfRemovable.isEmpty() && !remover.shouldTerminate()){
 			pendingRemoval = indicesOfRemovable.remove(r.nextInt(indicesOfRemovable.size()));
-			if(remover.removed(removable.get(pendingRemoval))){
+			if(remover.removeIfCan(removable.get(pendingRemoval))){
 				removed.add(pendingRemoval);
 				numRemoved++;
 			}

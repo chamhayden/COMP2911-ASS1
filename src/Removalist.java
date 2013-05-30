@@ -1,7 +1,7 @@
 
 public interface Removalist {
 	
-	public boolean removed(Position p);
+	public boolean removeIfCan(Position p);
 	
 	public boolean shouldTerminate();
 	
