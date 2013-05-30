@@ -87,7 +87,7 @@ public class BoardFiller {
 		for(i = 0; i < 9; i++){
 			for(j = 0; j < 9; j++){
 				//System.out.println("checking if " + i + " " + j + " is initially visible");
-				if(b.isInitiallyVisibleCell(i+1, j+1)){
+				if(b.hasInput(i+1, j+1)){
 					System.out.printf("%d" , b.getCellValue(i+1, j+1));
 				} else {
 					System.out.printf("%d", 0);
