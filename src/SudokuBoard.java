@@ -113,9 +113,14 @@ public class SudokuBoard implements Board {
 	 * @return Whether the cell is currently visible at the current
 	 *  particular state of the board
 	 */
-	public boolean isCurrentlyVisibleCell(int row, int col)
+	public boolean hasInput(int row, int col)
 	{
 		return getCell(row, col).isCurrentlyVisible();
+	}
+	
+	public boolean hasDrafts(int row, int col)
+	{
+		return true;
 	}
 	
 	/**
@@ -126,7 +131,7 @@ public class SudokuBoard implements Board {
 	 * @return Whether the cell is visible at the initial state
 	 *  of the board
 	 */
-	public boolean isInitiallyVisibleCell(int row, int col)
+	public boolean isInitiallySet(int row, int col)
 	{
 		return getCell(row, col).isInitiallyVisible();
 	}
@@ -318,7 +323,7 @@ public class SudokuBoard implements Board {
 		{
 			if (getCellValue(row, i) == value)
 			{
-				if(isInitiallyVisibleCell(row, i)){
+				if(isInitiallySet(row, i)){
 					result = true;
 				}
 			}
@@ -339,7 +344,7 @@ public class SudokuBoard implements Board {
 		{
 			if (getCellValue(i, col) == value)
 			{
-				if(isInitiallyVisibleCell(i, col)){
+				if(isInitiallySet(i, col)){
 					result = true;
 				}
 			}
@@ -377,7 +382,7 @@ public class SudokuBoard implements Board {
 				{
 					if (getCellValue(i, j) == value)
 					{
-						if(isInitiallyVisibleCell(i, j)){
+						if(isInitiallySet(i, j)){
 							result = true;
 						}
 					}
@@ -399,7 +404,13 @@ public class SudokuBoard implements Board {
 	
 	public void undoLast()
 	{
-		
+		for (int i = 1; i <= 9; i++)
+		{
+			for (int j = 1; j <= 9; j++)
+			{
+				this.setCellValue(i, j, 2);
+			}
+		}
 	}
 	
 	

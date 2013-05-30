@@ -8,7 +8,7 @@ public class SudokuSolver implements UniqueChecker {
 		int board[][] = new int[this.BOARD_SIZE][this.BOARD_SIZE];
 		for(int row = 1; row <= this.BOARD_SIZE; row++) {
 			for(int col = 1; col <= this.BOARD_SIZE; col++) {
-				if(boardToSolve.isCurrentlyVisibleCell(row, col)) {
+				if(boardToSolve.hasInput(row, col)) {
 					board[row-1][col-1] = boardToSolve.getCellValue(row, col);	
 				} else {
 					board[row-1][col-1] = this.EMPTY;

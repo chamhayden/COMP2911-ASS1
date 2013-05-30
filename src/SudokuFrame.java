@@ -297,7 +297,7 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			//board.undoLast();
+			board.undoLast();
 			labelGrid();
 		}
 	}

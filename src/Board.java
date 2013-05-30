@@ -30,7 +30,7 @@ public interface Board
 	 * @return Whether the cell is currently visible at the current
 	 *  particular state of the board
 	 */
-	public boolean isCurrentlyVisibleCell(int row, int col);
+	public boolean isInitiallySet(int row, int col);
 	
 	/**
 	 * Determine whether a cell is visible at the initial state 
@@ -40,7 +40,9 @@ public interface Board
 	 * @return Whether the cell is visible at the initial state
 	 *  of the board
 	 */
-	public boolean isInitiallyVisibleCell(int row, int col);
+	public boolean hasInput(int row, int col);
+	
+	public boolean hasDrafts(int row, int col);
 	
 	/**
 	 * Set the visiblity of a cell on the board
@@ -96,8 +98,6 @@ public interface Board
 	 *  filled out
 	 */
 	public boolean isCorrectCell(int row, int col);
-	
-	public boolean isCorrectInputForCell(int row, int col, int value);
 	
 	/**
 	 * Return the difficulty constant for "Easy"
@@ -177,6 +177,8 @@ public interface Board
 	public boolean isEmptyCell(int row, int col);
 	
 	public void undoLast();
+	
+	public boolean isCorrectInputForCell(int row, int col, int value);
 	
 	
 }
