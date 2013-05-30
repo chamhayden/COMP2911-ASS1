@@ -57,9 +57,10 @@ public class SudokuManager {
 					}
 				});
 				//frame.addKeyListener(new Listeners(frame).inputShortCut());
+				frame.setMinimumSize(size);
 				frame.pack();
 				frame.setVisible(true);
-				frame.setMinimumSize(size);
+				//frame.setMinimumSize(size);
 				
 			}
 		});
