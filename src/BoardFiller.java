@@ -17,6 +17,7 @@ public class BoardFiller {
 		this.b = b;
 	}
 	
+	/*
 	public boolean fillBoardOld(){
 		int i, j, k;
 		int x = 0;
@@ -66,7 +67,7 @@ public class BoardFiller {
 		}
 		printBoard();
 		return true;
-	}
+	}*/
 	
 	public boolean fillBoard(){
 		int row, col, square;
@@ -75,7 +76,9 @@ public class BoardFiller {
 		LinkedList<Integer> l = new LinkedList<Integer>();
 		int counter = 0;
 		
-		for(row = 0; row < 9; row++){
+		row = 0;
+		
+		while(row < 9){
 			counter = 0;
 			col = 0;
 			while(col < 9){				
@@ -96,17 +99,18 @@ public class BoardFiller {
 					col = reset(row, col);
 					counter++;
 					if (counter > ATTEMPT_LIMIT){
+						//TODO test to make sure this still works
 						b.clear();
-						return false;
-						//TODO could change this to row = 0; continue; to avoid repeated calls in SudokuBoard
+						row = 0;
+						break;
 					}
 				} else {
 					b.setCellValue(row+1, col+1, x);
 					col++;
 				}
 			}
+			row++;
 		}
-		printBoard();
 		return true;
 	}
 	
