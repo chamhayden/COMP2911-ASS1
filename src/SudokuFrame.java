@@ -439,7 +439,7 @@ public class SudokuFrame extends JFrame
 				if(!board.isInitiallySet(rowVal(b), colVal(b))){
 					if(board.isDifficultyHard() && board.isFilledBoard()){
 						checkSquare(b,3);
-					} else if(board.isEmptyCell(rowVal(b), colVal(b)))
+					} else if(!board.isEmptyCell(rowVal(b), colVal(b)))
 						checkSquare(b,3);
 				}
 			}
