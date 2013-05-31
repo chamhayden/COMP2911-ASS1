@@ -543,7 +543,8 @@ public class SudokuState {
 		}
 
 		/**
-		 * @param list
+		 * Removes duplicate numbers from list.
+		 * @param list The list to remove duplicates from.
 		 */
 		public void removeDuplicates(LinkedList<Integer> list) {
 			LinkedList<Integer> duplicateFreeList = new LinkedList<Integer>();
@@ -590,7 +591,10 @@ public class SudokuState {
 			}
 		}
 	
-
+		/** 
+		 * Prints debugging to console.
+		 * @param obj Object to convert to string before outputting to the console.
+		 */
 		public void debug(Object obj) {
 			//System.out.println(obj.toString());
 		}
@@ -613,7 +617,7 @@ public class SudokuState {
 		
 		/**
 		 * Checks if a the current board state (all rows, columns and squares) have valid cell values.
-		 * @return
+		 * @return True if all cells in the current board state are compliant to the rules of Sudoku. 
 		 */
 		public boolean valid() {
 			for(int row = 0; row < BOARD_SIZE; row++) {
@@ -643,7 +647,8 @@ public class SudokuState {
 		}
 		
 		/**
-		 * Updates and returns the number of filled cells in the current board state
+		 * Updates and returns the number of filled cells in the current board state.
+		 * @return The number of cells which are filled in the current board state.
 		 */
 		public int updateCellsFilled() {
 			int count = 0;
@@ -659,7 +664,7 @@ public class SudokuState {
 		}
 		
 		/**
-		 * Updates the value of temporary cells based upon the filled cells in its given row, column and square.
+		 * Updates the value of temporary (possible) cells based upon the filled cells in its given row, column and square.
 		 */
 		public void updateTempVals() {
 			for(int row = 0; row < BOARD_SIZE; row++) {
