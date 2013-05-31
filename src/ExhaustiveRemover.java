@@ -32,6 +32,7 @@ public class ExhaustiveRemover implements Removalist {
 		int col = p.getCol();
 		b.setIfInitiallySet(row+1, col+1, false);
 		if(checker.isSudokuSolutionUnique(b)){
+			numRemoved++;
 			return true;
 		} else {
 			b.setIfInitiallySet(row+1, col+1, true);

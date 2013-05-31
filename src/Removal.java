@@ -16,7 +16,7 @@ public class Removal {
 	 */
 	public Removal(Board b){
 		this.b = b;
-		removable = new ArrayList<Position>();
+		removableCells = new ArrayList<Position>();
 		initialise();
 	}
 	/**
@@ -31,10 +31,10 @@ public class Removal {
 		//TODO get rid of numRemoved after debugging
 		int numRemoved = 0;
 		int pendingRemoval;
-		int size = removable.size();
+		int size = removableCells.size();
 		Random r = new Random();
-		ArrayList<Integer> indicesOfRemovable = new ArrayList<Integer>();
-		PriorityQueue<Integer> removed = new PriorityQueue<Integer>(10, new Comparator<Integer>(){
+		ArrayList<Integer> indices = new ArrayList<Integer>();
+		PriorityQueue<Integer> indicesRemoved = new PriorityQueue<Integer>(10, new Comparator<Integer>(){
 
 			@Override
 			public int compare(Integer o1, Integer o2) {
@@ -50,17 +50,17 @@ public class Removal {
 		});
 
 		for(int i = 0; i < size; i++){
-			indicesOfRemovable.add(i);
+			indices.add(i);
 		}
-		while(!indicesOfRemovable.isEmpty() && !remover.shouldTerminate()){
-			pendingRemoval = indicesOfRemovable.remove(r.nextInt(indicesOfRemovable.size()));
-			if(remover.removeIfCan(removable.get(pendingRemoval))){
-				removed.add(pendingRemoval);
+		while(!indices.isEmpty() && !remover.shouldTerminate()){
+			pendingRemoval = indices.remove(r.nextInt(indices.size()));
+			if(remover.removeIfCan(removableCells.get(pendingRemoval))){
+				indicesRemoved.add(pendingRemoval);
 				numRemoved++;
 			}
 		}
-		while(!removed.isEmpty()){
-			removable.remove(removed.poll());
+		while(!indicesRemoved.isEmpty()){
+			removableCells.remove(indicesRemoved.poll());
 		}
 		System.out.println("Removed " + numRemoved);
 	}
@@ -72,7 +72,7 @@ public class Removal {
 		int row, col;
 		for(row = 0; row < 9; row++){
 			for(col = 0; col < 9; col++){
-				removable.add(new Position(row, col));
+				removableCells.add(new Position(row, col));
 			}
 		}
 	}
@@ -95,7 +95,7 @@ public class Removal {
 	}
 	
 	private Board b;
-	private ArrayList<Position> removable;
+	private ArrayList<Position> removableCells;
 	private int difficulty;
 
 	private static final int EASY = 1;
