@@ -248,15 +248,15 @@ public class SudokuFrame extends JFrame
 			//board.takeSnapShot(rowVal(b), colVal(b));
 			int value = Integer.parseInt(getCurrentValue());
 			if(isButtonToggled(eraseButton, DEFAULT_COMMAND)){
-				toggleDraftFalse(b);
+				//toggleDraftFalse(b);
 				board.removeCellValue(rowVal(b), colVal(b));
-				board.setIfInitiallySet(rowVal(b), colVal(b), false);
+				//board.setIfInitiallySet(rowVal(b), colVal(b), false);
 			}else if(!getCurrentValue().equalsIgnoreCase(BLANK)){
 				if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
 					if(!(board.isDifficultyEasy() && !checkSquare(b,1))){
 						board.setCellValue(rowVal(b), colVal(b), value);
-						board.setIfInitiallySet(rowVal(b), colVal(b), true);
-						toggleDraftFalse(b);
+						//board.setIfInitiallySet(rowVal(b), colVal(b), true);
+						//toggleDraftFalse(b);
 					}
 				} else{
 					toggleDraftValues(getCurrentValue(), b);
@@ -439,7 +439,7 @@ public class SudokuFrame extends JFrame
 				if(!board.isInitiallySet(rowVal(b), colVal(b))){
 					if(board.isDifficultyHard() && board.isFilledBoard()){
 						checkSquare(b,3);
-					} else if(board.isEmptyCell(rowVal(b), colVal(b)))
+					} else if(!board.isEmptyCell(rowVal(b), colVal(b)))
 						checkSquare(b,3);
 				}
 			}
@@ -514,9 +514,9 @@ public class SudokuFrame extends JFrame
 	public void removeAll(){
 		for(JButton b: buttonRow){
 			if (!board.isInitiallySet(rowVal(b),colVal(b))){
-				toggleDraftFalse(b);
+				//toggleDraftFalse(b);
 				board.removeCellValue(rowVal(b), colVal(b));
-				board.setIfInitiallySet(rowVal(b), colVal(b), false);
+				//board.setIfInitiallySet(rowVal(b), colVal(b), false);
 				//b.setText(BLANK);
 			}
 		}
