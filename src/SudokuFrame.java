@@ -437,9 +437,9 @@ public class SudokuFrame extends JFrame
 			highlightValue(BLANK);
 			for(JButton b: buttonRow){
 				if(!board.isInitiallySet(rowVal(b), colVal(b))){
-					if(board.isDifficultyHard() ){//&& board.filled
+					if(board.isDifficultyHard() && board.isFilledBoard()){
 						checkSquare(b,4);
-					} else if(!b.getText().equals(BLANK))
+					} else if(board.isEmptyCell(rowVal(b), colVal(b)))
 						checkSquare(b,4);
 				}
 			}
