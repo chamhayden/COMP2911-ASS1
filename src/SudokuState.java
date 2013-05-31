@@ -1,6 +1,4 @@
 import java.util.LinkedList;
-import java.util.Scanner;
-
 
 /**
  * CURRENT VERSION
@@ -63,7 +61,6 @@ public class SudokuState {
 			this.board = new int[BOARD_SIZE][BOARD_SIZE];
 			this.temp = new int[BOARD_SIZE][BOARD_SIZE][BOARD_SIZE];
 			this.board = inputBoard;
-			this.cellsFilled = 0;
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
 					// Initialize all temporary values to be possible;
@@ -71,7 +68,6 @@ public class SudokuState {
 						this.temp[row][col][i] = POSSIBLE;	
 					}
 					if(this.board[row][col] != EMPTY) {
-						this.cellsFilled++;
 					}
 					debug(this.board[row][col]);
 				}
@@ -653,12 +649,11 @@ public class SudokuState {
 			int count = 0;
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
-					if(this.board[row][col] != this.EMPTY) {
+					if(this.board[row][col] != EMPTY) {
 						count++;
 					}
 				}
 			}
-			this.cellsFilled = count;
 			return count;
 		}
 		
@@ -691,7 +686,7 @@ public class SudokuState {
 			boolean updated = false;
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
-					if(this.getTempFinalVal(row, col) != NOT_POSSIBLE && this.board[row][col] == this.EMPTY) {
+					if(this.getTempFinalVal(row, col) != NOT_POSSIBLE && this.board[row][col] == EMPTY) {
 						this.board[row][col] = this.getTempFinalVal(row, col);
 						updated = true;
 					}
@@ -768,68 +763,15 @@ public class SudokuState {
 			}
 			return true;
 		}
-		
-		/**
-		 * Prints 2D array representation of the board.
-		 * @param array The array to be printed to console.
-		 */
-		private void print2DBoard(int array[][]) {
-			for(int row = 0; row < BOARD_SIZE; row++) {
-				for(int col = 0; col < BOARD_SIZE; col++) {
-					if(array[row][col] != EMPTY) {
-						System.out.print(array[row][col] + "|");	
-					} else {
-						System.out.print(" | ");
-					}
-				}
-				System.out.println("");
-			}
-		}
-
-		/**
-		 * Prints the temporary values of the board
-		 */
-		private void printTemps() {
-			for(int row = 0; row < BOARD_SIZE; row++) {
-				for(int col = 0; col < BOARD_SIZE; col++) {
-					LinkedList<Integer> possibleValues = this.possibleVals(row, col);
-						System.out.print(possibleValues);
-					System.out.print("              |            ");
-				}
-				System.out.println("");
-				System.out.println("");
-			}
-		}
-		
-		/**
-		 * Prints the temporary values of cells contained in section.
-		 * @param section The section of cell to print.
-		 */
-		private void printTempsSection(int section) {
-			int sectionRow = this.getSectionFirstRow(section);
-			int sectionCol = this.getSectionFirstCol(section);
-			for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
-				for(int colTranslate = 0; colTranslate < this.SECTION_SIZE; colTranslate++) {
-					int currentRow = sectionRow + rowTranslate;
-					int currentCol = sectionCol + colTranslate;
-					LinkedList<Integer> possibleValues = this.possibleVals(currentRow, currentCol);
-					System.out.print(possibleValues);
-					System.out.print("     |      ");
-				}
-				System.out.println("");
-				System.out.println("");
-			}
-		}
 		/**
 		 * @param EMPTY Static integer representation of unknown cell values used to solve and construct Sudoku board states.
 		 */
 		public static final int EMPTY = -1;	
 		private int board[][];
 		private int temp[][][];
-		private static final int BOARD_SIZE = 9;
-		private static final int SECTION_SIZE = 3;
-		private int cellsFilled;
-		private static final int NOT_POSSIBLE = -10;
-		private static final int POSSIBLE = -100;
+		private final int BOARD_SIZE = 9;
+		private final int SECTION_SIZE = 3;
+		private final int NOT_POSSIBLE = -10;
+		private final int POSSIBLE = -100;
 }
 
