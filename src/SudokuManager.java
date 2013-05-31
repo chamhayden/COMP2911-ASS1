@@ -57,7 +57,7 @@ public class SudokuManager {
 					}
 				});
 				//frame.addKeyListener(new Listeners(frame).inputShortCut());
-				frame.setMinimumSize(size);
+				frame.setMinimumSize(new Dimension(MIN_WIDTH,MIN_HEIGHT));
 				frame.pack();
 				frame.setVisible(true);
 				//frame.setMinimumSize(size);
@@ -66,7 +66,8 @@ public class SudokuManager {
 		});
 	}
 	
-	private Dimension size = new Dimension(200,200);
+	private int MIN_WIDTH = 600;
+	private int MIN_HEIGHT = 700;
 	private OptionPanes pane;
 	private int difficulty;
 	private SudokuBoard board;
