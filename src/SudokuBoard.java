@@ -64,7 +64,8 @@ public class SudokuBoard implements Board {
 		r.removeValues(new SimpleRemover(this));
 		r.removeValues(new HardRemover(this));
 		r.removeValues(new ExhaustiveRemover(this));
-		
+
+
 		this.currentlyGenerating = false;
 	}
 	
@@ -82,6 +83,10 @@ public class SudokuBoard implements Board {
 		else
 		{
 			getCell(row, col).removeInputValue();
+			for (int i = 1; i <= boardSize; i++)
+			{
+				setCellDraftVisibility(row, col, i, false);
+			}
 		}
 	}
 	
@@ -135,8 +140,10 @@ public class SudokuBoard implements Board {
 	 *  particular state of the board
 	 */
 	public boolean hasInput(int row, int col)
+	
 	{
-		return getCell(row, col).isCurrentlyVisible();
+		//return getCell(row, col).isCurrentlyVisible();
+		return getCell(row, col).getInputValue()!=-1;
 	}
 	
 	public boolean hasDrafts(int row, int col)
