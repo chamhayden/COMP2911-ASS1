@@ -253,9 +253,12 @@ public class SudokuFrame extends JFrame
 				//board.setIfInitiallySet(rowVal(b), colVal(b), false);
 			}else if(!getCurrentValue().equalsIgnoreCase(BLANK)){
 				if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
-					if(!(board.isDifficultyEasy() && !checkSquare(b,1))){
+					if(board.isDifficultyEasy()){
+						if(checkSquare(b,1)){
+							board.setCellValue(rowVal(b), colVal(b), value);
+						}
+					}else{
 						board.setCellValue(rowVal(b), colVal(b), value);
-						//board.setIfInitiallySet(rowVal(b), colVal(b), true);
 						//toggleDraftFalse(b);
 					}
 				} else{
