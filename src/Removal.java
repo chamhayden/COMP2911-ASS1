@@ -16,38 +16,17 @@ public class Removal {
 	 */
 	public Removal(Board b){
 		this.b = b;
-		if(b.isDifficultyEasy()){
-			difficulty = EASY;
-		} else if (b.isDifficultyMedium()){
-			difficulty = MEDIUM;
-		} else if (b.isDifficultyHard()) {
-			difficulty = HARD;
-		}
 		removable = new ArrayList<Position>();
 		initialise();
 	}
-	
 	/**
 	 * Removes values from the board to produce a puzzle
-	 */
-	public void remove(){
-		
-		removeValues(new SimpleRemover(b));
-		if (difficulty > 1){
-			removeValues(new HardRemover(b));
-			if (difficulty > 2){
-				removeValues(new ExhaustiveRemover(b));
-			}
-		}
-	}
-	
-	/**
 	 * Iterates through each of the unremoved squares remaining on the board
 	 * in random order, removing them if they meet the remover condition
 	 * and stopping once the termination condition of the remover is met
 	 * @param remover
 	 */
-	private void removeValues(Removalist remover){
+	public void removeValues(Removalist remover){
 		
 		//TODO get rid of numRemoved after debugging
 		int numRemoved = 0;
