@@ -57,7 +57,7 @@ public class ExhaustiveRemover implements Removalist {
 
 	
 	private static final int REMOVE_ON_EASY = 0;
-	private static final int REMOVE_ON_MEDIUM = 30;
+	private static final int REMOVE_ON_MEDIUM = 20;
 	private static final int REMOVE_ON_HARD = 100;
 
 

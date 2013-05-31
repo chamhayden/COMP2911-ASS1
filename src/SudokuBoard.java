@@ -60,12 +60,11 @@ public class SudokuBoard implements Board {
 		BoardFiller filler = new BoardFiller(this);
 		Removal r = new Removal(this);
 		filler.fillBoard();
-		/*boolean filled = false;
-		while(!filled){
-			filled = filler.fillBoard();
-		}*/
 		
-		r.remove();
+		r.removeValues(new SimpleRemover(this));
+		r.removeValues(new HardRemover(this));
+		r.removeValues(new ExhaustiveRemover(this));
+
 
 		this.currentlyGenerating = false;
 	}
