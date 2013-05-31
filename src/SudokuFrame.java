@@ -10,14 +10,29 @@ import javax.swing.border.Border;
 /**
  * 
  * @author Hayden, Laura, Jerome, Steven
- * some code copied from Core Java Fundamentals Book 1 Chapter 8, Event Handling p329/ Cay Hortsmann
+ * some code inspired from Core Java Fundamentals Book 1 Chapter 8, Event Handling p329/ Cay Hortsmann
+ * code for blinkFuntion command inspired from:
+ * http://www.daniweb.com/software-development/java/threads/268414/changing-a-jbuttons-colour-with-a-timer
  * @version 0.1
  */
 
 
 /**
- * A frame with a panel button
- * @param currentValue is the value the ActionListener uses to change grid labels
+ * SudokuFrame creates the GUI for Board (implemented by SudokuBoard)
+ * @param currentValue is the value used to 
+ * @param board represents the current board
+ * @param buttonRow is the sudoku grid in ArrayList form
+ * @param buttonPanel is JPanel containing the Sudoku grid or 'play' area JButtons
+ * @param commandPanel is a JPanel containing game features JButtons
+ * @param scorePanel is a JPanel with JButtons that control the game's number inputs
+ * @param buttonInputs is the number inputs JButtons in ArrayList form
+ * @param newGameButton triggers a pop-up with the option to initialise a new game
+ * @param resetGameButton triggers a pop-up with the option to reset the current game to its initial state
+ * @param revealButton triggers a pop-up to 
+ * @param solutionButton
+ * @param undoButton
+ * @param draftButton
+ * @param eraseButton
  */
 
 public class SudokuFrame extends JFrame
@@ -49,8 +64,8 @@ public class SudokuFrame extends JFrame
 		scorePanel.setBackground(DEFAULTBG);
 
 		
-		newGame = makeCommandButton("NEW GAME", commandPanel, new newGamePop());
-		resetGame = makeCommandButton("Restart game", commandPanel, new resetFunction());
+		newGameButton = makeCommandButton("NEW GAME", commandPanel, new newGameFunction());
+		resetGameButton = makeCommandButton("Restart game", commandPanel, new resetFunction());
 		revealButton = makeCommandButton("Reveal ALL", commandPanel, new revealFunction());
 		solutionButton = makeCommandButton("Check my solution!", commandPanel, new solutionFunction());
 		undoButton = makeCommandButton("Undo my last", commandPanel, new undoFunction());
@@ -74,6 +89,9 @@ public class SudokuFrame extends JFrame
 		
 	}
 	
+	/**
+	 * Prepares a game layout according to difficulty
+	 */
 	private void prepareForDifficulty() {
 
 		if(board.isDifficultyEasy()){
@@ -82,11 +100,15 @@ public class SudokuFrame extends JFrame
 		if(board.isDifficultyMedium()){
 			solutionButton.setVisible(true);
 		}else{
-			solutionButton.setVisible(false);
+			solutionButton.setVisible(true);
 		}
-			
-		
 	}
+	
+	/**
+	 * Sets up the number inputs and adds to an ArrayList and to a JPanel
+	 * @param keyButton
+	 * @param label
+	 */
 	private void setUpButtonInputs(){
 		for (int i = 0; i < LABELS.length(); i++)
 	      {
@@ -100,9 +122,13 @@ public class SudokuFrame extends JFrame
 	      }
 	}
 	
-	
+	/**
+	 * Sets up the grid at the beginning of a new game (not a reset)
+	 * @param cellVal display value to be passed on to button
+	 * @param i,j represent row and column values of cell location respectively
+	 * @param given represents whether or not a value is initially given to the user
+	 */
 	private void setUpGrid(){
-		
 		buttonPanel.removeAll();
 		buttonPanel.setLayout(new GridLayout(9,9));
 		buttonRow.removeAll(buttonRow);
@@ -118,20 +144,23 @@ public class SudokuFrame extends JFrame
 				}else{
 					cellVal = BLANK;
 				}
-				buttonRow.add(makeGridButton(cellVal, currentValue, buttonPanel, given));
+				buttonRow.add(makeGridButton(cellVal, buttonPanel, given));
 			}
 		}
 	}
 	
+	/**
+	 * Scans the board's current state and updates all values
+	 * @param b is a temporary JButton value used as whole button grid is scanned and checked
+	 */
+	
 	private void labelGrid(){
 		JButton b;
-		for(int i = 1; i<=9; i++)
-		{
+		for(int i = 1; i<=9; i++){
 			for(int j = 1; j<=9; j++){
 				b = buttonRow.get(findIndex(i,j));
 				if(!board.isInitiallySet(i, j)){
-					if (board.hasInput(i,j))
-					{
+					if (board.hasInput(i,j)){
 						b.setText(Integer.toString(board.getCellValue(i,j)));
 					}else{
 						b.setText(BLANK);
@@ -149,8 +178,15 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
-	
-	public JButton makeGridButton( String name, String currentValue, JPanel panel, boolean given)
+	/**
+	 * Creates a new JButton used in the Sudoku 'play' area
+	 * @param button is the new button
+	 * @param name is the button text
+	 * @param panel is the JPanel button will belong to
+	 * @param given says whether a button value is initially given or not
+	 * @return new JButton
+	 */
+	public JButton makeGridButton( String name, JPanel panel, boolean given)
 	{
 		JButton button = new JButton(name);
 		panel.add(button);
@@ -174,7 +210,13 @@ public class SudokuFrame extends JFrame
 		}
 		return button;
 	}
-	
+	/**
+	 * Creates a new command or feature button
+	 * @param name
+	 * @param panel
+	 * @param action is the listener to be attached
+	 * @return JButton
+	 */
 	public JButton makeCommandButton(String name, JPanel panel, ActionListener action)
 	{
 		JButton button = new JButton(name);
@@ -184,40 +226,50 @@ public class SudokuFrame extends JFrame
 		return button;
 	}
 	
-/**
- * An action listener that sets the
- */
+	/**
+	 * ActionListener attached to Sudoku 'play' area buttons
+	 */
 	
 	private class NumberInsert implements ActionListener
 	{
+		/**
+		 * Constructor
+		 * @param b is the button
+		 */
 		public NumberInsert(JButton button)
 		{
 			b = button;
 		}
 		
-		public void actionPerformed(ActionEvent event)
-		{
+		/**
+		 * action performed if button is clicked
+		 */
+		public void actionPerformed(ActionEvent event){
 			//board.takeSnapShot(rowVal(b), colVal(b));
+			int value = Integer.parseInt(getCurrentValue());
 			if(isButtonToggled(eraseButton, DEFAULT_COMMAND)){
 				toggleDraftFalse(b);
 				board.removeCellValue(rowVal(b), colVal(b));
 				board.setIfInitiallySet(rowVal(b), colVal(b), false);
 			}else if(!getCurrentValue().equalsIgnoreCase(BLANK)){
 				if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
-					toggleDraftFalse(b);
-					board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(getCurrentValue()));
-					board.setIfInitiallySet(rowVal(b), colVal(b), true);
-					if(board.isDifficultyEasy())
-						checkSquare(b,2);
-					} else{
-						toggleDraftValues(getCurrentValue(), b);
+					if(!(board.isDifficultyEasy() && !checkSquare(b,2))){
+						board.setCellValue(rowVal(b), colVal(b), value);
+						board.setIfInitiallySet(rowVal(b), colVal(b), true);
+						toggleDraftFalse(b);
 					}
+				} else{
+					toggleDraftValues(getCurrentValue(), b);
 				}
+			}
 			labelGrid();
 			}
-		
 		private JButton b;
 	}
+	
+	/**
+	 * Toggles all draft values on a button to false
+	 */
 	
 	public void toggleDraftFalse(JButton button){
 		for(Component label: button.getComponents()){
@@ -225,6 +277,12 @@ public class SudokuFrame extends JFrame
 			board.setCellDraftVisibility(rowVal(button), colVal(button), Integer.parseInt(((JLabel) label).getText()), false);
 		}
 	}
+	
+	/**
+	 * Toggles a particular draft value
+	 * @param value is the value to be toggled
+	 * @param b is the button concerned in this action 
+	 */
 	
 	private void toggleDraftValues(String value, JButton b){
 		Component label = b.getComponent(Integer.parseInt(value)-1);
@@ -243,8 +301,14 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * ActionListener attached to Sudoku eraseButton
+	 * 
+	 */
+	
 	private class eraseFunction implements ActionListener
 	{
+		
 		public void actionPerformed(ActionEvent event)
 		{
 			//resetCommands();
@@ -254,11 +318,25 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Checks whether a button is toggled
+	 * @param button
+	 * @param defaultColour
+	 * @return boolean
+	 */
+	
 	public boolean isButtonToggled(JButton button, Color defaultColour){
 		if(!button.getBackground().equals(defaultColour))
 			return true;
 		else return false;
 	}
+	
+	/**
+	 * Toggles a button 
+	 * @param button
+	 * @param colour
+	 * @param defaultColour
+	 */
 	
 	public void toggleButton(JButton button, Color colour, Color defaultColour){
 		if(!button.getBackground().equals(colour)){
@@ -266,6 +344,11 @@ public class SudokuFrame extends JFrame
 		}
 		else button.setBackground(defaultColour);
 	}
+	
+	/**
+	 * ActionListener attached to Sudoku number inputs on scorePanel
+	 * Toggles number inputs and changes currentValue to be input
+	 */
 	
 	private class NumberSelect implements ActionListener
 	{
@@ -282,7 +365,12 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
-	private class newGamePop implements ActionListener
+	/**
+	 * ActionListener attached to Sudoku newGameButton
+	 * Creates a pop-up with choice of new game difficulty and sets the new game up
+	 */
+	
+	private class newGameFunction implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
@@ -295,6 +383,10 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Undoes last action attached to undoButton
+	 */
+	
 	private class undoFunction implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
@@ -303,6 +395,10 @@ public class SudokuFrame extends JFrame
 			labelGrid();
 		}
 	}
+	
+	/**
+	 * ActionListener attached to draftButton - toggles on/off
+	 */
 	
 	private class draftFunction implements ActionListener
 	{
@@ -316,26 +412,44 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Untoggles all commands
+	 */
+	
 	public void resetCommands(){
 		for(Component commands: commandPanel.getComponents()){
 			commands.setBackground(DEFAULT_COMMAND);
 		}
 	}
 	
+	/**
+	 * ActionListener attached to Sudoku solutionButton
+	 * 
+	 */
+	
 	private class solutionFunction implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
 			resetCommands();
-				toggleButton(solutionButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
-				blinkOut(solutionButton, DEFAULT_COMMAND,2);
-				highlightValue(BLANK);
-				for(JButton b: buttonRow){
-					if(!board.isInitiallySet(rowVal(b), colVal(b)))
+			toggleButton(solutionButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
+			blinkOut(solutionButton, DEFAULT_COMMAND,2);
+			highlightValue(BLANK);
+			for(JButton b: buttonRow){
+				if(!board.isInitiallySet(rowVal(b), colVal(b))){
+					if(board.isDifficultyHard() ){//&& board.filled
+						checkSquare(b,4);
+					} else if(!b.getText().equals(BLANK))
 						checkSquare(b,4);
 				}
+			}
 		}
 	}
+	
+	/**
+	 * ActionListener attached to Sudoku revealButton
+	 * 
+	 */
 	
 	private class revealFunction implements ActionListener
 	{
@@ -347,23 +461,38 @@ public class SudokuFrame extends JFrame
 		}
 	}
 
-	public void checkSquare(JButton b, int seconds)
-		{
-			if(!b.getText().equals(BLANK)){
-				if(board.isCorrectCell(rowVal(b),colVal(b))){
-					b.setBackground(CORRECT);
-				}
-				else {
-					b.setBackground(WRONG);
-				}
-				blinkOut(b,DEFAULT_GRID, seconds);
-			}
-		}
+	/**
+	 * Checks whether or not a square is filled correctly and makes it flash appropriately
+	 * @param b is button to be checked
+	 * @param seconds time delay for blink
+	 */
+	
+	public boolean checkSquare(JButton b, int seconds)	{
+		
+		boolean correct = board.isCorrectInputForCell(rowVal(b), colVal(b), Integer.decode(getCurrentValue()));
+		if(correct)		
+			b.setBackground(CORRECT);
+		else
+			b.setBackground(WRONG);
+		blinkOut(b,DEFAULT_GRID, seconds);
+		return correct;
+	}
+	
+	/**
+	 * Sets up timer for blinkerFunction
+	 * @param button
+	 * @param colour
+	 * @param seconds
+	 */
 	
 	private void blinkOut(JButton button , Color colour, int seconds){
         Timer timer = new Timer(seconds*1000, new blinkFunction(button, colour));
         timer.start(); 
     }
+	
+	/**
+	 * AciotnListener 
+	 */
 	
 	private class blinkFunction implements ActionListener{
 
@@ -378,6 +507,10 @@ public class SudokuFrame extends JFrame
         private Color c;
 	}
 	
+	/**
+	 * Helper method for resetFunction - removes all input values
+	 */
+	
 	public void removeAll(){
 		for(JButton b: buttonRow){
 			if (!board.isInitiallySet(rowVal(b),colVal(b))){
@@ -389,6 +522,11 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Action listener linked to resetButton
+	 * Resets current puzzle to original set values
+	 */
+	
 	private class resetFunction implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
@@ -399,6 +537,10 @@ public class SudokuFrame extends JFrame
 			}
 		}
 	}
+	
+	/**
+	 * Reveals the grid and disables any further gameplay
+	 */
 	
 	public void revealAll(){
 		for(int i = 1; i<=9; i++)
@@ -416,14 +558,27 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Resets currentValue
+	 */
+	
 	public String resetCurrentValue(){
 		this.currentValue = BLANK;
 		return currentValue;
 	}
 	
+	/**
+	 * @return currentValue
+	 */
+	
 	public String getCurrentValue(){
 		return this.currentValue;
 	}
+	
+	/**
+	 * Highlights a chosen number input
+	 * @param current is the value to be highlighted - BLANK to be passed in to un-highlight
+	 */
 	
 	public void highlightValue(String current){
 		for(JButton jb: buttonInputs){
@@ -432,6 +587,13 @@ public class SudokuFrame extends JFrame
 			else jb.setBackground(DEFAULT_INPUT);
 		}
 	}
+	
+	/**
+	 * Converts a button's row and column values to an index
+	 * @param row
+	 * @param column
+	 * @return index fir buttonRow ArrayList
+	 */
 	
 	private int findIndex(int row, int col){
 		int index;
@@ -442,12 +604,24 @@ public class SudokuFrame extends JFrame
 		return index;
 	}
 	
+	/**
+	 * Converts a button's index to a row value
+	 * @param JButton b
+	 * @return row value for JButton
+	 */
+	
 	private int rowVal(JButton b){
 		int index = buttonRow.indexOf(b);
 		int row;
 		 row = 1 + ((int)Math.floor((index)/9));
 		return row;
 	}
+	
+	/**
+	 * Converts a button's index to a column value
+	 * @param JButton b
+	 * @return column value for JButton
+	 */
 	
 	private int colVal(JButton b){
 		int index = buttonRow.indexOf(b);
@@ -472,8 +646,8 @@ public class SudokuFrame extends JFrame
 	public Font FIXEDSQUARES = new Font("Arial", Font.BOLD, 20);
 	private Color DEFAULT_GRID = new Color(238,238,238);
 	private Color DEFAULT_COMMAND = new Color(238,238,238);
-	private JButton newGame;
-	private JButton resetGame;
+	private JButton newGameButton;
+	private JButton resetGameButton;
 	private JButton undoButton;
 	private JButton draftButton;
 	private JButton eraseButton;

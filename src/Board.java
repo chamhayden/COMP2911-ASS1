@@ -180,5 +180,6 @@ public interface Board
 	
 	public boolean isCorrectInputForCell(int row, int col, int value);
 	
+	public boolean isFilledBoard();
 	
 }
