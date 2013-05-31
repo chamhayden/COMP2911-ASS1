@@ -32,6 +32,7 @@ public class Removal {
 		int numRemoved = 0;
 		int pendingRemoval;
 		int size = removableCells.size();
+		System.out.println(size + " to remove");
 		Random r = new Random();
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 		PriorityQueue<Integer> indicesRemoved = new PriorityQueue<Integer>(10, new Comparator<Integer>(){
@@ -56,17 +57,21 @@ public class Removal {
 			pendingRemoval = indices.remove(r.nextInt(indices.size()));
 			if(remover.removeIfCan(removableCells.get(pendingRemoval))){
 				indicesRemoved.add(pendingRemoval);
-				numRemoved++;
 			}
 		}
 		while(!indicesRemoved.isEmpty()){
-			removableCells.remove(indicesRemoved.poll());
+			int take = indicesRemoved.poll();
+			removableCells.remove(take);
+			numRemoved++;
 		}
 		System.out.println("Removed " + numRemoved);
+		System.out.println("There are now " + removableCells.size() + "to remove");
+		System.out.println("");
+		//printBoard();
 	}
 	
 	/**
-	 * Initialises the removable ArrayList
+	 * Initialises the removableCells ArrayList
 	 */
 	private void initialise(){
 		int row, col;
@@ -81,6 +86,7 @@ public class Removal {
 	//TODO remove after debugging is finished
 	public void printBoard(){
 		int i,j;
+		System.out.println("");
 		for(i = 0; i < 9; i++){
 			for(j = 0; j < 9; j++){
 				//System.out.println("checking if " + i + " " + j + " is initially visible");
@@ -92,6 +98,7 @@ public class Removal {
 			}
 			System.out.printf("\n");
 		}
+		System.out.println("");
 	}
 	
 	private Board b;

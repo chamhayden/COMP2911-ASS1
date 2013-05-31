@@ -30,6 +30,9 @@ public class ExhaustiveRemover implements Removalist {
 	public boolean removeIfCan(Position p) {
 		int row = p.getRow();
 		int col = p.getCol();
+		/*if(!b.isInitiallySet(row+1, col+1)){
+			System.out.println("error");
+		}*/
 		b.setIfInitiallySet(row+1, col+1, false);
 		if(checker.isSudokuSolutionUnique(b)){
 			numRemoved++;

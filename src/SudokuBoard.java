@@ -63,7 +63,7 @@ public class SudokuBoard implements Board {
 		
 		r.removeValues(new SimpleRemover(this));
 		r.removeValues(new HardRemover(this));
-		//r.removeValues(new ExhaustiveRemover(this));
+		r.removeValues(new ExhaustiveRemover(this));
 
 
 		this.currentlyGenerating = false;
