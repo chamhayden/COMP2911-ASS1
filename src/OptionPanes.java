@@ -52,6 +52,20 @@ public class OptionPanes {
 		else return false;
 	}
 	
+	public void exitWinGame(){
+		value = JOptionPane.showConfirmDialog(null, "Oh alright, see you next time champ!", "Aurevoir Sudoku Fun!",
+		        JOptionPane.OK_OPTION);
+		System.exit(0);
+	}
+	
+	public boolean winGame(){
+		value = JOptionPane.showConfirmDialog(null, "You're awesome! Shall we go again?", "You Win!",
+		        JOptionPane.YES_NO_OPTION);
+		if(value == JOptionPane.YES_OPTION)
+			return true;
+		else return false;
+	}
+	
 	public boolean newGameInGame(){
 		value = JOptionPane.showConfirmDialog(null, "Start another game?", "New Game",
 		        JOptionPane.YES_NO_OPTION);

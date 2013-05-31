@@ -19,20 +19,6 @@ import javax.swing.border.Border;
 
 /**
  * SudokuFrame creates the GUI for Board (implemented by SudokuBoard)
- * @param currentValue is the value used to 
- * @param board represents the current board
- * @param buttonRow is the sudoku grid in ArrayList form
- * @param buttonPanel is JPanel containing the Sudoku grid or 'play' area JButtons
- * @param commandPanel is a JPanel containing game features JButtons
- * @param scorePanel is a JPanel with JButtons that control the game's number inputs
- * @param buttonInputs is the number inputs JButtons in ArrayList form
- * @param newGameButton triggers a pop-up with the option to initialise a new game
- * @param resetGameButton triggers a pop-up with the option to reset the current game to its initial state
- * @param revealButton triggers a pop-up to 
- * @param solutionButton
- * @param undoButton
- * @param draftButton
- * @param eraseButton
  */
 
 public class SudokuFrame extends JFrame
@@ -50,7 +36,6 @@ public class SudokuFrame extends JFrame
 		buttonInputs = new LinkedList<JButton>();
 		
 		buttonPanel = new JPanel();
-		buttonPanel.setBackground(DEFAULTBG);
 		
 		setUpGrid();
 		
@@ -69,12 +54,14 @@ public class SudokuFrame extends JFrame
 		revealButton = makeCommandButton("Reveal ALL", commandPanel, new revealFunction());
 		solutionButton = makeCommandButton("Check my solution!", commandPanel, new solutionFunction());
 		undoButton = makeCommandButton("Undo my last", commandPanel, new undoFunction());
+		
+		
+		setUpButtonInputs();
+		
 		draftButton = makeCommandButton("DRAFT", scorePanel, new draftFunction());
 		eraseButton = makeCommandButton("Rubber", scorePanel, new eraseFunction());
 
 		prepareForDifficulty();
-		
-		setUpButtonInputs();
 		
 		JPanel fillerEast = new JPanel();
 		fillerEast.setBackground(DEFAULTBG);
@@ -95,9 +82,8 @@ public class SudokuFrame extends JFrame
 	private void prepareForDifficulty() {
 
 		if(board.isDifficultyEasy()){
-			solutionButton.setVisible(true);
-		}
-		if(board.isDifficultyMedium()){
+			solutionButton.setVisible(false);
+		} else if(board.isDifficultyMedium()){
 			solutionButton.setVisible(true);
 		}else{
 			solutionButton.setVisible(true);
@@ -106,8 +92,6 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Sets up the number inputs and adds to an ArrayList and to a JPanel
-	 * @param keyButton
-	 * @param label
 	 */
 	private void setUpButtonInputs(){
 		for (int i = 0; i < LABELS.length(); i++)
@@ -124,14 +108,19 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Sets up the grid at the beginning of a new game (not a reset)
-	 * @param cellVal display value to be passed on to button
-	 * @param i,j represent row and column values of cell location respectively
-	 * @param given represents whether or not a value is initially given to the user
 	 */
 	private void setUpGrid(){
 		buttonPanel.removeAll();
-		buttonPanel.setLayout(new GridLayout(9,9));
+		buttonPanel.setLayout(new GridLayout(3,3));
 		buttonRow.removeAll(buttonRow);
+		ArrayList<JPanel> insetPanels = new ArrayList<JPanel>();
+		for(int i = 0; i<9; i++){
+			JPanel JP = new JPanel();
+			JP.setLayout(new GridLayout(3,3));
+			JP.setBorder(panelLine);
+			insetPanels.add(JP);
+			buttonPanel.add(JP);
+		}
 		for(int i = 1; i<=9; i++)
 		{
 			for(int j = 1; j<=9; j++){
@@ -144,14 +133,35 @@ public class SudokuFrame extends JFrame
 				}else{
 					cellVal = BLANK;
 				}
-				buttonRow.add(makeGridButton(cellVal, buttonPanel, given));
+				if(i<=3){
+					if(j <= 3)
+						buttonRow.add(makeGridButton(cellVal, insetPanels.get(0), given));
+					else if(j <= 6)
+						buttonRow.add(makeGridButton(cellVal, insetPanels.get(1), given));
+					else if(j <= 9)
+						buttonRow.add(makeGridButton(cellVal, insetPanels.get(2), given));
+				} else if(i<=6) {
+					if(j <= 3)
+						buttonRow.add(makeGridButton(cellVal, insetPanels.get(3), given));
+					else if(j<= 6)
+						buttonRow.add(makeGridButton(cellVal, insetPanels.get(4), given));
+					else if( j <= 9)
+						buttonRow.add(makeGridButton(cellVal, insetPanels.get(5), given));
+				} else if(i<=9){
+					if( j <= 3)
+						buttonRow.add(makeGridButton(cellVal, insetPanels.get(6), given));
+					else if(j <= 6)
+						buttonRow.add(makeGridButton(cellVal, insetPanels.get(7), given));
+					else if(j <= 9)
+						buttonRow.add(makeGridButton(cellVal, insetPanels.get(8), given));
+				}
 			}
 		}
 	}
 	
+	
 	/**
 	 * Scans the board's current state and updates all values
-	 * @param b is a temporary JButton value used as whole button grid is scanned and checked
 	 */
 	
 	private void labelGrid(){
@@ -180,7 +190,6 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Creates a new JButton used in the Sudoku 'play' area
-	 * @param button is the new button
 	 * @param name is the button text
 	 * @param panel is the JPanel button will belong to
 	 * @param given says whether a button value is initially given or not
@@ -192,7 +201,7 @@ public class SudokuFrame extends JFrame
 		panel.add(button);
 		button.setBackground(DEFAULT_GRID);
 		button.setFont(FIXEDSQUARES);
-		button.setBorder(blackline);
+		button.setBorder(buttonLine);
 		if(!given){
 			NumberInsert insert = new NumberInsert(button);
 			button.addActionListener(insert);
@@ -234,7 +243,7 @@ public class SudokuFrame extends JFrame
 	{
 		/**
 		 * Constructor
-		 * @param b is the button
+		 * @param button is button attached to listener
 		 */
 		public NumberInsert(JButton button)
 		{
@@ -245,22 +254,17 @@ public class SudokuFrame extends JFrame
 		 * action performed if button is clicked
 		 */
 		public void actionPerformed(ActionEvent event){
-			//board.takeSnapShot(rowVal(b), colVal(b));
-			int value = Integer.parseInt(getCurrentValue());
 			if(isButtonToggled(eraseButton, DEFAULT_COMMAND)){
-				//toggleDraftFalse(b);
 				board.removeCellValue(rowVal(b), colVal(b));
-				//board.setIfInitiallySet(rowVal(b), colVal(b), false);
 			}else if(!getCurrentValue().equalsIgnoreCase(BLANK)){
 				if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
 					if(board.isDifficultyEasy()){
 						if(checkSquare(b,1)){
-							System.out.println(value);
-							board.setCellValue(rowVal(b), colVal(b), value);
+							board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(getCurrentValue()));
+							checkEndGame();
 						}
 					}else{
-						board.setCellValue(rowVal(b), colVal(b), value);
-						//toggleDraftFalse(b);
+						board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(getCurrentValue()));
 					}
 				} else{
 					toggleDraftValues(getCurrentValue(), b);
@@ -295,13 +299,7 @@ public class SudokuFrame extends JFrame
 			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), false);
 		} else{
 			label.setVisible(true);
-			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(b.getText()), true);
-		}
-		if(!b.getText().equalsIgnoreCase(BLANK)){
-			Component label2 = b.getComponent(Integer.parseInt(b.getText())-1);
-			b.setText(BLANK);
-			label2.setVisible(true);
-			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(b.getText()), true);
+			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), true);
 		}
 	}
 	
@@ -315,7 +313,9 @@ public class SudokuFrame extends JFrame
 		
 		public void actionPerformed(ActionEvent event)
 		{
-			//resetCommands();
+			if(!isButtonToggled(eraseButton, DEFAULT_COMMAND)){
+				resetCommands();
+			}
 			toggleButton(eraseButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
 			resetCurrentValue();
 			highlightValue(BLANK);
@@ -360,7 +360,7 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			if(currentValue.equalsIgnoreCase(event.getActionCommand())){
+			if(event.getActionCommand().equalsIgnoreCase(currentValue)){
 				highlightValue(resetCurrentValue());
 			}else{
 				currentValue = event.getActionCommand();
@@ -383,7 +383,7 @@ public class SudokuFrame extends JFrame
 			if(pane.newGameInGame()){
 				board.clear();
 				board.generate(pane.chooseLevelInGame());
-				//prepareForDifficulty();
+				prepareForDifficulty();
 				setUpGrid();
 			}
 		}
@@ -410,11 +410,10 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			resetCommands();
-			if(isButtonToggled(draftButton, DEFAULT_COMMAND)){
-				toggleButton(draftButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
-			} else toggleButton(draftButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
-		
+			if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
+				resetCommands();
+			} 
+			toggleButton(draftButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
 		}
 	}
 	
@@ -426,6 +425,11 @@ public class SudokuFrame extends JFrame
 		for(Component commands: commandPanel.getComponents()){
 			commands.setBackground(DEFAULT_COMMAND);
 		}
+		for(Component commands: scorePanel.getComponents()){
+			if(!buttonInputs.contains(commands))
+				commands.setBackground(DEFAULT_COMMAND);
+		}
+		
 	}
 	
 	/**
@@ -449,6 +453,18 @@ public class SudokuFrame extends JFrame
 						checkSquare(b,3);
 				}
 			}
+			checkEndGame();
+		}
+	}
+	
+	private void checkEndGame(){
+		if(board.isFilledBoard() && board.isCorrectBoard()){
+			if(pane.winGame()){
+				board.clear();
+				board.generate(pane.chooseLevelInGame());
+				prepareForDifficulty();
+				setUpGrid();
+			} else pane.exitWinGame();
 		}
 	}
 	
@@ -471,6 +487,7 @@ public class SudokuFrame extends JFrame
 	 * Checks whether or not a square is filled correctly and makes it flash appropriately
 	 * @param b is button to be checked
 	 * @param seconds time delay for blink
+	 * @return
 	 */
 	
 	public boolean checkSquare(JButton b, int seconds)	{
@@ -566,6 +583,7 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Resets currentValue
+	 * @return
 	 */
 	
 	public String resetCurrentValue(){
@@ -636,8 +654,8 @@ public class SudokuFrame extends JFrame
 	}
 	
 	public Color DEFAULTBG = new Color(200,200,250);
-	public Border greyline = BorderFactory.createLineBorder(Color.gray);
-	public Border blackline = BorderFactory.createLineBorder(Color.gray, 5);
+	public Border buttonLine = BorderFactory.createLineBorder(Color.gray, 2);
+	public Border panelLine = BorderFactory.createLineBorder(Color.gray, 5);
 	public Timer timer;
 	public TimerTask task;
 	public Color CORRECT = Color.GREEN;
