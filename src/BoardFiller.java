@@ -101,7 +101,7 @@ public class BoardFiller {
 					if (counter > ATTEMPT_LIMIT){
 						//TODO test to make sure this still works
 						b.clear();
-						row = 0;
+						row = -1;
 						break;
 					}
 				} else {
