@@ -4,7 +4,7 @@ import java.util.Random;
 /**
 * Class that allows creation, modification and access to
 *  a Sudoku board
-* @author Hayden Smith, Laura Hodes, Jerome Bird, Steven Falconieri
+* @author Hayden Smith, Laura Hodges, Jerome Bird, Steven Falconieri
 * @version 2.2
 * */
 public class SudokuBoard implements Board {
@@ -120,6 +120,11 @@ public class SudokuBoard implements Board {
 		else
 		{
 			getCell(row, col).setInputValue(number);
+			for (int i = 1; i <= boardSize; i++)
+			{
+				setCellDraftVisibility(row, col, i, false);
+			}
+			
 		}
 	}
 	
