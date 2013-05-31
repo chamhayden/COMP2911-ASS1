@@ -63,8 +63,8 @@ public class SudokuBoard implements Board {
 		/*boolean filled = false;
 		while(!filled){
 			filled = filler.fillBoard();
-		}
-		*/
+		}*/
+		
 		r.remove();
 
 		this.currentlyGenerating = false;
@@ -489,6 +489,11 @@ public class SudokuBoard implements Board {
 	}	
 	
 	public boolean isCorrectInputForCell(int row, int col, int value)
+	{
+		return true;
+	}
+
+	public boolean isFilledBoard()
 	{
 		return true;
 	}
