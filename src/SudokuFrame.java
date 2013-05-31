@@ -255,6 +255,7 @@ public class SudokuFrame extends JFrame
 				if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
 					if(board.isDifficultyEasy()){
 						if(checkSquare(b,1)){
+							System.out.println(value);
 							board.setCellValue(rowVal(b), colVal(b), value);
 						}
 					}else{
@@ -266,7 +267,7 @@ public class SudokuFrame extends JFrame
 				}
 			}
 			labelGrid();
-			}
+		}
 		private JButton b;
 	}
 	
@@ -342,7 +343,9 @@ public class SudokuFrame extends JFrame
 	 */
 	
 	public void toggleButton(JButton button, Color colour, Color defaultColour){
+		//resetCommands();
 		if(!button.getBackground().equals(colour)){
+			resetCommands();
 			button.setBackground(colour);
 		}
 		else button.setBackground(defaultColour);
