@@ -123,7 +123,7 @@ public class SudokuState {
 		/**
 		 * Solves for cells which have all but 1 number missing in a column, row or section.
 		 */
-		public boolean solveSimpleSteps()
+		private boolean solveSimpleSteps()
 		{
 			boolean stepsSolved = false;
 			boolean cellsFilled = false;
@@ -163,7 +163,7 @@ public class SudokuState {
 		 *  only one valid location with the specific section for a particular possible value.
 		 *  @return True if any cells were solved.
 		 */
-		public boolean solveMediumSteps() {
+		private boolean solveMediumSteps() {
 			boolean stepsSolved = false;
 			boolean cellsFilled = false;
 			int sectionRow = 0;
@@ -226,7 +226,7 @@ public class SudokuState {
 		 * <a src="http://www.sudokuwiki.org/Intersection_Removal"> http://www.sudokuwiki.org/Intersection_Removal </a>.
 		 * @return True if any possible values were removed. 
 		 */
-		public boolean pointingPairsAndTriplesAlgorithm() {
+		private boolean pointingPairsAndTriplesAlgorithm() {
 			debug("Pointing pairs algorithm ************");
 			boolean cellsFilled = true;
 			this.updateBoardVals();
@@ -376,7 +376,7 @@ public class SudokuState {
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 * @return Section number from 1 to 9 as shown above.
 		 */
-		public int getSection(int row, int col) {
+		private int getSection(int row, int col) {
 			int sectionRow = 0;
 			int sectionCol = 0;
 			if(row < 3) {
@@ -403,7 +403,7 @@ public class SudokuState {
 		 * |7|8|9| <br/>
 		 * @return First column in a given section.
 		 */
-		public int getSectionFirstCol(int section) {
+		private int getSectionFirstCol(int section) {
 			return (3 * ((section - 1) % 3));
 		}
 
@@ -414,7 +414,7 @@ public class SudokuState {
 		 * |7|8|9| <br/>
 		 * @return First row in a given section.
 		 */
-		public int getSectionFirstRow(int section) {
+		private int getSectionFirstRow(int section) {
 			return 3 * ((section - 1)/ 3);
 		}
 		
@@ -424,7 +424,7 @@ public class SudokuState {
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 * @return List of possible values for cells in the section and row defined by the row and columns parsed.
 		 */
-		public LinkedList<Integer> getSectionRowPossibleVals(int row, int col) {
+		private LinkedList<Integer> getSectionRowPossibleVals(int row, int col) {
 			int section = this.getSection(row, col);
 			int sectionFirstCol = this.getSectionFirstCol(section);
 			LinkedList<Integer> sectionRowTemps = new LinkedList<Integer>();
@@ -442,7 +442,7 @@ public class SudokuState {
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 * @return List of possible values for a cells in the section and column defined by the row and columns parsed.
 		 */
-		public LinkedList<Integer> getSectionColPossibleVals(int row, int col) {
+		private LinkedList<Integer> getSectionColPossibleVals(int row, int col) {
 			int section = this.getSection(row, col);
 			int sectionFirstRow = this.getSectionFirstRow(section);
 			LinkedList<Integer> sectionColTemps = new LinkedList<Integer>();
@@ -460,7 +460,7 @@ public class SudokuState {
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 * @return List of possible values for all cells in the column parsed. 
 		 */
-		public LinkedList<Integer> getColPossibleVals(int col) {
+		private LinkedList<Integer> getColPossibleVals(int col) {
 			LinkedList<Integer> sectionColTemps = new LinkedList<Integer>();
 			for(int currentRow = 0; currentRow < this.BOARD_SIZE; currentRow++) {
 				if(this.getTempFinalVal(currentRow, col) == this.NOT_POSSIBLE) {
@@ -475,7 +475,7 @@ public class SudokuState {
 		 * @param row Value from 0 to 8 representing the row number from top to bottom
 		 * @return List of possible values for all cells in the row parsed.  
 		 */
-		public LinkedList<Integer> getRowPossibleVals(int row) {
+		private LinkedList<Integer> getRowPossibleVals(int row) {
 			LinkedList<Integer> sectionRowTemps = new LinkedList<Integer>();
 			for(int currentCol = 0; currentCol < this.BOARD_SIZE; currentCol++) {
 				if(this.getTempFinalVal(row, currentCol) == this.NOT_POSSIBLE) {
@@ -491,7 +491,7 @@ public class SudokuState {
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 * @return List of all possible values in the section defined by the row and column parsed.
 		 */
-		public LinkedList<Integer> getSectionPossibleVals(int row, int col) {
+		private LinkedList<Integer> getSectionPossibleVals(int row, int col) {
 			int sectionFirstRow = 3*(row/3);
 			int sectionFirstCol = 3*(col/3);
 			int currentRow = 0;
@@ -517,7 +517,7 @@ public class SudokuState {
 		 * @return The only possible value for a given cell given all other possibilities have been exhausted. <br/>
 		 * this.NOT_POSSIBLE otherwise.
 		 */
-		public int getTempFinalVal(int row, int col) {
+		private int getTempFinalVal(int row, int col) {
 			LinkedList<Integer> possibleCellVals = this.possibleVals(row, col);
 			if(possibleCellVals.size() == 1) {
 				return possibleCellVals.peek();
@@ -533,7 +533,7 @@ public class SudokuState {
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 * @return
 		 */
-		public boolean removeTempVal(int num, int row, int col) {
+		private boolean removeTempVal(int num, int row, int col) {
 			if(this.getTempFinalVal(row, col) == this.NOT_POSSIBLE) {
 				this.temp[row][col][num - 1] = this.NOT_POSSIBLE;
 				return true;
@@ -545,7 +545,7 @@ public class SudokuState {
 		 * Removes duplicate numbers from list.
 		 * @param list The list to remove duplicates from.
 		 */
-		public void removeDuplicates(LinkedList<Integer> list) {
+		private void removeDuplicates(LinkedList<Integer> list) {
 			LinkedList<Integer> duplicateFreeList = new LinkedList<Integer>();
 			while(!list.isEmpty()) {
 				Integer currentElement = list.remove();
@@ -564,7 +564,7 @@ public class SudokuState {
 		 * @param list The list of integers to search through.
 		 * @return The number of occurrences of a single number within a list of integers. 
 		 */
-		public int numberOccurances(int number, LinkedList<Integer> list) {
+		private int numberOccurances(int number, LinkedList<Integer> list) {
 			int numCounter = 0;
 			for(Integer currentNum : list) {
 				if(currentNum == number) {
@@ -580,7 +580,7 @@ public class SudokuState {
 		 * @param row Value from 0 to 8 representing the row number from top to bottom
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 */
-		public void setTempFinalVal(int number, int row, int col) {
+		private void setTempFinalVal(int number, int row, int col) {
 			for(int num = 0; num < BOARD_SIZE; num++) {
 				if(number != (num + 1)) {
 					this.temp[row][col][num] = NOT_POSSIBLE;
@@ -594,7 +594,7 @@ public class SudokuState {
 		 * Prints debugging to console.
 		 * @param obj Object to convert to string before outputting to the console.
 		 */
-		public void debug(Object obj) {
+		private void debug(Object obj) {
 			//System.out.println(obj.toString());
 		}
 		/**
@@ -603,7 +603,7 @@ public class SudokuState {
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 * @return List of Integers of possible values for this cell.
 		 */
-		public LinkedList<Integer> possibleVals(int row, int col) {
+		private LinkedList<Integer> possibleVals(int row, int col) {
 			LinkedList<Integer> possibleVals = new LinkedList<Integer>();
 			for(int number = 0; number < BOARD_SIZE; number++) {
 				if(this.temp[row][col][number] == POSSIBLE) {
@@ -618,7 +618,7 @@ public class SudokuState {
 		 * Checks if a the current board state (all rows, columns and squares) have valid cell values.
 		 * @return True if all cells in the current board state are compliant to the rules of Sudoku. 
 		 */
-		public boolean valid() {
+		private boolean valid() {
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
 					for(int number = 1; number <= BOARD_SIZE; number++) {
@@ -639,7 +639,7 @@ public class SudokuState {
 		 * @param row Value from 0 to 8 representing the row number from top to bottom
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 */
-		public void clearTemp(int row, int col) {
+		private void clearTemp(int row, int col) {
 			for(int i = 0; i < BOARD_SIZE; i++) {
 				this.temp[row][col][i] = POSSIBLE;
 			}
@@ -649,7 +649,7 @@ public class SudokuState {
 		 * Updates and returns the number of filled cells in the current board state.
 		 * @return The number of cells which are filled in the current board state.
 		 */
-		public int updateCellsFilled() {
+		private int updateCellsFilled() {
 			int count = 0;
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
@@ -665,7 +665,7 @@ public class SudokuState {
 		/**
 		 * Updates the value of temporary (possible) cells based upon the filled cells in its given row, column and square.
 		 */
-		public void updateTempVals() {
+		private void updateTempVals() {
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
 					int cellVal = this.board[row][col];
@@ -687,7 +687,7 @@ public class SudokuState {
 		 * Updates the value of board values based upon changes made to temporary cells which have a final value set.
 		 * @return True if board values have been updated due to this method call.
 		 */
-		public boolean updateBoardVals() {
+		private boolean updateBoardVals() {
 			boolean updated = false;
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
@@ -706,7 +706,7 @@ public class SudokuState {
 		 * @param row Value from 0 to 8 representing the row number from top to bottom
 		 * @return The amount of occurrences of a specific number within the row specified.
 		 */
-		public int inRow(int number, int row) {
+		private int inRow(int number, int row) {
 			int answer = 0;
 			for(int tempCol = 0; tempCol < BOARD_SIZE; tempCol++) {
 				if(this.board[row][tempCol] == number) {
@@ -721,7 +721,7 @@ public class SudokuState {
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 * @return The amount of occurrences of a specific number within the column specified.
 		 */		
-		public int inColumn(int number, int col) {
+		private int inColumn(int number, int col) {
 			int answer = 0;
 			for(int tempRow = 0; tempRow < BOARD_SIZE; tempRow++) {
 				if(this.board[tempRow][col] == number) {
@@ -739,7 +739,7 @@ public class SudokuState {
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 * @return The amount of occurrences of a specific number within the section specified by row and column. 
 		 */
-		public int inSection(int number, int row, int col) {
+		private int inSection(int number, int row, int col) {
 			int sectionRow = 3*(row /3);
 			int sectionCol = 3*(col /3);
 			int answer = 0;
@@ -760,7 +760,7 @@ public class SudokuState {
 		 * @param col Value from 0 to 8 representing the column number from left to right
 		 * @return True if number is a possible value for the cell located at row, column.
 		 */
-		public boolean canBe(int number, int row, int col) {
+		private boolean canBe(int number, int row, int col) {
 			if(this.inColumn(number, col) > 0 
 					|| this.inRow(number, row) > 0 
 						|| this.inSection(number, row, col) > 0) {
@@ -773,7 +773,7 @@ public class SudokuState {
 		 * Prints 2D array representation of the board.
 		 * @param array The array to be printed to console.
 		 */
-		public void print2DBoard(int array[][]) {
+		private void print2DBoard(int array[][]) {
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
 					if(array[row][col] != EMPTY) {
@@ -789,7 +789,7 @@ public class SudokuState {
 		/**
 		 * Prints the temporary values of the board
 		 */
-		public void printTemps() {
+		private void printTemps() {
 			for(int row = 0; row < BOARD_SIZE; row++) {
 				for(int col = 0; col < BOARD_SIZE; col++) {
 					LinkedList<Integer> possibleValues = this.possibleVals(row, col);
@@ -805,7 +805,7 @@ public class SudokuState {
 		 * Prints the temporary values of cells contained in section.
 		 * @param section The section of cell to print.
 		 */
-		public void printTempsSection(int section) {
+		private void printTempsSection(int section) {
 			int sectionRow = this.getSectionFirstRow(section);
 			int sectionCol = this.getSectionFirstCol(section);
 			for(int rowTranslate = 0; rowTranslate < this.SECTION_SIZE; rowTranslate++) {
