@@ -484,13 +484,12 @@ public class SudokuBoard implements Board {
 	 */
 	private BoardCell getCell(int row, int col)
 	{
-		//System.out.println("fc: getCell("+row+","+col+")");
 		return board.get(row - 1).get(col - 1);
 	}	
 	
 	public boolean isCorrectInputForCell(int row, int col, int value)
 	{
-		if (getCell(row, col).getInputValue() == getCell(row, col).getCorrectValue())
+		if (value == getCell(row, col).getCorrectValue())
 		{
 			return true;
 		}
@@ -499,6 +498,19 @@ public class SudokuBoard implements Board {
 
 	public boolean isFilledBoard()
 	{
+		for (int i = 1; i <= boardSize; i++)
+		{
+			for (int j = 1; j <= boardSize; j++)
+			{
+				if (!getCell(i, j).isInitiallyVisible())
+				{
+					if (!isEmptyCell(i, j))
+					{
+						return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
 	
