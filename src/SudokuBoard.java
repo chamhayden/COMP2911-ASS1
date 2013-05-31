@@ -84,6 +84,10 @@ public class SudokuBoard implements Board {
 		else
 		{
 			getCell(row, col).removeInputValue();
+			for (int i = 1; i <= boardSize; i++)
+			{
+				setCellDraftVisibility(row, col, i, false);
+			}
 		}
 	}
 	
