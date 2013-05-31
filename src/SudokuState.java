@@ -524,8 +524,7 @@ public class SudokuState {
 			} 
 			return NOT_POSSIBLE;		
 		}
-			//  TODO Change this so that it just stores things to remove in a linkedlist that is 
-			// traversed after each updateTempVal call. 
+
 		/**
 		 * Removes the possibility of num being a solution at row and col. <br/>
 		 * <u>Note:-</U> Performing the updateTempVals method will override removals made by this method.
