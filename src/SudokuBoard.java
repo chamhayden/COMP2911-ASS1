@@ -490,7 +490,11 @@ public class SudokuBoard implements Board {
 	
 	public boolean isCorrectInputForCell(int row, int col, int value)
 	{
-		return true;
+		if (getCell(row, col).getInputValue() == getCell(row, col).getCorrectValue())
+		{
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isFilledBoard()
