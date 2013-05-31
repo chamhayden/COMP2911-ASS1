@@ -1,6 +1,14 @@
-
+/**
+ * Removes values if they cannot be placed anywhere else in the square
+ * @author laura
+ *
+ */
 public class HardRemover implements Removalist {
 	
+	/**
+	 * HardRemover constructor
+	 * @param b Board to remove from
+	 */
 	public HardRemover (Board b){
 		this.b = b;
 		if (b.isDifficultyEasy()){
@@ -14,6 +22,9 @@ public class HardRemover implements Removalist {
 	}
 	
 	@Override
+	/**
+	 * Removes if the value cannot be placed anywhere else in the square
+	 */
 	public boolean removeIfCan(Position p) {
 		int row = p.getRow();
 		int col = p.getCol();
@@ -38,6 +49,9 @@ public class HardRemover implements Removalist {
 	
 	
 	@Override
+	/**
+	 * Returns true if a certain number, based on difficulty, have been removed from the board 
+	 */
 	public boolean shouldTerminate() {
 		if (numRemoved >= maxRemoved){
 			return true;
@@ -45,6 +59,11 @@ public class HardRemover implements Removalist {
 		return false;
 	}
 	
+	/**
+	 * Finds the rows or columns adjacent to the given row or column
+	 * @param position row or column number
+	 * @return row or column numbers of adjacent rows or columns
+	 */
 	private int[] findAdj(int position){
 		int[] adj = new int[2];
 		int x = ((int)Math.floor(position/3)*3);
@@ -62,6 +81,13 @@ public class HardRemover implements Removalist {
 		return adj;
 	}
 	
+	/**
+	 * Evaluates whether the adjacent row/column within a square is full
+	 * @param dir1 adjacent row/column numbers
+	 * @param direction2 adjacent column/row numbers
+	 * @param position column/row of cell
+	 * @return if adjacent row/columns in square are full
+	 */
 	private boolean adjFull(int[] dir1, int[] direction2, int position){
 		int[] dir2 = new int[] {direction2[0], direction2[1], position};
 		for(int i = 0; i < 2; i++){

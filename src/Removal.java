@@ -2,10 +2,18 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Comparator;
-
+/**
+ * This class is used to remove values from the filled in board
+ * @author laura
+ *
+ */
 
 public class Removal {
 	
+	/**
+	 * Constructor for the Removal object
+	 * @param b board to remove values from
+	 */
 	public Removal(Board b){
 		this.b = b;
 		if(b.isDifficultyEasy()){
@@ -19,6 +27,9 @@ public class Removal {
 		initialise();
 	}
 	
+	/**
+	 * Removes values from the board to produce a puzzle
+	 */
 	public void remove(){
 		
 		removeValues(new SimpleRemover(b));
@@ -30,7 +41,13 @@ public class Removal {
 		}
 	}
 	
-	public void removeValues(Removalist remover){
+	/**
+	 * Iterates through each of the unremoved squares remaining on the board
+	 * in random order, removing them if they meet the remover condition
+	 * and stopping once the termination condition of the remover is met
+	 * @param remover
+	 */
+	private void removeValues(Removalist remover){
 		
 		//TODO get rid of numRemoved after debugging
 		int numRemoved = 0;
@@ -69,6 +86,9 @@ public class Removal {
 		System.out.println("Removed " + numRemoved);
 	}
 	
+	/**
+	 * Initialises the removable ArrayList
+	 */
 	private void initialise(){
 		int row, col;
 		for(row = 0; row < 9; row++){

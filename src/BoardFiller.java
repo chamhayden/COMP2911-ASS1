@@ -114,6 +114,12 @@ public class BoardFiller {
 		return true;
 	}
 	
+	/** 
+	 * Unsets the values in the cells up to a reset point based on current progress at board filling
+	 * @param row row the filler got stuck on
+	 * @param col column the filler got stuck on
+	 * @return column the filler has reset to
+	 */
 	private int reset(int row, int col){
 		int resetPoint;
 		if(row%3 == 2){
@@ -127,8 +133,14 @@ public class BoardFiller {
 		return resetPoint;
 	}
 	
-	private int squareNo(int row, int collumn){
-		return ((int)Math.floor(collumn/3) + (int)Math.floor(row/3)*3);
+	/**
+	 * The number of the square the given cell is in
+	 * @param row row of cell
+	 * @param column column of cell
+	 * @return square number
+	 */
+	private int squareNo(int row, int column){
+		return ((int)Math.floor(column/3) + (int)Math.floor(row/3)*3);
 	}
 	
 	//FOR DEBUGGING PURPOSES ONLY DO NOT USE

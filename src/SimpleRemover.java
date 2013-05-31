@@ -1,6 +1,14 @@
-
+/**
+ * Removes values if all other numbers are somewhere in the same row, column or square
+ * @author laura
+ *
+ */
 public class SimpleRemover implements Removalist {
 
+	/** 
+	 * Constructor for SimpleRemoved
+	 * @param b Board to remove from
+	 */
 	public SimpleRemover (Board b){
 		this.b = b;
 		if (b.isDifficultyEasy()){
@@ -14,6 +22,9 @@ public class SimpleRemover implements Removalist {
 	}
 	
 	@Override
+	/**
+	 * Removes if all other values are somewhere in the row, column or square
+	 */
 	public boolean removeIfCan(Position p) {
 		int row = p.getRow();
 		int col = p.getCol();
@@ -28,6 +39,9 @@ public class SimpleRemover implements Removalist {
 	}
 
 	@Override
+	/** 
+	 * Terminates once a certain number, based on difficulty, have been removed
+	 */
 	public boolean shouldTerminate() {
 		if (numRemoved >= maxRemoved){
 			return true;
