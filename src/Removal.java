@@ -65,9 +65,15 @@ public class Removal {
 			numRemoved++;
 		}
 		System.out.println("Removed " + numRemoved);
-		System.out.println("There are now " + removableCells.size() + "to remove");
+		System.out.println("There are now " + removableCells.size() + " to remove");
 		System.out.println("");
 		//printBoard();
+		//TODO get rid of this
+		SudokuSolver checker = new SudokuSolver();
+		if(!checker.isSudokuSolutionUnique(b)){
+			System.out.println("failure");
+		}
+		//TO here
 	}
 	
 	/**
