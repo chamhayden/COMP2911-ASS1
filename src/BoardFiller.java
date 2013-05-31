@@ -17,58 +17,6 @@ public class BoardFiller {
 		this.b = b;
 	}
 	
-	/*
-	public boolean fillBoardOld(){
-		int i, j, k;
-		int x = 0;
-		Random r = new Random();  
-		LinkedList<Integer> l = new LinkedList<Integer>();
-		int resetPoint;
-		int counter = 0;
-		
-		
-		for(i = 0; i < 9; i++){
-			counter = 0;
-			j = 0;
-			while(j < 9){				
-				k = squareNo(i, j);
-				// TODO THIS IS A NICE PLACE TO WATCH FROM IF YOU WANT TO =)
-				//System.out.printf("\n\n\n\n");
-				//printBoard();
-				//System.out.printf("\n\n\n");
-				//remove to here
-				for(int m = 1; m < 10; m++){
-					l.add(m);
-				}
-				do{
-					x = l.remove(r.nextInt(l.size()));
-				} while(!l.isEmpty() && (b.rowHas(i+1, x) || b.columnHas(j+1, x) || b.squareHas(k+1, x)));
-				
-				if(l.isEmpty()){
-					if(i%3 == 2){
-						resetPoint = ((int)Math.floor(j/3)*3);
-					} else {
-						resetPoint = 0;
-					}
-					for(int p = resetPoint; p < 9; p++){
-						b.removeCellValue(i+1, p+1);
-					}
-					j = resetPoint;
-					counter++;
-					if (counter > 50){
-						b.clear();
-						return false;
-					}
-					continue;
-				}
-				b.setCellValue(i+1, j+1, x);
-				j++;
-			}
-		}
-		printBoard();
-		return true;
-	}*/
-	
 	public boolean fillBoard(){
 		int row, col, square;
 		int x = 0;
