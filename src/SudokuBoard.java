@@ -61,9 +61,10 @@ public class SudokuBoard implements Board {
 		Removal r = new Removal(this);
 		filler.fillBoard();
 		
-		r.removeValues(new SimpleRemover(this));
-		r.removeValues(new HardRemover(this));
-		r.removeValues(new ExhaustiveRemover(this));
+		r.remove();
+		//r.removeValues(new SimpleRemover(this));
+		//r.removeValues(new HardRemover(this));
+		//r.removeValues(new ExhaustiveRemover(this));
 
 
 		this.currentlyGenerating = false;
