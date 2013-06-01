@@ -16,6 +16,7 @@ public class SudokuBoard implements Board {
 	 */
 	public SudokuBoard(int size)
 	{	
+		this.gameStates = new ArrayList<SudokuBoard>();
 		this.boardSize = size;
 		board = new ArrayList<ArrayList<BoardCell>>();
 		
@@ -89,6 +90,7 @@ public class SudokuBoard implements Board {
 			{
 				setCellDraftVisibility(row, col, i, false);
 			}
+			this.addGameState();
 		}
 	}
 	
@@ -129,7 +131,7 @@ public class SudokuBoard implements Board {
 			{
 				setCellDraftVisibility(row, col, i, false);
 			}
-			
+			this.addGameState();
 		}
 	}
 	
@@ -238,6 +240,7 @@ public class SudokuBoard implements Board {
 		{
 			removeCellValue(row, col);
 		}
+		this.addGameState();
 	}
 			
 	/**
@@ -445,16 +448,40 @@ public class SudokuBoard implements Board {
 	
 	public void undoLast()
 	{
-		for (int i = 1; i <= 9; i++)
-		{
-			for (int j = 1; j <= 9; j++)
-			{
-				this.setCellValue(i, j, 2);
-			}
-		}
+		int indexOfLast = this.gameStates.size() - 1;
+		this.cloneIntoBoard(this.gameStates.remove(indexOfLast));
 	}
 	
+	private void addGameState() {
+		SudokuBoard currentGameState = new SudokuBoard(this.boardSize);
+		currentGameState.cloneIntoBoard(this);
+		this.gameStates.add(currentGameState);
+		System.out.println("Adding State");
+	}
 	
+	@Override 
+	public Object clone() {
+		SudokuBoard copy = new SudokuBoard(this.boardSize);
+		for(int row = 1; row <= this.boardSize; row++) {
+			for(int col = 1; col <= this.boardSize; col++) {
+				copy.board.get(row-1).remove(0);
+				copy.board.get(row-1).add(this.board.get(row-1).get(col-1));
+			}
+		}
+		copy.difficulty = this.difficulty;
+		copy.gameStates = null;
+		return copy;
+	}
+	private void cloneIntoBoard(SudokuBoard boardToCloneFrom) {
+		for(int row = 1; row <= this.boardSize; row++) {
+			for(int col = 1; col <= this.boardSize; col++) {
+				this.board.get(row-1).remove(0);
+				this.board.get(row-1).add(boardToCloneFrom.board.get(row-1).get(col-1));
+			}
+		}
+		this.difficulty = boardToCloneFrom.difficulty;
+	}
+
 	private int squareSectionId(int row, int col)
 	{
 		int sectionId = 0;
@@ -527,6 +554,7 @@ public class SudokuBoard implements Board {
 		return true;
 	}
 	
+	private ArrayList<SudokuBoard> gameStates;
 	private ArrayList<ArrayList<BoardCell>> board;
 	private int boardSize;
 	private int difficulty;

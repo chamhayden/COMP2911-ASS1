@@ -199,6 +199,16 @@ public class BoardCell implements Cell {
 		return false;
 	}
 	
+	public Object clone() {
+		BoardCell copy = new BoardCell(this.boardSize);
+		copy.isCurrentlyVisible = this.isCurrentlyVisible;
+		copy.isInitiallyVisible = this.isInitiallyVisible;
+		copy.tempNumbers = this.tempNumbers;
+		copy.valueFinal = this.valueFinal;
+		copy.valueInput = this.valueInput;
+		return copy;
+	}
+	
 	private int boardSize;
 	private int valueFinal;
 	private int valueInput;
