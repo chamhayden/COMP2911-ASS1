@@ -5,11 +5,11 @@
  */
 public interface Removalist {
 	/**
-	 * Removes a value from the board if it meets a specific condition
+	 * Determines whether value can be removed from the board based on a specific condition
 	 * @param p position to remove from
 	 * @return whether the value was removed
 	 */
-	public boolean removeIfCan(Position p);
+	public boolean canRemove(Position p);
 	
 	/**
 	 * Provides a condition upon which the removal should terminate

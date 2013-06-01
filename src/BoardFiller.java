@@ -96,7 +96,6 @@ public class BoardFiller {
 		int i,j;
 		for(i = 0; i < 9; i++){
 			for(j = 0; j < 9; j++){
-				//System.out.println("checking if " + i + " " + j + " is initially visible");
 				if(b.hasInput(i+1, j+1)){
 					System.out.printf("%d" , b.getCellValue(i+1, j+1));
 				} else {

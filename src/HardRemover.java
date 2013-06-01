@@ -25,7 +25,7 @@ public class HardRemover implements Removalist {
 	/**
 	 * Removes if the value cannot be placed anywhere else in the square
 	 */
-	public boolean removeIfCan(Position p) {
+	public boolean canRemove(Position p) {
 		int row = p.getRow();
 		int col = p.getCol();
 		int removedVal = b.getCellValue(row+1, col+1);
