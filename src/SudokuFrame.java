@@ -473,6 +473,7 @@ public class SudokuFrame extends JFrame
 		{
 			if(pane.revealMessage()){
 				revealAll();
+				labelGrid();
 			}
 		}
 	}
@@ -564,11 +565,9 @@ public class SudokuFrame extends JFrame
 		{
 			JButton finalButton;
 			for(int j = 1; j<=9; j++){
-				String cellVal;
-				cellVal = Integer.toString(board.getCellValue(i,j));
-				if (!board.hasInput(i,j)){
+				if (!board.isInitiallySet(i,j)){
+					board.setCellValue(i, j, (board.getCellValue(i,j)));
 					finalButton = buttonRow.get(findIndex(i,j));
-					finalButton.setText(cellVal);
 					finalButton.setEnabled(false);
 				}
 			}
