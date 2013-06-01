@@ -24,7 +24,7 @@ public class Removal {
 	 * Iterates through each of the unremoved squares remaining on the board
 	 * in random order, removing them if they meet the remover condition
 	 * and stopping once the termination condition of the remover is met
-	 * @param remover
+	 * @param remover Removalist to be used
 	 */
 	public void removeValues(Removalist remover){
 		
@@ -64,16 +64,6 @@ public class Removal {
 			removableCells.remove(take);
 			numRemoved++;
 		}
-		//System.out.println("Removed " + numRemoved);
-		//System.out.println("There are now " + removableCells.size() + " to remove");
-		//System.out.println("");
-		//printBoard();
-		//TODO get rid of this
-		SudokuSolver checker = new SudokuSolver();
-		if(!checker.isSudokuSolutionUnique(b)){
-			System.out.println("failure");
-		}
-		//TO here
 	}
 	
 	/**
@@ -109,7 +99,6 @@ public class Removal {
 	
 	private Board b;
 	private ArrayList<Position> removableCells;
-	private int difficulty;
 
 	private static final int EASY = 1;
 	private static final int MEDIUM = 2;
