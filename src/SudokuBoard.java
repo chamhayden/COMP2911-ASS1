@@ -247,9 +247,9 @@ public class SudokuBoard implements Board {
 		boolean allCorrect = true;
 		for (int i = 1; i <= boardSize; i++)
 		{
-			for (int j = 1; i <= boardSize; j++)
+			for (int j = 1; j <= boardSize; j++)
 			{
-				if (!isCorrectCell(i, j))
+				if (!isInitiallySet(i,j) && !isCorrectCell(i, j))
 				{
 					allCorrect = false;
 				}
@@ -516,13 +516,10 @@ public class SudokuBoard implements Board {
 		{
 			for (int j = 1; j <= boardSize; j++)
 			{
-				if (!getCell(i, j).isInitiallyVisible())
-				{
-					if (!isEmptyCell(i, j))
+					if (!isInitiallySet(i,j) && isEmptyCell(i, j))
 					{
 						return false;
 					}
-				}
 			}
 		}
 		return true;

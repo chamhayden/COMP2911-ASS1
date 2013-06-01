@@ -261,7 +261,6 @@ public class SudokuFrame extends JFrame
 					if(board.isDifficultyEasy()){
 						if(checkSquare(b,1)){
 							board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(getCurrentValue()));
-							checkEndGame();
 						}
 					}else{
 						board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(getCurrentValue()));
@@ -271,6 +270,7 @@ public class SudokuFrame extends JFrame
 				}
 			}
 			labelGrid();
+			checkEndGame();
 		}
 		private JButton b;
 	}
@@ -458,6 +458,7 @@ public class SudokuFrame extends JFrame
 	}
 	
 	private void checkEndGame(){
+		System.out.println(board.isFilledBoard());
 		if(board.isFilledBoard() && board.isCorrectBoard()){
 			if(pane.winGame()){
 				board.clear();
