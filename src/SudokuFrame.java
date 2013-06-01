@@ -3,7 +3,6 @@ import java.awt.event.*;
 import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.TimerTask;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -99,7 +98,7 @@ public class SudokuFrame extends JFrame
 	         final String label = LABELS.substring(i, i + 1);
 	         JButton keyButton = new JButton(label);
 	         keyButton.addActionListener(new NumberSelect());
-	         keyButton.setBackground(DEFAULT_COMMAND);
+	         keyButton.setBackground(DEFAULT_INPUT);
 	         keyButton.setFont(USERINPUT);
 	         buttonInputs.add(keyButton);
 	         scorePanel.add(keyButton);
@@ -308,7 +307,7 @@ public class SudokuFrame extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			if(!isButtonToggled(eraseButton, DEFAULT_COMMAND)){
-				resetCommands();
+				resetCommandsToggle();
 			}
 			toggleButton(eraseButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
 			resetCurrentValue();
@@ -337,9 +336,8 @@ public class SudokuFrame extends JFrame
 	 */
 	
 	public void toggleButton(JButton button, Color colour, Color defaultColour){
-		//resetCommands();
 		if(!button.getBackground().equals(colour)){
-			resetCommands();
+			resetCommandsToggle();
 			button.setBackground(colour);
 		}
 		else button.setBackground(defaultColour);
@@ -377,6 +375,7 @@ public class SudokuFrame extends JFrame
 			if(pane.newGameInGame()){
 				board.clear();
 				board.generate(pane.chooseLevelInGame());
+				enableCommands(true);
 				prepareForDifficulty();
 				setUpGrid();
 			}
@@ -405,7 +404,7 @@ public class SudokuFrame extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
-				resetCommands();
+				resetCommandsToggle();
 			} 
 			toggleButton(draftButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
 		}
@@ -415,7 +414,7 @@ public class SudokuFrame extends JFrame
 	 * Untoggles all commands
 	 */
 	
-	public void resetCommands(){
+	public void resetCommandsToggle(){
 		for(Component commands: commandPanel.getComponents()){
 			commands.setBackground(DEFAULT_COMMAND);
 		}
@@ -435,7 +434,7 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			resetCommands();
+			resetCommandsToggle();
 			highlightValue(BLANK);
 			toggleButton(solutionButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
 			blinkOut(solutionButton, DEFAULT_COMMAND,2);
@@ -473,11 +472,23 @@ public class SudokuFrame extends JFrame
 		{
 			if(pane.revealMessage()){
 				revealAll();
+				enableCommands(false);
 				labelGrid();
+				
 			}
 		}
 	}
 
+	public void enableCommands(boolean enable){
+		for(Component commands: commandPanel.getComponents()){
+			if(!enable && !commands.equals(newGameButton))
+				commands.setEnabled(false);
+			else commands.setEnabled(true);
+		}
+		
+		
+	}
+	
 	/**
 	 * Checks whether or not a square is filled correctly and makes it flash appropriately
 	 * @param b is button to be checked
@@ -646,23 +657,25 @@ public class SudokuFrame extends JFrame
 		return col;
 	}
 	
-	public Color DEFAULTBG = new Color(200,200,250);
 	public Border buttonLine = BorderFactory.createLineBorder(Color.gray, 2);
 	public Border panelLine = BorderFactory.createLineBorder(Color.gray, 5);
 	public Timer timer;
-	public TimerTask task;
+	
+	public Color DEFAULTBG = new Color(200,200,250);
 	public Color CORRECT = Color.GREEN;
 	public Color WRONG = Color.RED;
-	public Color INPUT_TOGGLED = Color.pink;
+	public Color INPUT_TOGGLED = Color.yellow;
 	public Color COMMAND_TOGGLED = Color.yellow;
-	public Color DEFAULT_INPUT = new Color(238,238,238);
+	public Color DEFAULT_INPUT = new Color(90,200,150);
 	public Color userTempColor = Color.BLUE;
 	public Color draftColor = Color.LIGHT_GRAY;
+	private Color DEFAULT_GRID = new Color(238,238,238);
+	private Color DEFAULT_COMMAND = new Color(238,150,140);
+	
 	public Font USERINPUT = new Font ("Courrier", Font.CENTER_BASELINE, 25);
 	public Font DRAFTSMALL = new Font("Courrier",Font.CENTER_BASELINE ,15);
 	public Font FIXEDSQUARES = new Font("Arial", Font.BOLD, 20);
-	private Color DEFAULT_GRID = new Color(238,238,238);
-	private Color DEFAULT_COMMAND = new Color(238,238,238);
+	
 	private JButton newGameButton;
 	private JButton resetGameButton;
 	private JButton undoButton;
@@ -670,7 +683,7 @@ public class SudokuFrame extends JFrame
 	private JButton eraseButton;
 	private JButton solutionButton;
 	private JButton revealButton;
-	private String currentValue;
+	
 	private JPanel buttonPanel;
 	private JPanel commandPanel;
 	private JPanel scorePanel;
@@ -679,6 +692,8 @@ public class SudokuFrame extends JFrame
 	private OptionPanes pane = new OptionPanes();
 
 	public Board board;
+	
+	private String currentValue;
 	public static final String LABELS = "123456789";
 	public static final String BLANK = "";
 	public static final int DEFAULT_WIDTH = 900;
