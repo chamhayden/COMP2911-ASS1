@@ -15,13 +15,13 @@ public class SudokuSolver implements UniqueChecker {
 	// can only be solved if there is a unique solution. This is specifically 
 	// why backtracking was not used.
 	public boolean isSudokuSolutionUnique(Board boardToSolve) {
-		int board[][] = new int[this.BOARD_SIZE][this.BOARD_SIZE];
-		for(int row = 1; row <= this.BOARD_SIZE; row++) {
-			for(int col = 1; col <= this.BOARD_SIZE; col++) {
+		int board[][] = new int[BOARD_SIZE][BOARD_SIZE];
+		for(int row = 1; row <= BOARD_SIZE; row++) {
+			for(int col = 1; col <= BOARD_SIZE; col++) {
 				if(boardToSolve.hasInput(row, col)) {
 					board[row-1][col-1] = boardToSolve.getCellValue(row, col);	
 				} else {
-					board[row-1][col-1] = this.EMPTY;
+					board[row-1][col-1] = EMPTY;
 				}
 			}
 		}
