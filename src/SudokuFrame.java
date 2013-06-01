@@ -121,6 +121,7 @@ public class SudokuFrame extends JFrame
 			insetPanels.add(JP);
 			buttonPanel.add(JP);
 		}
+		JPanel panel = null;
 		for(int i = 1; i<=9; i++)
 		{
 			for(int j = 1; j<=9; j++){
@@ -135,26 +136,27 @@ public class SudokuFrame extends JFrame
 				}
 				if(i<=3){
 					if(j <= 3)
-						buttonRow.add(makeGridButton(cellVal, insetPanels.get(0), given));
+						panel = insetPanels.get(0);
 					else if(j <= 6)
-						buttonRow.add(makeGridButton(cellVal, insetPanels.get(1), given));
+						panel = insetPanels.get(1);
 					else if(j <= 9)
-						buttonRow.add(makeGridButton(cellVal, insetPanels.get(2), given));
+						panel = insetPanels.get(2);
 				} else if(i<=6) {
 					if(j <= 3)
-						buttonRow.add(makeGridButton(cellVal, insetPanels.get(3), given));
+						panel = insetPanels.get(3);
 					else if(j<= 6)
-						buttonRow.add(makeGridButton(cellVal, insetPanels.get(4), given));
+						panel = insetPanels.get(4);
 					else if( j <= 9)
-						buttonRow.add(makeGridButton(cellVal, insetPanels.get(5), given));
+						panel = insetPanels.get(5);
 				} else if(i<=9){
 					if( j <= 3)
-						buttonRow.add(makeGridButton(cellVal, insetPanels.get(6), given));
+						panel = insetPanels.get(6);
 					else if(j <= 6)
-						buttonRow.add(makeGridButton(cellVal, insetPanels.get(7), given));
+						panel = insetPanels.get(7);
 					else if(j <= 9)
-						buttonRow.add(makeGridButton(cellVal, insetPanels.get(8), given));
+						panel = insetPanels.get(8);
 				}
+				buttonRow.add(makeGridButton(cellVal, panel, given));
 			}
 		}
 	}
@@ -483,8 +485,11 @@ public class SudokuFrame extends JFrame
 	 */
 	
 	public boolean checkSquare(JButton b, int seconds)	{
+		boolean correct;
+		if(board.isDifficultyEasy())
+			correct = board.isCorrectInputForCell(rowVal(b), colVal(b), Integer.decode(getCurrentValue()));
+		else correct = board.isCorrectCell(rowVal(b), colVal(b));
 		
-		boolean correct = board.isCorrectInputForCell(rowVal(b), colVal(b), Integer.decode(getCurrentValue()));
 		if(correct)		
 			b.setBackground(CORRECT);
 		else
