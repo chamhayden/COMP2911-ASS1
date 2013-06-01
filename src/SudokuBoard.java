@@ -554,6 +554,18 @@ public class SudokuBoard implements Board {
 		return true;
 	}
 	
+	public void printBoard()
+	{
+		for (int i = 1; i <= boardSize; i++)
+		{
+			for (int j = 1; j <= boardSize; j++)
+			{
+				System.out.print(getCellValue(i, j) + " ");
+			}
+		}
+		System.out.println();
+	}
+	
 	private ArrayList<SudokuBoard> gameStates;
 	private ArrayList<ArrayList<BoardCell>> board;
 	private int boardSize;
