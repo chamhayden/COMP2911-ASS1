@@ -57,16 +57,8 @@ public class SudokuBoard implements Board {
 				if (l == 0) setIfInitiallySet(i, j, false);
 			}
 		}*/
-		
-		BoardFiller filler = new BoardFiller(this);
-		Removal r = new Removal(this);
-		filler.fillBoard();
-		
-		r.removeValues(new SimpleRemover(this));
-
-		r.removeValues(new HardRemover(this));
-		
-		r.removeValues(new ExhaustiveRemover(this));
+		Generator g = new Generator();
+		g.generateBoard(this);
 
 
 		this.currentlyGenerating = false;
