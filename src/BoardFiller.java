@@ -17,7 +17,7 @@ public class BoardFiller {
 		this.b = b;
 	}
 	
-	public boolean fillBoard(){
+	public void fillBoard(){
 		int row, col, square;
 		int x = 0;
 		Random r = new Random();  
@@ -58,15 +58,7 @@ public class BoardFiller {
 				}
 			}
 			row++;
-		}
-		//TODO get rid of this
-		SudokuSolver checker = new SudokuSolver();
-		if(!checker.isSudokuSolutionUnique(b)){
-			System.out.println("failure before removing anything");
-		}
-		//TO here
-		return true;
-		
+		}		
 	}
 	
 	/** 
