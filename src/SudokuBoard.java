@@ -60,25 +60,11 @@ public class SudokuBoard implements Board {
 		BoardFiller filler = new BoardFiller(this);
 		Removal r = new Removal(this);
 		filler.fillBoard();
-		//TODO get rid of this
-		SudokuSolver checker = new SudokuSolver();
-		if(!checker.isSudokuSolutionUnique(this)){
-			System.out.println("failure before removing anything");
-		}
-		//TO here
 		
 		r.removeValues(new SimpleRemover(this));
-		//TODO get rid of this
-		if(!checker.isSudokuSolutionUnique(this)){
-			System.out.println("failure after simple remove");
-		}
-		//TO here
+
 		r.removeValues(new HardRemover(this));
-		//TODO get rid of this
-		if(!checker.isSudokuSolutionUnique(this)){
-			System.out.println("failure after harder remove");
-		}
-		//TO here
+		
 		r.removeValues(new ExhaustiveRemover(this));
 
 

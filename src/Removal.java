@@ -32,7 +32,7 @@ public class Removal {
 		int numRemoved = 0;
 		int pendingRemoval;
 		int size = removableCells.size();
-		System.out.println(size + " to remove");
+		//System.out.println(size + " to remove");
 		Random r = new Random();
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 		PriorityQueue<Integer> indicesRemoved = new PriorityQueue<Integer>(10, new Comparator<Integer>(){
@@ -64,9 +64,9 @@ public class Removal {
 			removableCells.remove(take);
 			numRemoved++;
 		}
-		System.out.println("Removed " + numRemoved);
-		System.out.println("There are now " + removableCells.size() + " to remove");
-		System.out.println("");
+		//System.out.println("Removed " + numRemoved);
+		//System.out.println("There are now " + removableCells.size() + " to remove");
+		//System.out.println("");
 		//printBoard();
 		//TODO get rid of this
 		SudokuSolver checker = new SudokuSolver();
