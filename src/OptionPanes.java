@@ -18,10 +18,10 @@ public class OptionPanes {
 		/**
 		 * Icons imported from http://findicons.com/
 		 */		
-		start = createImageIcon("images/puzzle.gif", "puzzle");
-		grumpy = createImageIcon("images/grumpy.gif", "grumpy");
-		awesome = createImageIcon("images/awesome.gif", "awesome");
-		puzzled = createImageIcon("images/puzzled.gif", "puzzled");
+		start = createImageIcon("Images/puzzle.gif", "puzzle");
+		grumpy = createImageIcon("Images/grumpy.gif", "grumpy");
+		awesome = createImageIcon("Images/awesome.gif", "awesome");
+		puzzled = createImageIcon("Images/puzzled.gif", "puzzled");
 		
 	}
 	
