@@ -18,7 +18,7 @@ public class SudokuSolver implements UniqueChecker {
 		int board[][] = new int[BOARD_SIZE][BOARD_SIZE];
 		for(int row = 1; row <= BOARD_SIZE; row++) {
 			for(int col = 1; col <= BOARD_SIZE; col++) {
-				if(boardToSolve.hasInput(row, col)) {
+				if(boardToSolve.isInitiallySet(row, col)) {
 					board[row-1][col-1] = boardToSolve.getCellValue(row, col);	
 				} else {
 					board[row-1][col-1] = EMPTY;
@@ -26,7 +26,9 @@ public class SudokuSolver implements UniqueChecker {
 			}
 		}
 		SudokuState initialState = new SudokuState(board);
-		initialState.solve();
+		if(!initialState.solved()) {
+			initialState.solve();
+		}
 		return initialState.solved();
 	}
 	private static final int BOARD_SIZE = 9;
