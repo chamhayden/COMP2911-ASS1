@@ -3,6 +3,7 @@
  * @author laura
  *
  */
+
 public class Position {
 	
 	/**
