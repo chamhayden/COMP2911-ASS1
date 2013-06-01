@@ -172,6 +172,9 @@ public class SudokuFrame extends JFrame
 				if(!board.isInitiallySet(i, j)){
 					if (board.hasInput(i,j)){
 						b.setText(Integer.toString(board.getCellValue(i,j)));
+							for(Component label: b.getComponents()){
+								label.setVisible(false);
+							}
 					}else{
 						b.setText(BLANK);
 						if(board.hasDrafts(i,j)){
