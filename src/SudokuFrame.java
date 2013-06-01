@@ -172,9 +172,9 @@ public class SudokuFrame extends JFrame
 				if(!board.isInitiallySet(i, j)){
 					if (board.hasInput(i,j)){
 						b.setText(Integer.toString(board.getCellValue(i,j)));
-							for(Component label: b.getComponents()){
-								label.setVisible(false);
-							}
+						for(Component label: b.getComponents()){
+							label.setVisible(false);
+						}
 					}else{
 						b.setText(BLANK);
 						if(board.hasDrafts(i,j)){
@@ -434,9 +434,9 @@ public class SudokuFrame extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			resetCommands();
+			highlightValue(BLANK);
 			toggleButton(solutionButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
 			blinkOut(solutionButton, DEFAULT_COMMAND,2);
-			highlightValue(BLANK);
 			for(JButton b: buttonRow){
 				if(!board.isInitiallySet(rowVal(b), colVal(b))){
 					if(board.isDifficultyHard() && board.isFilledBoard()){
@@ -571,8 +571,8 @@ public class SudokuFrame extends JFrame
 	}
 	
 	/**
-	 * Resets currentValue
-	 * @return
+	 * Resets currentValue to BLANK
+	 * @return currentValue
 	 */
 	
 	public String resetCurrentValue(){

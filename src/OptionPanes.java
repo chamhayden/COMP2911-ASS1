@@ -9,6 +9,8 @@ import javax.swing.JOptionPane;
  * @author Jerome
  *
  */
+
+
 public class OptionPanes {
 	
 	
@@ -105,6 +107,7 @@ public class OptionPanes {
 			return true;
 		else return false;
 	}
+	
 	
 	public boolean createYESNOPopUp(Icon icon, String message, String title){
 		value = JOptionPane.showConfirmDialog((Component) icon, message, title,
