@@ -27,7 +27,7 @@ public class ExhaustiveRemover implements Removalist {
 	/**
 	 * Removes all values that can be whilst still maintaining a unique solution
 	 */
-	public boolean canRemove(Position p) {
+	public boolean removeIfCan(Position p) {
 		int row = p.getRow();
 		int col = p.getCol();
 		
@@ -59,7 +59,7 @@ public class ExhaustiveRemover implements Removalist {
 
 	
 	private static final int REMOVE_ON_EASY = 0;
-	private static final int REMOVE_ON_MEDIUM = 20;
+	private static final int REMOVE_ON_MEDIUM = 15;
 	private static final int REMOVE_ON_HARD = 100;
 
 

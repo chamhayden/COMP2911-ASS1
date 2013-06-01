@@ -25,7 +25,7 @@ public class SimpleRemover implements Removalist {
 	/**
 	 * Removes if all other values are somewhere in the row, column or square
 	 */
-	public boolean canRemove(Position p) {
+	public boolean removeIfCan(Position p) {
 		int row = p.getRow();
 		int col = p.getCol();
 		for(int i = 1; i < 10; i++){

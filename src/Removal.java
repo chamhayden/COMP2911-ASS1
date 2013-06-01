@@ -55,7 +55,7 @@ public class Removal {
 		}
 		while(!indices.isEmpty() && !remover.shouldTerminate()){
 			pendingRemoval = indices.remove(r.nextInt(indices.size()));
-			if(remover.canRemove(removableCells.get(pendingRemoval))){
+			if(remover.removeIfCan(removableCells.get(pendingRemoval))){
 				indicesRemoved.add(pendingRemoval);
 			}
 		}

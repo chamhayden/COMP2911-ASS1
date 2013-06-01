@@ -9,7 +9,7 @@ public interface Removalist {
 	 * @param p position to remove from
 	 * @return whether the value was removed
 	 */
-	public boolean canRemove(Position p);
+	public boolean removeIfCan(Position p);
 	
 	/**
 	 * Provides a condition upon which the removal should terminate
