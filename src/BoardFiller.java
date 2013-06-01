@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 /**
- * Generates a board
+ * Fills in the values of the board
  * Randomly assigns values, checks they work, reassigns if required
  * @author laura
  *
@@ -12,11 +12,18 @@ import java.util.Random;
 
 public class BoardFiller {
 	
+	/**
+	 * Constructor 
+	 * @param b board to fill
+	 */
 	public BoardFiller(Board b) 
 	{
 		this.b = b;
 	}
 	
+	/**
+	 * Fills the board with values
+	 */
 	public void fillBoard(){
 		int row, col, square;
 		int x = 0;
