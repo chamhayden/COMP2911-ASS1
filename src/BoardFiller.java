@@ -59,7 +59,14 @@ public class BoardFiller {
 			}
 			row++;
 		}
+		//TODO get rid of this
+		SudokuSolver checker = new SudokuSolver();
+		if(!checker.isSudokuSolutionUnique(b)){
+			System.out.println("failure before removing anything");
+		}
+		//TO here
 		return true;
+		
 	}
 	
 	/** 
