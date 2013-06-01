@@ -276,17 +276,6 @@ public class SudokuFrame extends JFrame
 	}
 	
 	/**
-	 * Toggles all draft values on a button to false
-	 */
-	
-	public void toggleDraftFalse(JButton button){
-		for(Component label: button.getComponents()){
-			label.setVisible(false);
-			board.setCellDraftVisibility(rowVal(button), colVal(button), Integer.parseInt(((JLabel) label).getText()), false);
-		}
-	}
-	
-	/**
 	 * Toggles a particular draft value
 	 * @param value is the value to be toggled
 	 * @param b is the button concerned in this action 
@@ -458,7 +447,6 @@ public class SudokuFrame extends JFrame
 	}
 	
 	private void checkEndGame(){
-		System.out.println(board.isFilledBoard());
 		if(board.isFilledBoard() && board.isCorrectBoard()){
 			if(pane.winGame()){
 				board.clear();
@@ -538,10 +526,7 @@ public class SudokuFrame extends JFrame
 	public void removeAll(){
 		for(JButton b: buttonRow){
 			if (!board.isInitiallySet(rowVal(b),colVal(b))){
-				//toggleDraftFalse(b);
 				board.removeCellValue(rowVal(b), colVal(b));
-				//board.setIfInitiallySet(rowVal(b), colVal(b), false);
-				//b.setText(BLANK);
 			}
 		}
 	}
