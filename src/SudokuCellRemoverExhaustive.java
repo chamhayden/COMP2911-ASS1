@@ -35,7 +35,7 @@ public class SudokuCellRemoverExhaustive implements Removalist {
 		int col = p.getCol();
 		
 		board.setIfInitiallySet(row+1, col+1, false);
-		if(checker.isSudokuSolutionUnique(board)){
+		if(checker.isUniqueSolution(board)){
 			numRemoved++;
 			return true;
 		} else {
