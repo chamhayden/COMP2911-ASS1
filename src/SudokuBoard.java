@@ -1,4 +1,6 @@
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
 * Class that allows creation, modification and access to
@@ -15,21 +17,23 @@ public class SudokuBoard implements Board {
 	 */
 	public SudokuBoard(int size)
 	{	
-		this.gameStates = new ArrayList<SudokuBoard>();
+		this.undoCellStates = new LinkedList<Cell>();
+		this.undoCellPoints = new LinkedList<Point>();
+		
 		this.boardSize = size;
-		board = new ArrayList<ArrayList<SudokuBoardCell>>();
+		board = new ArrayList<ArrayList<Cell>>();
 		
 		for (int i = 0; i < boardSize; i++)
 		{
-			board.add(new ArrayList<SudokuBoardCell>());
-			ArrayList<SudokuBoardCell> row = board.get(i);
+			board.add(new ArrayList<Cell>());
+			ArrayList<Cell> row = board.get(i);
 			for (int j = 0; j < boardSize; j++)
 			{ 
 				row.add(new SudokuBoardCell(boardSize));
 			}
 		}
-		c = 0;
 		generator = new Generator();
+		addingCellState = false;
 	}
 	
 	/**
@@ -60,21 +64,17 @@ public class SudokuBoard implements Board {
 		}
 		else
 		{
-			System.out.println("Removing cell value " + c++);
+			addingCellState = true;
+			this.addCellState(row, col);
 			getCell(row, col).removeInputValue();
 			for (int i = 1; i <= boardSize; i++)
 			{
-				System.out.println("Setting draft visibility of " + i + " to false");
 				setCellDraftVisibility(row, col, i, false);
 			}
-			this.addGameState();
-		}
-		for (int i = 1; i <= boardSize; i++)
-		{
-			System.out.println("Draft visibility of " + i + " is " + this.isVisibleCellDraft(row, col, i));
+			
 		}
 	}
-	private int c;
+	
 	/**
 	 * Get the value that is currently held within a particular cell
 	 * @param row Row cell is in
@@ -107,12 +107,14 @@ public class SudokuBoard implements Board {
 		}
 		else
 		{
+			addingCellState = true;
+			System.out.println("Adding Cell State");
+			this.addCellState(row, col);
 			getCell(row, col).setInputValue(number);
 			for (int i = 1; i <= boardSize; i++)
 			{
 				setCellDraftVisibility(row, col, i, false);
 			}
-			this.addGameState();
 		}
 	}
 	
@@ -215,12 +217,13 @@ public class SudokuBoard implements Board {
 	 */
 	public void setCellDraftVisibility(int row, int col, int number, boolean isSet)
 	{
+		addingCellState = true;
 		getCell(row, col).setDraft(number, isSet);
 		if (isSet)
 		{
 			removeCellValue(row, col);
 		}
-		this.addGameState();
+		
 	}
 			
 	/**
@@ -424,44 +427,33 @@ public class SudokuBoard implements Board {
 	public int getDifficulty()
 	{
 		return this.difficulty;
-	}
-	
-	
+	}	
 	
 	public void undoLast()
 	{
-		int indexOfLast = this.gameStates.size() - 1;
-		this.cloneIntoBoard(this.gameStates.remove(indexOfLast));
+		System.out.println("Trying to undo");
+		if (undoCellPoints.size() > 0 && undoCellStates.size() > 0)
+		{
+			System.out.println("Enough items in linked lists");
+			System.out.println(undoCellStates);
+			System.out.println(undoCellPoints);
+			
+			Point p = undoCellPoints.pop();
+			Cell  c = undoCellStates.pop();
+			printBoard();
+			getCell(p.getX(), p.getY()).cloneBack(c);
+			printBoard();
+		}
 	}
 	
-	private void addGameState() {
-		SudokuBoard currentGameState = new SudokuBoard(this.boardSize);
-		currentGameState.cloneIntoBoard(this);
-		this.gameStates.add(currentGameState);
-		System.out.println("Adding State");
-	}
-	
-	@Override 
-	public Object clone() {
-		SudokuBoard copy = new SudokuBoard(this.boardSize);
-		for(int row = 1; row <= this.boardSize; row++) {
-			for(int col = 1; col <= this.boardSize; col++) {
-				copy.board.get(row-1).remove(0);
-				copy.board.get(row-1).add(this.board.get(row-1).get(col-1));
-			}
+	private void addCellState(int row, int col) {
+		if (addingCellState)
+		{
+			Cell c = getCell(row, col).cloneCell();
+			undoCellStates.addFirst(c);
+			undoCellPoints.addFirst(new Point(row, col));
+			addingCellState = false;
 		}
-		copy.difficulty = this.difficulty;
-		copy.gameStates = null;
-		return copy;
-	}
-	private void cloneIntoBoard(SudokuBoard boardToCloneFrom) {
-		for(int row = 1; row <= this.boardSize; row++) {
-			for(int col = 1; col <= this.boardSize; col++) {
-				this.board.get(row-1).remove(0);
-				this.board.get(row-1).add(boardToCloneFrom.board.get(row-1).get(col-1));
-			}
-		}
-		this.difficulty = boardToCloneFrom.difficulty;
 	}
 
 	private int squareSectionId(int row, int col)
@@ -507,9 +499,14 @@ public class SudokuBoard implements Board {
 	 * @param col
 	 * @return
 	 */
-	private SudokuBoardCell getCell(int row, int col)
+	private Cell getCell(int row, int col)
 	{
 		return board.get(row - 1).get(col - 1);
+	}	
+	
+	private Cell getCell(double row, double col)
+	{
+		return board.get((int)row - 1).get((int)col - 1);
 	}	
 	
 	public boolean isCorrectInputForCell(int row, int col, int value)
@@ -543,20 +540,23 @@ public class SudokuBoard implements Board {
 			for (int j = 1; j <= boardSize; j++)
 			{
 				System.out.print(getCellValue(i, j) + " ");
+				if (j%3==0) System.out.print("| ");
 			}
+			if (i%3==0) System.out.println("\n---------------------------");
+			else System.out.println();
 		}
-		System.out.println();
 	}
 	
 	private Generator generator;
-	private ArrayList<SudokuBoard> gameStates;
-	private ArrayList<ArrayList<SudokuBoardCell>> board;
+	private LinkedList<Cell> undoCellStates;
+	private LinkedList<Point> undoCellPoints;
+	private ArrayList<ArrayList<Cell>> board;
 	private int boardSize;
 	private int difficulty;
 	public boolean currentlyGenerating;
 	private static final int DIFFICULTY_EASY = 0;
 	private static final int DIFFICULTY_MEDIUM = 1;
 	private static final int DIFFICULTY_HARD = 2;
-	
+	private boolean addingCellState;
 	
 }

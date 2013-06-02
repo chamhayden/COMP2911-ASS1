@@ -17,6 +17,10 @@ public interface Cell {
 	 */
 	public int getInputValue();
 	
+	public void cloneBack(Cell c);
+	
+	public Cell cloneCell();
+	
 	/**
 	 * Set what the final value of the cell should be
 	 * @param number What the final value of the cell should be
