@@ -218,18 +218,22 @@ public class SudokuFrame extends JFrame
 						}
 					}else{
 						b.setText(BLANK);
-						if(board.hasDrafts(i,j)){
-							for(int draft = 1; draft <= 9; draft++){
-								System.out.println("hello");
-								System.out.println((board.isVisibleCellDraft(rowVal(b), colVal(b), draft)));
-								if(board.isVisibleCellDraft(rowVal(b), colVal(b), draft)){
-									//toggleDraftValues(Integer.toString(draft), b);
-									System.out.println("hello");
-									
-									b.getComponent(draft-1).setVisible(true);
-								}
+						//if(board.hasDrafts(i,j)){
+							int count = 1;
+							for(Component label: b.getComponents()){
+								if(board.isVisibleCellDraft(i, j, count++))
+									label.setVisible(true);
+								else label.setVisible(false);
 							}
-						}
+							
+							
+							
+							/*for(int draft = 1; draft <= 9; draft++){
+								if(board.isVisibleCellDraft(i, j, draft)){
+									b.getComponent(draft-1).setVisible(true);
+								}else b.getComponent(draft-1).setVisible(false);
+							}*/
+					//	}
 						
 					}
 				}
@@ -268,7 +272,7 @@ public class SudokuFrame extends JFrame
 	 */
 	
 	private void toggleDraftValues(String value, JButton b){
-		//Component label = b.getComponent(Integer.parseInt(value)-1);
+		Component label = b.getComponent(Integer.parseInt(value)-1);
 		if(board.isVisibleCellDraft(rowVal(b), colVal(b), Integer.parseInt(value))){
 			//label.setVisible(false);
 			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), false);
