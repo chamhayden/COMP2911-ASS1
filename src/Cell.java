@@ -111,4 +111,6 @@ public interface Cell {
 	 */
 	public boolean isCorrect();
 	
+	public int getBoardSize();
+	
 }

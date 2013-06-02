@@ -43,7 +43,7 @@ public class SudokuBoardCell implements Cell {
 		newCell.setCurrentlyVisible(this.isCurrentlyVisible());
 		for (int i = 1; i <= boardSize; i++)
 		{ 
-			System.out.println("Draft! " + i + ", " + this.issetDraft(i));
+			//System.out.println("Draft! " + i + ", " + this.issetDraft(i));
 			newCell.setDraft(i, this.issetDraft(i));
 		}
 		return newCell;
@@ -247,6 +247,11 @@ public class SudokuBoardCell implements Cell {
 		copy.valueFinal = this.valueFinal;
 		copy.valueInput = this.valueInput;
 		return copy;
+	}
+	
+	public int getBoardSize()
+	{
+		return this.boardSize;
 	}
 	
 	private int boardSize;

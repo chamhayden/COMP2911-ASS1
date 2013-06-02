@@ -108,13 +108,17 @@ public class SudokuBoard implements Board {
 		}
 		else
 		{
-			addingCellState = true;
-			System.out.println("Adding Cell State");
-			this.addCellState(row, col);
-			getCell(row, col).setInputValue(number);
-			for (int i = 1; i <= boardSize; i++)
+			System.out.println("Checking: " + getCell(row, col).getInputValue() + " | " + number);
+			if (getCell(row, col).getInputValue() != number)
 			{
-				setCellDraftVisibility(row, col, i, false);
+				addingCellState = true;
+				System.out.println("Adding Cell State");
+				this.addCellState(row, col);
+				getCell(row, col).setInputValue(number);
+				for (int i = 1; i <= boardSize; i++)
+				{
+					getCell(row, col).setDraft(i, false);
+				}
 			}
 		}
 	}
@@ -218,6 +222,7 @@ public class SudokuBoard implements Board {
 	 */
 	public void setCellDraftVisibility(int row, int col, int number, boolean isSet)
 	{
+		System.out.println("METHOD: setCellDraftVisibility();");
 		addingCellState = true;
 		addCellState(row, col);
 		getCell(row, col).setDraft(number, isSet);
