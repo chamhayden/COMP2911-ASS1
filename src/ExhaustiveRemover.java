@@ -36,6 +36,7 @@ public class ExhaustiveRemover implements Removalist {
 			numRemoved++;
 			return true;
 		} else {
+			System.out.println("no");
 			b.setIfInitiallySet(row+1, col+1, true);
 			return false;
 		}
