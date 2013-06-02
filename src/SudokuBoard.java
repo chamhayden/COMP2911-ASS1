@@ -4,16 +4,20 @@ import java.util.LinkedList;
 
 /**
 * Class that allows creation, modification and access to
-*  a Sudoku board
-* @author Hayden Smith, Laura Hodges, Jerome Bird, Steven Falconieri
+*  a Sudoku board. A board's items have a "correct" value, and user's
+*  are able to enter both "input" values and "draft" input values.
+*  This also provides extra functionality in terms of whether particular
+*  cells or the entire board are correctly filled
+*  
+* @author Hayden Smith, Laura Hodges, Jerome Robins, Steven Falconieri
 * @version 2.2
 * */
 public class SudokuBoard implements Board {
 
 	/**
-	 * 
-	 * @param size
-	 * @param difficulty
+	 * Construct a Sudoku Board
+	 * @param size Width and height of the board
+	 * @param difficulty Arbitrary difficulty of board solving
 	 */
 	public SudokuBoard(int size)
 	{	
@@ -33,8 +37,7 @@ public class SudokuBoard implements Board {
 				row.add(c);
 			}
 		}
-		generator = new Generator();
-		addingCellState = false;
+		sudokuGenerator = new Generator();
 	}
 	
 	/**
@@ -48,7 +51,7 @@ public class SudokuBoard implements Board {
 		this.difficulty = difficulty;
 		
 		this.currentlyGenerating = true;
-		generator.generateBoard(this);
+		sudokuGenerator.generateBoard(this);
 		this.currentlyGenerating = false;
 	}
 	
@@ -65,7 +68,6 @@ public class SudokuBoard implements Board {
 		}
 		else
 		{
-			addingCellState = true;
 			this.addCellState(row, col);
 			getCell(row, col).removeInputValue();
 			for (int i = 1; i <= boardSize; i++)
@@ -108,11 +110,8 @@ public class SudokuBoard implements Board {
 		}
 		else
 		{
-			System.out.println("Checking: " + getCell(row, col).getInputValue() + " | " + number);
 			if (getCell(row, col).getInputValue() != number)
 			{
-				addingCellState = true;
-				System.out.println("Adding Cell State");
 				this.addCellState(row, col);
 				getCell(row, col).setInputValue(number);
 				for (int i = 1; i <= boardSize; i++)
@@ -135,18 +134,6 @@ public class SudokuBoard implements Board {
 	
 	{
 		return getCell(row, col).getInputValue()!=-1;
-	}
-	
-	public boolean hasDrafts(int row, int col)
-	{
-		for (int i = 1; i <= boardSize; i++)
-		{
-			if (isVisibleCellDraft(row, col, i))
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	/**
@@ -222,8 +209,6 @@ public class SudokuBoard implements Board {
 	 */
 	public void setCellDraftVisibility(int row, int col, int number, boolean isSet)
 	{
-		System.out.println("METHOD: setCellDraftVisibility();");
-		addingCellState = true;
 		addCellState(row, col);
 		getCell(row, col).setDraft(number, isSet);
 		if (isSet)
@@ -436,33 +421,79 @@ public class SudokuBoard implements Board {
 		return this.difficulty;
 	}	
 	
+	/** 
+	 * Revert the last change to the board that the user
+	 *  made
+	 */
 	public void undoLast()
 	{
-		System.out.println("Trying to undo");
 		if (undoCellPoints.size() > 0 && undoCellStates.size() > 0)
 		{
-			System.out.println("Enough items in linked lists");
-			System.out.println(undoCellStates);
-			System.out.println(undoCellPoints);
-			
 			Point p = undoCellPoints.pop();
 			Cell  c = undoCellStates.pop();
-			printBoard();
 			getCell(p.getX(), p.getY()).cloneBack(c);
-			printBoard();
-		}
-	}
-	
-	private void addCellState(int row, int col) {
-		if (addingCellState)
-		{
-			Cell c = getCell(row, col).cloneCell();
-			undoCellStates.addFirst(c);
-			undoCellPoints.addFirst(new Point(row, col));
-			addingCellState = false;
 		}
 	}
 
+	/**
+	 * For a given value check if it matches the correct value
+	 *  of a cell
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 * @param value Value to check if matches the correct
+	 *  input of a cell
+	 * @return Whether a given value matches the correct value of a cell
+	 */
+	public boolean isCorrectInputForCell(int row, int col, int value)
+	{
+		if (value == getCell(row, col).getCorrectValue())
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if all inputs that are capable of being filled on the board
+	 *  have in-fact been filled
+	 * @return Return whether all inputs that are capable of being filled 
+	 *  on the board have in-fact been filled
+	 */
+	public boolean isFilledBoard()
+	{
+		for (int i = 1; i <= boardSize; i++)
+		{
+			for (int j = 1; j <= boardSize; j++)
+			{
+					if (!isInitiallySet(i,j) && isEmptyCell(i, j))
+					{
+						return false;
+					}
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Determine the "squareSectionID" (i.e. arbitrary number reflecting
+	 *  which segment a cell lies in) of a particular cell
+	 * 
+	 * 1 1 1 | 2 2 2 | 3 3 3
+	 * 1 1 1 | 2 2 2 | 3 3 3
+	 * 1 1 1 | 2 2 2 | 3 3 3
+	 * ---------------------
+	 * 4 4 4 | 5 5 5 | 6 6 6
+	 * 4 4 4 | 5 5 5 | 6 6 6
+	 * 4 4 4 | 5 5 5 | 6 6 6
+	 * ---------------------
+	 * 7 7 7 | 8 8 8 | 9 9 9
+	 * 7 7 7 | 8 8 8 | 9 9 9
+	 * 7 7 7 | 8 8 8 | 9 9 9
+	 * 
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 * @return The arbitrary square section ID that a cell lies in
+	 */
 	private int squareSectionId(int row, int col)
 	{
 		int sectionId = 0;
@@ -489,11 +520,24 @@ public class SudokuBoard implements Board {
 		}
 		return sectionId;
 	}
+
+	/**
+	 * Take a copy of a cell of a particular row/column and add
+	 *  it to the stack of "changed cells" for use in the undo method
+	 *  at a later point
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 */
+	private void addCellState(int row, int col) {
+		Cell c = getCell(row, col).cloneCell();
+		undoCellStates.addFirst(c);
+		undoCellPoints.addFirst(new Point(row, col));
+	}
 	
 	/**
-	 * TODO: Fill
-	 * @param row
-	 * @param col
+	 * Clear all values in a cell for a given row and column
+	 * @param row Row cell is in
+	 * @param col Column cell is in
 	 */
 	private void clearCell(int row, int col)
 	{
@@ -501,69 +545,37 @@ public class SudokuBoard implements Board {
 	}
 	
 	/**
-	 * TODO: Fill
-	 * @param row
-	 * @param col
-	 * @return
+	 * Return a Cell object when given a particular row and column
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 * @return Cell object for particular row/column
 	 */
 	private Cell getCell(int row, int col)
 	{
 		return board.get(row - 1).get(col - 1);
 	}	
 	
+	/**
+	 * Return a Cell object when given a particular row and column
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 * @return Cell object for particular row/column
+	 */
 	private Cell getCell(double row, double col)
 	{
 		return board.get((int)row - 1).get((int)col - 1);
 	}	
 	
-	public boolean isCorrectInputForCell(int row, int col, int value)
-	{
-		if (value == getCell(row, col).getCorrectValue())
-		{
-			return true;
-		}
-		return false;
-	}
-
-	public boolean isFilledBoard()
-	{
-		for (int i = 1; i <= boardSize; i++)
-		{
-			for (int j = 1; j <= boardSize; j++)
-			{
-					if (!isInitiallySet(i,j) && isEmptyCell(i, j))
-					{
-						return false;
-					}
-			}
-		}
-		return true;
-	}
-	
-	public void printBoard()
-	{
-		for (int i = 1; i <= boardSize; i++)
-		{
-			for (int j = 1; j <= boardSize; j++)
-			{
-				System.out.print(getCellValue(i, j) + " ");
-				if (j%3==0) System.out.print("| ");
-			}
-			if (i%3==0) System.out.println("\n---------------------------");
-			else System.out.println();
-		}
-	}
-	
-	private Generator generator;
+	private Generator sudokuGenerator;
 	private LinkedList<Cell> undoCellStates;
 	private LinkedList<Point> undoCellPoints;
 	private ArrayList<ArrayList<Cell>> board;
 	private int boardSize;
 	private int difficulty;
 	public boolean currentlyGenerating;
+	
 	private static final int DIFFICULTY_EASY = 0;
 	private static final int DIFFICULTY_MEDIUM = 1;
 	private static final int DIFFICULTY_HARD = 2;
-	private boolean addingCellState;
 	
 }

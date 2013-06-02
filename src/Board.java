@@ -1,7 +1,9 @@
 /**
 * Class that allows creation, modification and access to
-*  a board
-* @author Hayden Smith, Laura Hodes, Jerome Bird, Steven Falconieri
+*  a board. A board's items have a "correct" value, and user's
+*  are able to enter both "input" values and "draft" input values.
+*  
+* @author Hayden Smith, Laura Hodges, Jerome Robins, Steven Falconieri
 * 
 */
 public interface Board
@@ -41,9 +43,7 @@ public interface Board
 	 *  of the board
 	 */
 	public boolean hasInput(int row, int col);
-	
-	public boolean hasDrafts(int row, int col);
-	
+		
 	/**
 	 * Set the visiblity of a cell on the board
 	 * @param row Row cell is in
@@ -176,10 +176,29 @@ public interface Board
 	 */
 	public boolean isEmptyCell(int row, int col);
 	
+	/** 
+	 * Revert the last change to the board that the user
+	 *  made
+	 */
 	public void undoLast();
 	
+	/**
+	 * For a given value check if it matches the correct value
+	 *  of a cell
+	 * @param row Row cell is in
+	 * @param col Column cell is in
+	 * @param value Value to check if matches the correct
+	 *  input of a cell
+	 * @return Whether a given value matches the correct value of a cell
+	 */
 	public boolean isCorrectInputForCell(int row, int col, int value);
 	
+	/**
+	 * Check if all inputs that are capable of being filled on the board
+	 *  have in-fact been filled
+	 * @return Return whether all inputs that are capable of being filled 
+	 *  on the board have in-fact been filled
+	 */
 	public boolean isFilledBoard();
 	
 }

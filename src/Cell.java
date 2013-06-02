@@ -1,7 +1,8 @@
 /**
  * Class to store and access values associated with an individual
- *  cell in the grid
- * @author Hayden Smith, Laura Hodges, Jerome Bird, Steven Falconieri
+ *  cell, containing information such as a cell's correct value,
+ *  input value and draft value.
+ * @author Hayden Smith, Laura Hodges, Jerome Robins, Steven Falconieri
  */
 public interface Cell {
 
@@ -17,8 +18,18 @@ public interface Cell {
 	 */
 	public int getInputValue();
 	
+	/**
+	 * Copy the contents of a given cell into "this" cell
+	 * @param c Contents of given cell that is desired to be copied 
+	 *  from
+	 */
 	public void cloneBack(Cell c);
 	
+	/**
+	 * Clone a cell
+	 * @return Cell object that contains identical data
+	 *  to that of "this" cell
+	 */
 	public Cell cloneCell();
 	
 	/**
@@ -111,6 +122,10 @@ public interface Cell {
 	 */
 	public boolean isCorrect();
 	
+	/**
+	 * Return the size of the board the cell is contained within
+	 * @return Size of the board the cell is contained within
+	 */
 	public int getBoardSize();
 	
 }

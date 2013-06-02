@@ -22,6 +22,11 @@ public class SudokuBoardCell implements Cell {
 		}
 	}
 	
+	/**
+	 * Copy the contents of a given cell into "this" cell
+	 * @param c Contents of given cell that is desired to be copied 
+	 *  from
+	 */
 	public void cloneBack(Cell c)
 	{
 		this.setCorrectValue(c.getCorrectValue());
@@ -34,6 +39,11 @@ public class SudokuBoardCell implements Cell {
 		}
 	}
 	
+	/**
+	 * Clone a cell
+	 * @return Cell object that contains identical data
+	 *  to that of "this" cell
+	 */
 	public Cell cloneCell()
 	{
 		Cell newCell = new SudokuBoardCell(boardSize);
@@ -43,7 +53,6 @@ public class SudokuBoardCell implements Cell {
 		newCell.setCurrentlyVisible(this.isCurrentlyVisible());
 		for (int i = 1; i <= boardSize; i++)
 		{ 
-			//System.out.println("Draft! " + i + ", " + this.issetDraft(i));
 			newCell.setDraft(i, this.issetDraft(i));
 		}
 		return newCell;
@@ -226,29 +235,10 @@ public class SudokuBoardCell implements Cell {
 		return false;
 	}
 	
-	public String toString()
-	{
-		String bs = new String("(");
-		for (int i = 0; i < boardSize; i++)
-		{
-			if (tempNumbers[i])
-			{
-				bs = bs + (i+1) + ","; 
-			}
-		}
-		bs = bs + ")";
-		return new String("(Final: "+valueFinal+", Input: "+valueInput+", Drafts["+bs+"])\n");
-	}
-	public Object clone() {
-		SudokuBoardCell copy = new SudokuBoardCell(this.boardSize);
-		copy.isCurrentlyVisible = this.isCurrentlyVisible;
-		copy.isInitiallyVisible = this.isInitiallyVisible;
-		copy.tempNumbers = this.tempNumbers;
-		copy.valueFinal = this.valueFinal;
-		copy.valueInput = this.valueInput;
-		return copy;
-	}
-	
+	/**
+	 * Return the size of the board the cell is contained within
+	 * @return Size of the board the cell is contained within
+	 */
 	public int getBoardSize()
 	{
 		return this.boardSize;
