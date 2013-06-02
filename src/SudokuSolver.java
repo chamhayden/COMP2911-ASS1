@@ -1,20 +1,25 @@
 /**
- * @author Steven Falconieri <br/>
  * <h3> Class Description</h3>
  * Checks if a Sudoku has a unique solution by attempting to solve the puzzle with logical techniques,
  * which will only solve the puzzle if a unique solution exits.This is specifically why backtracking 
  * was not used since it would require comparison of all solutions in order to ensure that only one 
- * solution existed. 
+ * solution existed.
+ *  
+ * @author Hayden Smith, Laura Hodges, Jerome Robins, Steven Falconieri
+ *
  */
-public class SudokuSolver implements UniqueChecker {
-	public SudokuSolver() {
-		
-	}
+public class SudokuSolver implements UniqueChecker<Board> {
+	
 	@Override
-	// Since implementation only uses logical solving techniques, the puzzle
-	// can only be solved if there is a unique solution. This is specifically 
-	// why backtracking was not used.
-	public boolean isSudokuSolutionUnique(Board boardToSolve) {
+	/**
+	 * Since implementation only uses logical solving techniques, the puzzle
+	 * 	can only be solved if there is a unique solution. This is specifically
+	 * 	why backtracking was not used
+	 * @param boardToSolve Board that needs to be solved
+	 * @return Whether the board has a unique solution
+	 */
+
+	public boolean isUniqueSolution(Board boardToSolve) {
 		int board[][] = new int[BOARD_SIZE][BOARD_SIZE];
 		for(int row = 1; row <= BOARD_SIZE; row++) {
 			for(int col = 1; col <= BOARD_SIZE; col++) {
