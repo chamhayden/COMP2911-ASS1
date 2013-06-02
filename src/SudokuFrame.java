@@ -1,8 +1,13 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -24,11 +29,7 @@ public class SudokuFrame extends JFrame
 {
 	public SudokuFrame(Board sudokuBoard)
 	{
-		 ImageIcon st = (ImageIcon) OptionPanes.createImageIcon("Images/puffer.gif", null);
-		    ImagePanel panel = new ImagePanel(st.getImage());
-		    panel.setOpaque(false);
-		    getContentPane().add(panel);
-		
+		 
 		this.board = sudokuBoard;
 		setTitle("SUDOKU FUN!");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -961,8 +962,3 @@ public class SudokuFrame extends JFrame
 	public static final int DEFAULT_WIDTH = 900;
 	public static final int DEFAULT_HEIGHT = 700;
 }
-
-
-
-
-

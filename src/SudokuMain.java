@@ -1,22 +1,20 @@
-/*
- * Interactive Sudoku Solver
- * You are probably familiar with the puzzle of Sudoku. Basically, the puzzle uses a 9×9 grid divided into 9 rows, 9 columns and 9 squares of size 3×3. Given a valid initial position, the problem is to fill in all the grid elements with a number from 1 to 9 such that each row, each column and each square contains all and only the numbers from 1 to 9, so that no number appears more than once in any row, column or square.
- */
+/**
+* Creates a Sudoku Game
+* Sudoku is a common game played on a 9x9 grid of squares consisting of 9
+* smaller 3x3 puzzles which the aim is to fill in all blank square in the grid
+* such that there is only one instance of each number from 1 to 9 in each smaller 3x3
+* square, each row and each column. 
+*  
+* @author Hayden Smith, Laura Hodges, Jerome Robins, Steven Falconieri
+* 
+*/ 
+ 
 public class SudokuMain {
 
 	public static void main (String[] args)
 	{
-		//System.out.println("Starting game");
+		// This although apparently redundant has been used to illustrate
+		// that multiple games can be constructed and played.
 		SudokuManager sudoku = new SudokuManager();
 	}
 }
-
-// Is it a good idea to NOT merge this with SudokuManager, in case people want multiple instances of Sudoku to run on a single process?
-
-/* Only 1 person per team
-give cs2911 ass3 ass3.zip
-o	All your .java source files
-o	The doc directory containing all the Javadoc
-o	A .pdf – team design documents (UML class / state / sequence)
-2911 classrun -check ass3
-*/
