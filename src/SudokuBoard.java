@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
 * Class that allows creation, modification and access to
@@ -18,17 +17,19 @@ public class SudokuBoard implements Board {
 	{	
 		this.gameStates = new ArrayList<SudokuBoard>();
 		this.boardSize = size;
-		board = new ArrayList<ArrayList<BoardCell>>();
+		board = new ArrayList<ArrayList<SudokuBoardCell>>();
 		
 		for (int i = 0; i < boardSize; i++)
 		{
-			board.add(new ArrayList<BoardCell>());
-			ArrayList<BoardCell> row = board.get(i);
+			board.add(new ArrayList<SudokuBoardCell>());
+			ArrayList<SudokuBoardCell> row = board.get(i);
 			for (int j = 0; j < boardSize; j++)
 			{ 
-				row.add(new BoardCell(boardSize));
+				row.add(new SudokuBoardCell(boardSize));
 			}
 		}
+		c = 0;
+		generator = new Generator();
 	}
 	
 	/**
@@ -39,28 +40,10 @@ public class SudokuBoard implements Board {
 	public void generate(int difficulty)
 	{
 		clear();
-		
-		this.currentlyGenerating = true;
 		this.difficulty = difficulty;
 		
-		/*
-		// Debugging
-		Random n = new Random();
-		for (int i = 1; i <= 9; i++)
-		{
-			for (int j = 1; j <= 9; j++)
-			{
-				setCellValue(i, j, n.nextInt(9) + 1);
-				int l = n.nextInt(2);
-				System.out.println(l);
-				if (l == 1) setIfInitiallySet(i, j, true);
-				if (l == 0) setIfInitiallySet(i, j, false);
-			}
-		}*/
-		Generator g = new Generator();
-		g.generateBoard(this);
-
-
+		this.currentlyGenerating = true;
+		generator.generateBoard(this);
 		this.currentlyGenerating = false;
 	}
 	
@@ -77,15 +60,21 @@ public class SudokuBoard implements Board {
 		}
 		else
 		{
+			System.out.println("Removing cell value " + c++);
 			getCell(row, col).removeInputValue();
 			for (int i = 1; i <= boardSize; i++)
 			{
+				System.out.println("Setting draft visibility of " + i + " to false");
 				setCellDraftVisibility(row, col, i, false);
 			}
 			this.addGameState();
 		}
+		for (int i = 1; i <= boardSize; i++)
+		{
+			System.out.println("Draft visibility of " + i + " is " + this.isVisibleCellDraft(row, col, i));
+		}
 	}
-	
+	private int c;
 	/**
 	 * Get the value that is currently held within a particular cell
 	 * @param row Row cell is in
@@ -138,7 +127,6 @@ public class SudokuBoard implements Board {
 	public boolean hasInput(int row, int col)
 	
 	{
-		//return getCell(row, col).isCurrentlyVisible();
 		return getCell(row, col).getInputValue()!=-1;
 	}
 	
@@ -438,6 +426,8 @@ public class SudokuBoard implements Board {
 		return this.difficulty;
 	}
 	
+	
+	
 	public void undoLast()
 	{
 		int indexOfLast = this.gameStates.size() - 1;
@@ -517,7 +507,7 @@ public class SudokuBoard implements Board {
 	 * @param col
 	 * @return
 	 */
-	private BoardCell getCell(int row, int col)
+	private SudokuBoardCell getCell(int row, int col)
 	{
 		return board.get(row - 1).get(col - 1);
 	}	
@@ -558,8 +548,9 @@ public class SudokuBoard implements Board {
 		System.out.println();
 	}
 	
+	private Generator generator;
 	private ArrayList<SudokuBoard> gameStates;
-	private ArrayList<ArrayList<BoardCell>> board;
+	private ArrayList<ArrayList<SudokuBoardCell>> board;
 	private int boardSize;
 	private int difficulty;
 	public boolean currentlyGenerating;

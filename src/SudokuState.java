@@ -265,20 +265,8 @@ public class SudokuState {
 									debug("pairOrTriple in section row " + row);
 									debug("pair Or Triple in Section = " + pairOrTripleInSection + " in sectionRow = " + pairOrTripleInSectionRow + " in sectionCol = " + pairOrTripleInSectionCol);
 									debug("Num is " + num + " vals in section " + sectionPossibleVals + " vals in section row " + sectionRowPossibleVals + " vals in section col " + sectionColPossibleVals);
-									for(int currentCol = 0; currentCol < this.BOARD_SIZE; currentCol++) {
-										// Check if currentCol is not contained within this section of the board.
-										if(this.getSection(row, currentCol) != section && this.possibleVals(row, currentCol).contains(num)) {
-											// Remove occurrences of this number from all columns in this row that are not in the same section.
-											this.removeTempVal(num, row, currentCol);
-											if(!this.valid()) {
-												this.updateTempVals();
-											} else {
-												cellsFilled = true;
-												debug("Removed possibility of " + num + " from (" + currentCol + ", " + row + ") From Section " + this.getSection(row, currentCol) + " due to section " + section);
-												this.updateBoardVals();
-											}
-										}
-									}
+									cellsFilled = tits(cellsFilled, row,
+											section, num);
 								}
 								if(numOccurrencesInSectionCol == numOccurrencesInSection) {
 									debug("pairOrTriple in section col " + col);
@@ -357,6 +345,24 @@ public class SudokuState {
 			}
 			
 			this.solveMediumSteps();
+			return cellsFilled;
+		}
+
+		private boolean tits(boolean cellsFilled, int row, int section, int num) {
+			for(int currentCol = 0; currentCol < this.BOARD_SIZE; currentCol++) {
+				// Check if currentCol is not contained within this section of the board.
+				if(this.getSection(row, currentCol) != section && this.possibleVals(row, currentCol).contains(num)) {
+					// Remove occurrences of this number from all columns in this row that are not in the same section.
+					this.removeTempVal(num, row, currentCol);
+					if(!this.valid()) {
+						this.updateTempVals();
+					} else {
+						cellsFilled = true;
+						debug("Removed possibility of " + num + " from (" + currentCol + ", " + row + ") From Section " + this.getSection(row, currentCol) + " due to section " + section);
+						this.updateBoardVals();
+					}
+				}
+			}
 			return cellsFilled;
 		}
 
