@@ -75,6 +75,12 @@ public class SudokuFrame extends JFrame
 		
 	}
 	
+	/************************************************
+	 * GUI Set up methods
+	 * 
+	 ************************************************/
+	
+	
 	/**
 	 * Prepares a game layout according to difficulty
 	 */
@@ -163,38 +169,6 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
-	
-	/**
-	 * Scans the board's current state and updates all values
-	 */
-	
-	private void labelGrid(){
-		JButton b;
-		for(int i = 1; i<=9; i++){
-			for(int j = 1; j<=9; j++){
-				b = buttonRow.get(findIndex(i,j));
-				if(!board.isInitiallySet(i, j)){
-					if (board.hasInput(i,j)){
-						b.setText(Integer.toString(board.getCellValue(i,j)));
-						for(Component label: b.getComponents()){
-							label.setVisible(false);
-						}
-					}else{
-						b.setText(BLANK);
-						if(board.hasDrafts(i,j)){
-							for(int draft = 1; draft <= 9; draft++){
-								if(board.isVisibleCellDraft(i, j, draft)){
-									toggleDraftValues(Integer.toString(draft), b);
-								}
-							}
-						}
-						
-					}
-				}
-			}
-		}
-	}
-	
 	/**
 	 * Creates a new JButton used in the Sudoku 'play' area
 	 * @param name is the button text
@@ -226,6 +200,43 @@ public class SudokuFrame extends JFrame
 		}
 		return button;
 	}
+	
+	/**
+	 * Scans the board's current state and updates all values
+	 */
+	
+	private void labelGrid(){
+		JButton b;
+		for(int i = 1; i<=9; i++){
+			for(int j = 1; j<=9; j++){
+				b = buttonRow.get(findIndex(i,j));
+				if(!board.isInitiallySet(i, j)){
+					if (board.hasInput(i,j)){
+						b.setText(Integer.toString(board.getCellValue(i,j)));
+						for(Component label: b.getComponents()){
+							label.setVisible(false);
+						}
+					}else{
+						b.setText(BLANK);
+						if(board.hasDrafts(i,j)){
+							for(int draft = 1; draft <= 9; draft++){
+								System.out.println("hello");
+								System.out.println((board.isVisibleCellDraft(rowVal(b), colVal(b), draft)));
+								if(board.isVisibleCellDraft(rowVal(b), colVal(b), draft)){
+									//toggleDraftValues(Integer.toString(draft), b);
+									System.out.println("hello");
+									
+									b.getComponent(draft-1).setVisible(true);
+								}
+							}
+						}
+						
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Creates a new command or feature button
 	 * @param name
@@ -244,6 +255,129 @@ public class SudokuFrame extends JFrame
 				button.setFont(BIGFONT);
 		return button;
 	}
+	
+	/************************************************
+	 * Gaming experience methods
+	 * 
+	 ************************************************/
+	
+	/**
+	 * Toggles a particular draft value
+	 * @param value is the value to be toggled
+	 * @param b is the button concerned in this action 
+	 */
+	
+	private void toggleDraftValues(String value, JButton b){
+		//Component label = b.getComponent(Integer.parseInt(value)-1);
+		if(board.isVisibleCellDraft(rowVal(b), colVal(b), Integer.parseInt(value))){
+			//label.setVisible(false);
+			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), false);
+		} else{
+			//label.setVisible(true);
+			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), true);
+			
+		}
+	}
+	
+	/**
+	 * Checks whether a button is toggled
+	 * @param button
+	 * @param defaultColour
+	 * @return boolean
+	 */
+	
+	private boolean isButtonToggled(JButton button, Color defaultColour){
+		if(!button.getBackground().equals(defaultColour))
+			return true;
+		else return false;
+	}
+	
+	/**
+	 * Toggles a button 
+	 * @param button
+	 * @param colour
+	 * @param defaultColour
+	 */
+	
+	private void toggleButton(JButton button, Color colour, Color defaultColour){
+		if(!button.getBackground().equals(colour)){
+			resetCommandsToggle();
+			button.setBackground(colour);
+		}
+		else button.setBackground(defaultColour);
+	}
+	
+	/**
+	 * Untoggles all commands
+	 */
+	
+	private void resetCommandsToggle(){
+		for(Component commands: commandPanel.getComponents()){
+			commands.setBackground(DEFAULT_COMMAND);
+		}
+		for(Component commands: scorePanel.getComponents()){
+			if(!buttonInputs.contains(commands))
+				commands.setBackground(DEFAULT_COMMAND);
+		}
+		
+	}
+	
+	/**
+	 * Checks if board is filled and correct and initiates end game options
+	 * 
+	 */
+	private void checkEndGame(){
+		if(board.isFilledBoard() && board.isCorrectBoard()){
+			if(pane.winGame()){
+				board.clear();
+				board.generate(pane.chooseLevelInGame());
+				prepareSolutionButtonForDifficulty();
+				setUpGrid();
+			} else pane.exitWinGame();
+		}
+	}
+	
+	/**
+	 * Enables and disables certain command buttons 
+	 * @param enable
+	 */
+	private void enableCommands(boolean enable){
+		for(Component commands: commandPanel.getComponents()){
+			if(!enable && !commands.equals(newGameButton))
+				commands.setEnabled(false);
+			else commands.setEnabled(true);
+		}
+		
+		
+	}
+	
+	
+	/**
+	 * Checks whether or not a square is filled correctly and makes it flash appropriately
+	 * @param b is button to be checked
+	 * @param seconds time delay for blink
+	 * @return whether input is correct or not
+	 */
+	
+	private boolean checkSquare(JButton b, int seconds)	{
+		boolean correct;
+		if(board.isDifficultyEasy())
+			correct = board.isCorrectInputForCell(rowVal(b), colVal(b), Integer.decode(getCurrentValue()));
+		else correct = board.isCorrectCell(rowVal(b), colVal(b));
+		
+		if(correct)		
+			b.setBackground(CORRECT);
+		else
+			b.setBackground(WRONG);
+		blinkOut(b,DEFAULT_GRID, seconds);
+		return correct;
+	}
+	
+	
+	/************************************************
+	 * ActionListeners private classes
+	 * 
+	 ************************************************/
 	
 	/**
 	 * ActionListener attached to Sudoku 'play' area buttons
@@ -285,22 +419,6 @@ public class SudokuFrame extends JFrame
 		private JButton b;
 	}
 	
-	/**
-	 * Toggles a particular draft value
-	 * @param value is the value to be toggled
-	 * @param b is the button concerned in this action 
-	 */
-	
-	private void toggleDraftValues(String value, JButton b){
-		Component label = b.getComponent(Integer.parseInt(value)-1);
-		if(label.isVisible()){
-			label.setVisible(false);
-			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), false);
-		} else{
-			label.setVisible(true);
-			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), true);
-		}
-	}
 	
 	/**
 	 * ActionListener attached to Sudoku eraseButton
@@ -317,37 +435,11 @@ public class SudokuFrame extends JFrame
 			}
 			toggleButton(eraseButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
 			resetCurrentValue();
-			highlightValue(BLANK);
+			highlightInputValue(BLANK);
+			highlightGridValue(BLANK);
 		}
 	}
 	
-	/**
-	 * Checks whether a button is toggled
-	 * @param button
-	 * @param defaultColour
-	 * @return boolean
-	 */
-	
-	public boolean isButtonToggled(JButton button, Color defaultColour){
-		if(!button.getBackground().equals(defaultColour))
-			return true;
-		else return false;
-	}
-	
-	/**
-	 * Toggles a button 
-	 * @param button
-	 * @param colour
-	 * @param defaultColour
-	 */
-	
-	public void toggleButton(JButton button, Color colour, Color defaultColour){
-		if(!button.getBackground().equals(colour)){
-			resetCommandsToggle();
-			button.setBackground(colour);
-		}
-		else button.setBackground(defaultColour);
-	}
 	
 	/**
 	 * ActionListener attached to Sudoku number inputs on scorePanel
@@ -359,10 +451,12 @@ public class SudokuFrame extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			if(event.getActionCommand().equalsIgnoreCase(currentValue)){
-				highlightValue(resetCurrentValue());
+				highlightInputValue(resetCurrentValue());
+				highlightGridValue(resetCurrentValue());
 			}else{
 				currentValue = event.getActionCommand();
-				highlightValue(currentValue);
+				highlightInputValue(currentValue);
+				highlightGridValue(currentValue);
 			}
 			if(isButtonToggled(eraseButton, DEFAULT_COMMAND))
 				toggleButton(eraseButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
@@ -416,20 +510,6 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
-	/**
-	 * Untoggles all commands
-	 */
-	
-	public void resetCommandsToggle(){
-		for(Component commands: commandPanel.getComponents()){
-			commands.setBackground(DEFAULT_COMMAND);
-		}
-		for(Component commands: scorePanel.getComponents()){
-			if(!buttonInputs.contains(commands))
-				commands.setBackground(DEFAULT_COMMAND);
-		}
-		
-	}
 	
 	/**
 	 * ActionListener attached to Sudoku solutionButton
@@ -441,7 +521,8 @@ public class SudokuFrame extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			resetCommandsToggle();
-			highlightValue(BLANK);
+			highlightInputValue(BLANK);
+			highlightGridValue(BLANK);
 			toggleButton(solutionButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
 			blinkOut(solutionButton, DEFAULT_COMMAND,2);
 			for(JButton b: buttonRow){
@@ -453,17 +534,6 @@ public class SudokuFrame extends JFrame
 				}
 			}
 			checkEndGame();
-		}
-	}
-	
-	private void checkEndGame(){
-		if(board.isFilledBoard() && board.isCorrectBoard()){
-			if(pane.winGame()){
-				board.clear();
-				board.generate(pane.chooseLevelInGame());
-				prepareSolutionButtonForDifficulty();
-				setUpGrid();
-			} else pane.exitWinGame();
 		}
 	}
 	
@@ -485,37 +555,6 @@ public class SudokuFrame extends JFrame
 		}
 	}
 
-	public void enableCommands(boolean enable){
-		for(Component commands: commandPanel.getComponents()){
-			if(!enable && !commands.equals(newGameButton))
-				commands.setEnabled(false);
-			else commands.setEnabled(true);
-		}
-		
-		
-	}
-	
-	/**
-	 * Checks whether or not a square is filled correctly and makes it flash appropriately
-	 * @param b is button to be checked
-	 * @param seconds time delay for blink
-	 * @return
-	 */
-	
-	public boolean checkSquare(JButton b, int seconds)	{
-		boolean correct;
-		if(board.isDifficultyEasy())
-			correct = board.isCorrectInputForCell(rowVal(b), colVal(b), Integer.decode(getCurrentValue()));
-		else correct = board.isCorrectCell(rowVal(b), colVal(b));
-		
-		if(correct)		
-			b.setBackground(CORRECT);
-		else
-			b.setBackground(WRONG);
-		blinkOut(b,DEFAULT_GRID, seconds);
-		return correct;
-	}
-	
 	/**
 	 * Sets up timer for blinkerFunction
 	 * @param button
@@ -549,7 +588,7 @@ public class SudokuFrame extends JFrame
 	 * Helper method for resetFunction - removes all input values
 	 */
 	
-	public void removeAll(){
+	private void removeAllUserValues(){
 		for(JButton b: buttonRow){
 			if (!board.isInitiallySet(rowVal(b),colVal(b))){
 				board.removeCellValue(rowVal(b), colVal(b));
@@ -582,7 +621,7 @@ public class SudokuFrame extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			if(pane.restartGame()){
-				removeAll();
+				removeAllUserValues();
 				labelGrid();
 			}
 		}
@@ -592,7 +631,7 @@ public class SudokuFrame extends JFrame
 	 * Reveals the grid and disables any further gameplay
 	 */
 	
-	public void revealAll(){
+	private void revealAll(){
 		for(int i = 1; i<=9; i++)
 		{
 			JButton finalButton;
@@ -611,7 +650,7 @@ public class SudokuFrame extends JFrame
 	 * @return currentValue
 	 */
 	
-	public String resetCurrentValue(){
+	private String resetCurrentValue(){
 		this.currentValue = BLANK;
 		return currentValue;
 	}
@@ -620,7 +659,7 @@ public class SudokuFrame extends JFrame
 	 * @return currentValue
 	 */
 	
-	public String getCurrentValue(){
+	private String getCurrentValue(){
 		return this.currentValue;
 	}
 	
@@ -629,11 +668,22 @@ public class SudokuFrame extends JFrame
 	 * @param current is the value to be highlighted - BLANK to be passed in to un-highlight
 	 */
 	
-	public void highlightValue(String current){
+	private void highlightInputValue(String current){
 		for(JButton jb: buttonInputs){
-			if(jb.getText().equalsIgnoreCase(current))
+			if(jb.getText().equalsIgnoreCase(current)){
 				jb.setBackground(INPUT_TOGGLED);
-			else jb.setBackground(DEFAULT_INPUT);
+			}
+			else {
+				jb.setBackground(DEFAULT_INPUT);
+			}
+		}
+	}
+	
+	private void highlightGridValue(String current){
+		for(JButton jb: buttonRow){
+			if(!jb.getText().equals(BLANK) && jb.getText().equals(current))
+				jb.setBackground(INPUT_TOGGLED);
+			else jb.setBackground(DEFAULT_GRID);
 		}
 	}
 	
