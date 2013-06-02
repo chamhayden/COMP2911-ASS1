@@ -1,9 +1,11 @@
 /**
- * Interface to evaluate whether a point can be removed based on conditions
- * @author laura
- *
- */
-public interface Removalist {
+* Interface to evaluate whether a point can be removed based on conditions
+*  
+* @author Hayden Smith, Laura Hodges, Jerome Robins, Steven Falconieri
+* 
+*/
+public interface Removalist
+{
 	/**
 	 * Determines whether value can be removed from the board based on a specific condition
 	 * @param p position to remove from
@@ -16,5 +18,6 @@ public interface Removalist {
 	 * @return whether the condition is met
 	 */
 	public boolean shouldTerminate();
+	
 	
 }

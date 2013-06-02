@@ -9,14 +9,14 @@ import java.util.Random;
 * @author Hayden Smith, Laura Hodges, Jerome Robins, Steven Falconieri
 * 
 */
-public class BoardFiller
+public class SudokuBoardFiller
 {
 	
 	/**
 	 * Construct a BoardFiller
 	 * @param b Board to fill
 	 */
-	public BoardFiller(Board b) 
+	public SudokuBoardFiller(Board b) 
 	{
 		this.board = b;
 	}

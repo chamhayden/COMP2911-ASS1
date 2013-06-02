@@ -15,12 +15,12 @@ public class SudokuGenerator
 	 */
 	public void generateBoard(Board board)
 	{
-		BoardFiller filler = new BoardFiller(board);
-		Removal r = new Removal(board);
+		SudokuBoardFiller filler = new SudokuBoardFiller(board);
+		SudokuCellRemover r = new SudokuCellRemover(board);
 		filler.fillBoard();
 
-		r.removeValues(new RemoverSimple(board));
-		r.removeValues(new RemoverHard(board));
-		r.removeValues(new RemoverExhaustive(board));
+		r.removeValues(new SudokuCellRemoverSimple(board));
+		r.removeValues(new SudokuCellRemoverHard(board));
+		r.removeValues(new SudokuCellRemoverExhaustive(board));
 	}
 }
