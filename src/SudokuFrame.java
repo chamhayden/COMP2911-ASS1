@@ -50,7 +50,7 @@ public class SudokuFrame extends JFrame
 		scorePanel.setVisible(true);
 		scorePanel.setBackground(DEFAULTBG);
 
-		newGameButton = makeCommandButton("NEW GAME", commandPanel, new newGameFunction(), "Allows you to switch difficulties.");
+		newGameButton = makeCommandButton("[N]EW GAME", commandPanel, new newGameFunction(), "Allows you to switch difficulties.");
 		resetGameButton = makeCommandButton("[R]estart game", commandPanel, new restartFunction(), "Give this puzzle another go!");
 		giveUpButton = makeCommandButton("[G]ive Up", commandPanel, new giveUpFunction(), "Reveals solution.");
 		solutionButton = makeCommandButton("[C]heck my solution!", commandPanel, new solutionFunction(), null);
@@ -69,9 +69,9 @@ public class SudokuFrame extends JFrame
 		fillerEast.setBackground(DEFAULTBG);
 		JPanel fillerWest = new JPanel();
 		fillerWest.setBackground(DEFAULTBG);
-		//JPanel panel = new ImagePanel(new FlowLayout(FlowLayout.CENTER,50,180));
+		JPanel panel = new ImagePanel(new FlowLayout(FlowLayout.CENTER,50,180));
 		//panel.add(buttonPanel,BorderLayout.CENTER);
-		//super.add(panel,BorderLayout.EAST);
+		super.add(panel,BorderLayout.EAST);
 		add(buttonPanel,BorderLayout.CENTER);
 		add(commandPanel,BorderLayout.NORTH);
 		add(scorePanel,BorderLayout.SOUTH);
