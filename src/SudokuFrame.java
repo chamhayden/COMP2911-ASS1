@@ -696,7 +696,7 @@ public class SudokuFrame extends JFrame
 	public Font USERINPUT = new Font ("Courrier", Font.CENTER_BASELINE, 25);
 	public Font DRAFTSMALL = new Font("Courrier",Font.CENTER_BASELINE ,15);
 	public Font FIXEDSQUARES = new Font("Arial", Font.BOLD, 20);
-	public Font BIGFONT = new Font("Courrier", Font.CENTER_BASELINE, 20);
+	public Font BIGFONT = new Font("Courrier", Font.CENTER_BASELINE, 25);
 	
 	private JButton exitButton;
 	private JButton newGameButton;
