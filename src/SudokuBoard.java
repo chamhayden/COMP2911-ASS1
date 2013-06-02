@@ -219,10 +219,11 @@ public class SudokuBoard implements Board {
 	public void setCellDraftVisibility(int row, int col, int number, boolean isSet)
 	{
 		addingCellState = true;
+		addCellState(row, col);
 		getCell(row, col).setDraft(number, isSet);
 		if (isSet)
 		{
-			removeCellValue(row, col);
+			getCell(row, col).removeInputValue();
 		}
 		
 	}
