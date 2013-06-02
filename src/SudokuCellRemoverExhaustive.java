@@ -62,6 +62,6 @@ public class SudokuCellRemoverExhaustive implements Removalist {
 	
 	private static final int REMOVE_ON_EASY = 0;
 	private static final int REMOVE_ON_MEDIUM = 15;
-	private static final int REMOVE_ON_HARD = 100;
+	private static final int REMOVE_ON_HARD = 25;
 
 }
