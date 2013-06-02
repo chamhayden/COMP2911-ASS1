@@ -29,7 +29,8 @@ public class SudokuBoard implements Board {
 			ArrayList<Cell> row = board.get(i);
 			for (int j = 0; j < boardSize; j++)
 			{ 
-				row.add(new SudokuBoardCell(boardSize));
+				Cell c = new SudokuBoardCell(boardSize); 
+				row.add(c);
 			}
 		}
 		generator = new Generator();
