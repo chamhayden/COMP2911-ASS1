@@ -24,6 +24,11 @@ public class SudokuFrame extends JFrame
 {
 	public SudokuFrame(Board sudokuBoard)
 	{
+		 ImageIcon st = (ImageIcon) OptionPanes.createImageIcon("Images/puffer.gif", null);
+		    ImagePanel panel = new ImagePanel(st.getImage());
+		    panel.setOpaque(false);
+		    getContentPane().add(panel);
+		
 		this.board = sudokuBoard;
 		setTitle("SUDOKU FUN!");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -38,7 +43,6 @@ public class SudokuFrame extends JFrame
 		for(JButton b: buttonRow){
 			b.addMouseListener(new MyMouseListener());
 			b.addKeyListener(new MyKeyListener());
-			//b.requestFocusInWindow();
 		}
 		
 		commandPanel = new JPanel();
@@ -64,19 +68,22 @@ public class SudokuFrame extends JFrame
 		eraseButton = makeCommandButton("[E]RASE", scorePanel, new eraseFunction(), "Made a mistake? Click me!");
 
 		prepareSolutionButtonForDifficulty();
-		
 		JPanel fillerEast = new JPanel();
 		fillerEast.setBackground(DEFAULTBG);
 		JPanel fillerWest = new JPanel();
 		fillerWest.setBackground(DEFAULTBG);
-		JPanel panel = new ImagePanel(new FlowLayout(FlowLayout.CENTER,50,180));
-		//panel.add(buttonPanel,BorderLayout.CENTER);
-		super.add(panel,BorderLayout.EAST);
+		
+		
+		/*JPanel panel = new BackgroundPanel(new FlowLayout(FlowLayout.CENTER,0,0));
+		panel.add(buttonPanel,new FlowLayout(FlowLayout.CENTER,0,0));
+		super.add(panel,BorderLayout.CENTER);
+		*/
+		
 		add(buttonPanel,BorderLayout.CENTER);
 		add(commandPanel,BorderLayout.NORTH);
 		add(scorePanel,BorderLayout.SOUTH);
 		//add(fillerEast,BorderLayout.EAST);
-		add(fillerWest, BorderLayout.WEST);
+		//panel.add(fillerWest, BorderLayout.WEST);
 		
 	}
 	
@@ -129,11 +136,11 @@ public class SudokuFrame extends JFrame
 		buttonRow.removeAll(buttonRow);
 		ArrayList<JPanel> insetPanels = new ArrayList<JPanel>();
 		for(int i = 0; i<9; i++){
-			JPanel JP = new JPanel();
-			JP.setLayout(new GridLayout(3,3));
-			JP.setBorder(panelLine);
-			insetPanels.add(JP);
-			buttonPanel.add(JP);
+			JPanel panel = new JPanel();
+			panel.setLayout(new GridLayout(3,3));
+			panel.setBorder(panelLine);
+			insetPanels.add(panel);
+			buttonPanel.add(panel);
 		}
 		JPanel panel = null;
 		for(int i = 1; i<=9; i++)
@@ -450,7 +457,47 @@ public class SudokuFrame extends JFrame
 	}
 	
 	/**
-	 * Attempt at mouselistener
+	 * 
+	 * Class creates and draws an image
+	 *
+	 */
+	public class ImagePanel extends JPanel
+	{
+		/**
+		 * Constructor
+		 * @param img
+		 */
+		public ImagePanel(String imageAddr) {
+		  this(new ImageIcon(imageAddr).getImage());
+		}
+		
+		  /**
+		   * Image constructor
+		   * @param img
+		   */
+		public ImagePanel(Image img) {
+			this.img = img;
+			Dimension size = new Dimension(600,600);
+			setPreferredSize(size);
+			setMinimumSize(size);
+			setMaximumSize(size);
+			setSize(size);
+			setLayout(null);
+			
+		}
+		/**
+		 * Paint image
+		 */
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			g.drawImage(img, 50, 50, null);
+		}
+		  
+		private Image img;
+	}
+	
+	/**
+	 * MouseListener for right click
 	 * 
 	 */
 	
@@ -461,23 +508,26 @@ public class SudokuFrame extends JFrame
 		}
 
 		public void mouseClicked(MouseEvent e) {
-
 			if (e.getButton() == MouseEvent.BUTTON3) {
 				if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
 					resetCommandsToggle();
 				} 
 				toggleButton(draftButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
-	
 			}
 		} 
 	}
 	
+	/**
+	 * KeyListener for commands and inputs
+	 * @author Jerome
+	 *
+	 */
 	public class MyKeyListener implements KeyListener{
 
-		public MyKeyListener(){
-			
-		}
-		
+		/**
+		 * Converts input to action
+		 * @param input
+		 */
 		public void convertKey(String input){
 			highlightInputValue(String.valueOf(key));
 			setCurrentValue(input);
@@ -672,11 +722,17 @@ public class SudokuFrame extends JFrame
 	 * 
 	 ************************************************/
 	
+	/**
+	 * Undo helper function
+	 */
 	public void toggleUndo(){
 		board.undoLast();
 		labelGrid();
 	}
 	
+	/**
+	 * New game helper function - creates new game procedure
+	 */
 	public void toggleNewGame(){
 		if(pane.confirmationPopUp(pane.getIcon("puzzledIcon"),"Start another game?", "New Game")){
 			board.clear();
@@ -687,6 +743,9 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Reveals the grid
+	 */
 	public void toggleGiveUp(){
 		if(pane.confirmationPopUp(pane.getIcon("grumpyIcon"),"Give up, eh? Are you sure?", "Sudoku Fun GAME OVER!")){
 			revealAll();
@@ -695,12 +754,18 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Toggles exit pop up
+	 */
 	public void toggleExit(){
 		if(pane.confirmationPopUp(pane.getIcon("grumpyIcon"),"Really? Your progress will not be saved.", "Aurevoir Sudoku Fun!")){
 			System.exit(0);
 		}
 	}
 	
+	/**
+	 * Checks for solution
+	 */
 	public void toggleSolution(){
 		resetCommandsToggle();
 		highlightInputValue(BLANK);
@@ -718,6 +783,9 @@ public class SudokuFrame extends JFrame
 		checkEndGame();
 	}
 	
+	/**
+	 * Restarts game if user confirms
+	 */
 	public void toggleRestart(){
 		if(pane.confirmationPopUp(pane.getIcon("puzzledIcon"), "Restart? Are you sure?", "Restart")){
 			removeAllUserValues();
@@ -725,6 +793,9 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Toggles draft mode
+	 */
 	public void toggleDraft(){
 		if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
 			resetCommandsToggle();
@@ -732,6 +803,9 @@ public class SudokuFrame extends JFrame
 		toggleButton(draftButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
 	}
 	
+	/**
+	 * Toggles erase mode
+	 */
 	public void toggleErase(){
 		if(!isButtonToggled(eraseButton, DEFAULT_COMMAND)){
 			resetCommandsToggle();
@@ -743,9 +817,8 @@ public class SudokuFrame extends JFrame
 	}
 	
 	
-	
 	/**
-	 * Helper method for resetFunction - removes all input values
+	 * Helper method for restartFunction - removes all input values
 	 */
 	
 	private void removeAllUserValues(){

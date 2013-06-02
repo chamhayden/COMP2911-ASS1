@@ -24,6 +24,7 @@ public class OptionPanes {
 		grumpy = createImageIcon("Images/grumpy.gif", "grumpy");
 		awesome = createImageIcon("Images/awesome.gif", "awesome");
 		puzzled = createImageIcon("Images/puzzled.gif", "puzzled");
+		background = createImageIcon("Images/grumpy.gif", "grumpy");
 		
 	}
 	
@@ -32,7 +33,7 @@ public class OptionPanes {
 	 * @param name of icon
 	 * @return icon
 	 */
-	public Icon getIcon(String name){
+	public ImageIcon getIcon(String name){
 		if(name.equals("startIcon"))
 			return start;
 		if(name.equals("grumpyIcon"))
@@ -41,6 +42,8 @@ public class OptionPanes {
 			return awesome;
 		if(name.equals("puzzledIcon"))
 			return puzzled;
+		if(name.equals("backgroundIcon"))
+			return background;
 		else return null;
 	}
 	
@@ -146,7 +149,7 @@ public class OptionPanes {
 	 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
 	
-    protected static Icon createImageIcon(String path, String description) {
+    protected static ImageIcon createImageIcon(String path, String description) {
         java.net.URL imgURL = OptionPanes.class.getResource(path);
         if (imgURL != null) {
             return new ImageIcon(imgURL, description);
@@ -155,11 +158,11 @@ public class OptionPanes {
             return null;
         }
     }
-	
-    private Icon start;
-    private Icon grumpy;
-    private Icon awesome;
-    private Icon puzzled;
+	private ImageIcon background;
+    private ImageIcon start;
+    private ImageIcon grumpy;
+    private ImageIcon awesome;
+    private ImageIcon puzzled;
     
     private int EXIT_VALUE = 3;
 	private int difficulty;
