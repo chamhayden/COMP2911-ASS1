@@ -37,6 +37,9 @@ public class SudokuFrame extends JFrame
 		buttonPanel = new JPanel();
 		
 		setUpGrid();
+		for(JButton b: buttonRow){
+			b.addMouseListener(new MyMouseListener());
+		}
 		
 		commandPanel = new JPanel();
 		commandPanel.setLayout(new FlowLayout());
@@ -442,6 +445,31 @@ public class SudokuFrame extends JFrame
 		}
 		private JButton b;
 	}
+	
+	/**
+	 * Attempt at mouselistener
+	 * 
+	 */
+	
+	public class MyMouseListener extends MouseAdapter {
+
+		public MyMouseListener() {
+			
+		}
+
+		public void mouseClicked(MouseEvent e) {
+
+			if (e.getButton() == MouseEvent.BUTTON3) {
+				if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
+					resetCommandsToggle();
+				} 
+				toggleButton(draftButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
+	
+			}
+		} 
+	}
+	
+	
 	
 	
 	/**
