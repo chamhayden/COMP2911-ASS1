@@ -37,7 +37,7 @@ public class SudokuBoard implements Board {
 				row.add(c);
 			}
 		}
-		sudokuGenerator = new Generator();
+		sudokuGenerator = new SudokuGenerator();
 	}
 	
 	/**
@@ -566,7 +566,7 @@ public class SudokuBoard implements Board {
 		return board.get((int)row - 1).get((int)col - 1);
 	}	
 	
-	private Generator sudokuGenerator;
+	private SudokuGenerator sudokuGenerator;
 	private LinkedList<Cell> undoCellStates;
 	private LinkedList<Point> undoCellPoints;
 	private ArrayList<ArrayList<Cell>> board;

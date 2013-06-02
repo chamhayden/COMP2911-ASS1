@@ -1,30 +1,31 @@
-
-
 import java.util.LinkedList;
 import java.util.Random;
 
 /**
- * Fills in the values of the board
- * Randomly assigns values, checks they work, reassigns if required
- * @author laura
- *
- */
-
-public class BoardFiller {
+* Class that is passed a board of type Board and fills
+*  the board with numbers that are appropriate for a sudoku puzzle
+*  (see SudokuMain for this description)
+*  
+* @author Hayden Smith, Laura Hodges, Jerome Robins, Steven Falconieri
+* 
+*/
+public class BoardFiller
+{
 	
 	/**
-	 * Constructor 
-	 * @param b board to fill
+	 * Construct a BoardFiller
+	 * @param b Board to fill
 	 */
 	public BoardFiller(Board b) 
 	{
-		this.b = b;
+		this.board = b;
 	}
 	
 	/**
 	 * Fills the board with values
 	 */
-	public void fillBoard(){
+	public void fillBoard()
+	{
 		int row, col, square;
 		int x = 0;
 		Random r = new Random();  
@@ -33,34 +34,36 @@ public class BoardFiller {
 		
 		row = 0;
 		
-		while(row < 9){
+		while(row < board.getBoardSize())
+		{
 			counter = 0;
 			col = 0;
-			while(col < 9){				
+			while(col < board.getBoardSize())
+			{				
 				square = squareNo(row, col);
-				// TODO THIS IS A NICE PLACE TO WATCH FROM IF YOU WANT TO =)
-				//System.out.printf("\n\n\n\n");
-				//printBoard();
-				//System.out.printf("\n\n\n");
-				//remove to here
-				for(int m = 1; m < 10; m++){
+				for(int m = 1; m < 10; m++)
+				{
 					l.add(m);
 				}
-				do{
+				do {
 					x = l.remove(r.nextInt(l.size()));
-				} while(!l.isEmpty() && (b.rowHas(row+1, x) || b.columnHas(col+1, x) || b.squareHas(square+1, x)));
+				}
+				while(!l.isEmpty() && (board.rowHas(row+1, x) || board.columnHas(col+1, x) || board.squareHas(square+1, x)));
 				
-				if(l.isEmpty()){
+				if(l.isEmpty())
+				{
 					col = reset(row, col);
 					counter++;
-					if (counter > ATTEMPT_LIMIT){
-						//TODO test to make sure this still works
-						b.clear();
+					if (counter > ATTEMPT_LIMIT)
+					{
+						board.clear();
 						row = -1;
 						break;
 					}
-				} else {
-					b.setCellValue(row+1, col+1, x);
+				}
+				else
+				{
+					board.setCellValue(row+1, col+1, x);
 					col++;
 				}
 			}
@@ -74,15 +77,19 @@ public class BoardFiller {
 	 * @param col column the filler got stuck on
 	 * @return column the filler has reset to
 	 */
-	private int reset(int row, int col){
+	private int reset(int row, int col)
+	{
 		int resetPoint;
-		if(row%3 == 2){
+		if(row % 3 == 2){
 			resetPoint = ((int)Math.floor(col/3)*3);
-		} else {
+		}
+		else
+		{
 			resetPoint = 0;
 		}
-		for(int p = resetPoint; p < 9; p++){
-			b.removeCellValue(row+1, p+1);
+		for (int p = resetPoint; p < board.getBoardSize(); p++)
+		{
+			board.removeCellValue(row+1, p+1);
 		}	
 		return resetPoint;
 	}
@@ -93,27 +100,11 @@ public class BoardFiller {
 	 * @param column column of cell
 	 * @return square number
 	 */
-	private int squareNo(int row, int column){
-		return ((int)Math.floor(column/3) + (int)Math.floor(row/3)*3);
-	}
+	private int squareNo(int row, int column)
+	{
+		return ((int)Math.floor(column / 3) + (int)Math.floor(row / 3) * 3);
+	}	
 	
-	//FOR DEBUGGING PURPOSES ONLY DO NOT USE
-	//TODO remove after debugging is finished
-	public void printBoard(){
-		int i,j;
-		for(i = 0; i < 9; i++){
-			for(j = 0; j < 9; j++){
-				if(b.hasInput(i+1, j+1)){
-					System.out.printf("%d" , b.getCellValue(i+1, j+1));
-				} else {
-					System.out.printf("%d", 0);
-				}
-			}
-			System.out.printf("\n");
-		}
-	}
-	
-	
-	private Board b;
+	private Board board;
 	private static final int ATTEMPT_LIMIT = 20;
 }
