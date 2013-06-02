@@ -14,28 +14,12 @@ public class SudokuManager {
 	public SudokuManager()
 	{
 		
-		/*try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-            //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }*/
-        // Turn off metal's use of bold fonts 
-        //UIManager.put("swing.boldMetal", Boolean.FALSE);
-		
 		board = new SudokuBoard(BOARD_SIZE);
 		
 		pane = new OptionPanes();
 		difficulty = pane.chooseLevel();
 		
-		while(difficulty == EXIT_VALUE || difficulty == pane.closedOption()){
+		while(difficulty == pane.closedOption()){
 			if(pane.exitMessageStart()){
 				System.exit(0);
 			} else difficulty = pane.chooseLevel();
@@ -60,7 +44,6 @@ public class SudokuManager {
 				frame.setMinimumSize(new Dimension(MIN_WIDTH,MIN_HEIGHT));
 				frame.pack();
 				frame.setVisible(true);
-				//frame.setMinimumSize(size);
 				
 			}
 		});
@@ -72,5 +55,4 @@ public class SudokuManager {
 	private int difficulty;
 	private SudokuBoard board;
 	private static final int BOARD_SIZE = 9;
-	private final int EXIT_VALUE = 3;
 }

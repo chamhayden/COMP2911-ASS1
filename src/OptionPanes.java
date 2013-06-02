@@ -1,15 +1,17 @@
+
 import java.awt.Component;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+
 /**
- * @author Jerome
+ * 
+ * A class to help create various types of option pane pop ups
+ * @author Hayden Smith, Laura Hodes, Jerome Robins, Steven Falconieri
  *
  */
-
 
 public class OptionPanes {
 	
@@ -25,18 +27,33 @@ public class OptionPanes {
 		
 	}
 	
+	/**
+	 * @return value of closing a window
+	 */
+	
 	public int closedOption(){
 		return JOptionPane.CLOSED_OPTION;
 	}
 	
+	/**
+	 * Choose the level of difficulty for the first game
+	 * @return level of difficulty or exit value
+	 */
+	
 	public int chooseLevel(){
-		
-		
 		String[] buttons = {"Easy", "Medium", "Hard", "Exit" };
 		difficulty = JOptionPane.showOptionDialog(null, "To start, choose your difficulty:", "Welcome to Sudoku Fun!",
 		        JOptionPane.INFORMATION_MESSAGE, 0, start, buttons, buttons[3]);
+		if(difficulty == EXIT_VALUE)
+			difficulty = JOptionPane.CLOSED_OPTION;
 		return difficulty;
 	}
+	
+	/**
+	 * Choose the level of difficulty after first game
+	 * @return level of difficulty
+	 *
+	 */
 	
 	public int chooseLevelInGame(){
 		String[] buttons = {"Easy", "Medium", "Hard"};
@@ -44,6 +61,11 @@ public class OptionPanes {
 		        JOptionPane.INFORMATION_MESSAGE, 0, start, buttons, buttons[2]);
 		return difficulty;
 	}
+	
+	/**
+	 * Exit pop up before first game
+	 * @return confirmation of exit
+	 */
 	
 	public boolean exitMessageStart(){
 		String[] buttons = {"Yes", "No"};
@@ -54,6 +76,12 @@ public class OptionPanes {
 		else return false;
 	}
 	
+	/**
+	 * Reveal message pop up
+	 * @return user confirmation
+	 *
+	 */
+	
 	public boolean revealMessage(){
 		String[] buttons = {"Yes", "No"};
 		value = JOptionPane.showOptionDialog(null, "Give up, eh? Are you sure?", "Sudoku Fun GAME OVER!",
@@ -62,6 +90,12 @@ public class OptionPanes {
 			return true;
 		else return false;
 	}
+	
+	/**
+	 * Exit pop up once mid-game 
+	 * @return user confirmation
+	 *
+	 */
 	
 	public boolean exitMessageInGame(){
 		String[] buttons = {"Yes", "No"};
@@ -72,6 +106,10 @@ public class OptionPanes {
 		else return false;
 	}
 	
+	/**
+	 * Exit pop after a finished game
+	 */
+	
 	public void exitWinGame(){
 		
 		String[] buttons = {"Cool see ya!"};
@@ -80,6 +118,12 @@ public class OptionPanes {
 		
 		System.exit(0);
 	}
+	
+	/**
+	 * New game or exit options pop up
+	 * @return user confirmation
+	 *
+	 */
 	
 	public boolean winGame(){
 		String[] buttons = {"Yes", "No"};
@@ -90,6 +134,11 @@ public class OptionPanes {
 		else return false;
 	}
 	
+	/**
+	 * @author Jerome
+	 *
+	 */
+	
 	public boolean newGameInGame(){
 		String[] buttons = {"Yes", "No"};
 		value = JOptionPane.showOptionDialog(null, "Start another game?", "New Game",
@@ -98,6 +147,11 @@ public class OptionPanes {
 			return true;
 		else return false;
 	}
+	
+	/**
+	 * @author Jerome
+	 *
+	 */
 	
 	public boolean restartGame(){
 		String[] buttons = {"Yes", "No"};
@@ -108,10 +162,10 @@ public class OptionPanes {
 		else return false;
 	}
 	
-	
-	public boolean createYESNOPopUp(Icon icon, String message, String title){
-		value = JOptionPane.showConfirmDialog((Component) icon, message, title,
-		        JOptionPane.YES_NO_OPTION);
+	public boolean confirmationPopUp(Icon icon, String message, String title){
+		String[] buttons = {"Yes", "No"};
+		value = JOptionPane.showOptionDialog(null, message, title,
+		        JOptionPane.INFORMATION_MESSAGE, 0, icon, buttons, buttons[1]);
 		if(value == JOptionPane.YES_OPTION)
 			return true;
 		else return false;
@@ -150,6 +204,7 @@ public class OptionPanes {
     Icon awesome;
     Icon puzzled;
     
+    private int EXIT_VALUE = 3;
 	private int difficulty;
 	private int value;
 }

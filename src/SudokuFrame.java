@@ -47,20 +47,20 @@ public class SudokuFrame extends JFrame
 		scorePanel.setVisible(true);
 		scorePanel.setBackground(DEFAULTBG);
 
-		
-		newGameButton = makeCommandButton("NEW GAME", commandPanel, new newGameFunction());
-		resetGameButton = makeCommandButton("Restart game", commandPanel, new resetFunction());
-		revealButton = makeCommandButton("Reveal ALL", commandPanel, new revealFunction());
-		solutionButton = makeCommandButton("Check my solution!", commandPanel, new solutionFunction());
-		undoButton = makeCommandButton("Undo my last", commandPanel, new undoFunction());
+		exitButton = makeCommandButton("EXIT GAME", commandPanel, new exitFunction(), "Bye bye!" );
+		newGameButton = makeCommandButton("NEW GAME", commandPanel, new newGameFunction(), "Allows you to switch difficulties.");
+		resetGameButton = makeCommandButton("Restart game", commandPanel, new resetFunction(), "Give this puzzle another go!");
+		revealButton = makeCommandButton("Reveal ALL", commandPanel, new revealFunction(), "Give up?");
+		solutionButton = makeCommandButton("Check my solution!", commandPanel, new solutionFunction(), null);
+		undoButton = makeCommandButton("Undo my last", commandPanel, new undoFunction(), "Undo your last move");
 		
 		
 		setUpButtonInputs();
 		
-		draftButton = makeCommandButton("DRAFT", scorePanel, new draftFunction());
-		eraseButton = makeCommandButton("Rubber", scorePanel, new eraseFunction());
+		draftButton = makeCommandButton("DRAFT", scorePanel, new draftFunction(), "Click me if you're not sure!");
+		eraseButton = makeCommandButton("RUBBER", scorePanel, new eraseFunction(), "Made a mistake? Click me!");
 
-		prepareForDifficulty();
+		prepareSolutionButtonForDifficulty();
 		
 		JPanel fillerEast = new JPanel();
 		fillerEast.setBackground(DEFAULTBG);
@@ -78,15 +78,18 @@ public class SudokuFrame extends JFrame
 	/**
 	 * Prepares a game layout according to difficulty
 	 */
-	private void prepareForDifficulty() {
-
+	private void prepareSolutionButtonForDifficulty() {
+		String tooltip = null;
 		if(board.isDifficultyEasy()){
 			solutionButton.setVisible(false);
 		} else if(board.isDifficultyMedium()){
 			solutionButton.setVisible(true);
+			tooltip = "I'll check what you've done so far!";
 		}else{
 			solutionButton.setVisible(true);
+			tooltip = "I'll check what you've done when you've filled the board up!";
 		}
+		solutionButton.setToolTipText(tooltip);
 	}
 	
 	/**
@@ -230,12 +233,15 @@ public class SudokuFrame extends JFrame
 	 * @param action is the listener to be attached
 	 * @return JButton
 	 */
-	public JButton makeCommandButton(String name, JPanel panel, ActionListener action)
+	public JButton makeCommandButton(String name, JPanel panel, ActionListener action, String tooltip)
 	{
 		JButton button = new JButton(name);
 		panel.add(button);
 		button.addActionListener(action);
 		button.setBackground(DEFAULT_COMMAND);
+		button.setToolTipText(tooltip);
+		if(panel.equals(scorePanel))
+				button.setFont(BIGFONT);
 		return button;
 	}
 	
@@ -376,7 +382,7 @@ public class SudokuFrame extends JFrame
 				board.clear();
 				board.generate(pane.chooseLevelInGame());
 				enableCommands(true);
-				prepareForDifficulty();
+				prepareSolutionButtonForDifficulty();
 				setUpGrid();
 			}
 		}
@@ -455,7 +461,7 @@ public class SudokuFrame extends JFrame
 			if(pane.winGame()){
 				board.clear();
 				board.generate(pane.chooseLevelInGame());
-				prepareForDifficulty();
+				prepareSolutionButtonForDifficulty();
 				setUpGrid();
 			} else pane.exitWinGame();
 		}
@@ -523,7 +529,7 @@ public class SudokuFrame extends JFrame
     }
 	
 	/**
-	 * AciotnListener 
+	 * ActionListener 
 	 */
 	
 	private class blinkFunction implements ActionListener{
@@ -547,6 +553,21 @@ public class SudokuFrame extends JFrame
 		for(JButton b: buttonRow){
 			if (!board.isInitiallySet(rowVal(b),colVal(b))){
 				board.removeCellValue(rowVal(b), colVal(b));
+			}
+		}
+	}
+	
+	/**
+	 * Action listener linked to resetButton
+	 * Resets current puzzle to original set values
+	 */
+	
+	private class exitFunction implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			if(pane.exitMessageInGame()){
+				System.exit(0);
 			}
 		}
 	}
@@ -675,7 +696,9 @@ public class SudokuFrame extends JFrame
 	public Font USERINPUT = new Font ("Courrier", Font.CENTER_BASELINE, 25);
 	public Font DRAFTSMALL = new Font("Courrier",Font.CENTER_BASELINE ,15);
 	public Font FIXEDSQUARES = new Font("Arial", Font.BOLD, 20);
+	public Font BIGFONT = new Font("Courrier", Font.CENTER_BASELINE, 20);
 	
+	private JButton exitButton;
 	private JButton newGameButton;
 	private JButton resetGameButton;
 	private JButton undoButton;
