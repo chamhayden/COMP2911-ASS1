@@ -447,8 +447,7 @@ public class SudokuFrame extends JFrame
 	}
 	
 	/**
-	 * Attempt at mouselistener
-	 * 
+	 * MouseAdapter
 	 */
 	
 	public class MyMouseListener extends MouseAdapter {
@@ -457,6 +456,9 @@ public class SudokuFrame extends JFrame
 			
 		}
 
+		/**
+		 * Handles right click
+		 */
 		public void mouseClicked(MouseEvent e) {
 
 			if (e.getButton() == MouseEvent.BUTTON3) {
