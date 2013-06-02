@@ -70,11 +70,12 @@ public class SudokuFrame extends JFrame
 		JPanel fillerWest = new JPanel();
 		fillerWest.setBackground(DEFAULTBG);
 		JPanel panel = new ImagePanel(new FlowLayout(FlowLayout.CENTER,50,180));
-		panel.add(buttonPanel,BorderLayout.CENTER);
-		super.add(panel,BorderLayout.CENTER);
+		//panel.add(buttonPanel,BorderLayout.CENTER);
+		super.add(panel,BorderLayout.EAST);
+		add(buttonPanel,BorderLayout.CENTER);
 		add(commandPanel,BorderLayout.NORTH);
 		add(scorePanel,BorderLayout.SOUTH);
-		add(fillerEast,BorderLayout.EAST);
+		//add(fillerEast,BorderLayout.EAST);
 		add(fillerWest, BorderLayout.WEST);
 		
 	}
@@ -487,7 +488,6 @@ public class SudokuFrame extends JFrame
 			
 		@Override
 		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
 			key = String.valueOf(e.getKeyChar());
 			if( inputKeys.contains(key)){
 				convertKey(key);
