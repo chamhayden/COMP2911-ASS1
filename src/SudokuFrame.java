@@ -76,7 +76,7 @@ public class SudokuFrame extends JFrame
 	}
 	
 	/************************************************
-	 * GUI Set up methods
+	 * GUI component set up methods
 	 * 
 	 ************************************************/
 	
@@ -176,7 +176,7 @@ public class SudokuFrame extends JFrame
 	 * @param given says whether a button value is initially given or not
 	 * @return new JButton
 	 */
-	public JButton makeGridButton( String name, JPanel panel, boolean given)
+	private JButton makeGridButton( String name, JPanel panel, boolean given)
 	{
 		JButton button = new JButton(name);
 		panel.add(button);
@@ -244,7 +244,7 @@ public class SudokuFrame extends JFrame
 	 * @param action is the listener to be attached
 	 * @return JButton
 	 */
-	public JButton makeCommandButton(String name, JPanel panel, ActionListener action, String tooltip)
+	private JButton makeCommandButton(String name, JPanel panel, ActionListener action, String tooltip)
 	{
 		JButton button = new JButton(name);
 		panel.add(button);
@@ -373,6 +373,46 @@ public class SudokuFrame extends JFrame
 		return correct;
 	}
 	
+	/**
+	 * Sets up timer for blinkerFunction
+	 * @param button
+	 * @param colour
+	 * @param seconds
+	 */
+	
+	private void blinkOut(JButton button , Color colour, int seconds){
+        Timer timer = new Timer(seconds*1000, new blinkFunction(button, colour));
+        timer.start(); 
+    }
+	
+	/**
+	 * Highlights a chosen number input
+	 * @param current is the value to be highlighted - BLANK to be passed in to un-highlight
+	 */
+	
+	private void highlightInputValue(String current){
+		for(JButton jb: buttonInputs){
+			if(jb.getText().equalsIgnoreCase(current)){
+				jb.setBackground(INPUT_TOGGLED);
+			}
+			else {
+				jb.setBackground(DEFAULT_INPUT);
+			}
+		}
+	}
+	
+	/**
+	 * Highlights all grid buttons with the chosen string value
+	 * @param current
+	 */
+	private void highlightGridValue(String current){
+		for(JButton jb: buttonRow){
+			if(!jb.getText().equals(BLANK) && jb.getText().equals(current))
+				jb.setBackground(INPUT_TOGGLED);
+			else jb.setBackground(DEFAULT_GRID);
+		}
+	}
+	
 	
 	/************************************************
 	 * ActionListeners private classes
@@ -394,9 +434,6 @@ public class SudokuFrame extends JFrame
 			b = button;
 		}
 		
-		/**
-		 * action performed if button is clicked
-		 */
 		public void actionPerformed(ActionEvent event){
 			if(isButtonToggled(eraseButton, DEFAULT_COMMAND)){
 				board.removeCellValue(rowVal(b), colVal(b));
@@ -450,13 +487,13 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			if(event.getActionCommand().equalsIgnoreCase(currentValue)){
+			if(event.getActionCommand().equalsIgnoreCase(getCurrentValue())){
 				highlightInputValue(resetCurrentValue());
 				highlightGridValue(resetCurrentValue());
 			}else{
-				currentValue = event.getActionCommand();
-				highlightInputValue(currentValue);
-				highlightGridValue(currentValue);
+				setCurrentValue(event.getActionCommand());
+				highlightInputValue(getCurrentValue());
+				highlightGridValue(getCurrentValue());
 			}
 			if(isButtonToggled(eraseButton, DEFAULT_COMMAND))
 				toggleButton(eraseButton, COMMAND_TOGGLED, DEFAULT_COMMAND);
@@ -556,23 +593,15 @@ public class SudokuFrame extends JFrame
 	}
 
 	/**
-	 * Sets up timer for blinkerFunction
-	 * @param button
-	 * @param colour
-	 * @param seconds
+	 * ActionListener attached blinkOut method
+	 * 
 	 */
-	
-	private void blinkOut(JButton button , Color colour, int seconds){
-        Timer timer = new Timer(seconds*1000, new blinkFunction(button, colour));
-        timer.start(); 
-    }
-	
-	/**
-	 * ActionListener 
-	 */
-	
 	private class blinkFunction implements ActionListener{
-
+		/**
+		 * Constructor
+		 * @param button
+		 * @param colour
+		 */
 		public blinkFunction(JButton button , Color colour){
 			b = button;
 			c = colour;
@@ -582,18 +611,6 @@ public class SudokuFrame extends JFrame
 		}
 		private JButton b;
         private Color c;
-	}
-	
-	/**
-	 * Helper method for resetFunction - removes all input values
-	 */
-	
-	private void removeAllUserValues(){
-		for(JButton b: buttonRow){
-			if (!board.isInitiallySet(rowVal(b),colVal(b))){
-				board.removeCellValue(rowVal(b), colVal(b));
-			}
-		}
 	}
 	
 	/**
@@ -627,6 +644,23 @@ public class SudokuFrame extends JFrame
 		}
 	}
 	
+	/************************************************
+	 * Helper methods
+	 * 
+	 ************************************************/
+	
+	/**
+	 * Helper method for resetFunction - removes all input values
+	 */
+	
+	private void removeAllUserValues(){
+		for(JButton b: buttonRow){
+			if (!board.isInitiallySet(rowVal(b),colVal(b))){
+				board.removeCellValue(rowVal(b), colVal(b));
+			}
+		}
+	}
+	
 	/**
 	 * Reveals the grid and disables any further gameplay
 	 */
@@ -656,6 +690,7 @@ public class SudokuFrame extends JFrame
 	}
 	
 	/**
+	 * Gets current value
 	 * @return currentValue
 	 */
 	
@@ -664,27 +699,11 @@ public class SudokuFrame extends JFrame
 	}
 	
 	/**
-	 * Highlights a chosen number input
-	 * @param current is the value to be highlighted - BLANK to be passed in to un-highlight
+	 * Sets currentValue
+	 * @param value
 	 */
-	
-	private void highlightInputValue(String current){
-		for(JButton jb: buttonInputs){
-			if(jb.getText().equalsIgnoreCase(current)){
-				jb.setBackground(INPUT_TOGGLED);
-			}
-			else {
-				jb.setBackground(DEFAULT_INPUT);
-			}
-		}
-	}
-	
-	private void highlightGridValue(String current){
-		for(JButton jb: buttonRow){
-			if(!jb.getText().equals(BLANK) && jb.getText().equals(current))
-				jb.setBackground(INPUT_TOGGLED);
-			else jb.setBackground(DEFAULT_GRID);
-		}
+	private void setCurrentValue(String value) {
+		currentValue = value;
 	}
 	
 	/**
