@@ -30,8 +30,8 @@ public class OptionPanes {
 	
 	/**
 	 * Retrieves a chosen icon
-	 * @param name of icon
-	 * @return icon
+	 * @param name name of the icon
+	 * @return icon the selected icon
 	 */
 	public ImageIcon getIcon(String name){
 		if(name.equals("startIcon"))
@@ -63,7 +63,8 @@ public class OptionPanes {
 	
 	public int chooseLevel(){
 		String[] buttons = {"Easy", "Medium", "Hard", "Exit" };
-		difficulty = JOptionPane.showOptionDialog(null, "To start, choose your difficulty:", "Welcome to Sudoku Fun!",
+		difficulty = JOptionPane.showOptionDialog(null, 
+			"To start, choose your difficulty:", "Welcome to Sudoku Fun!",
 		        JOptionPane.INFORMATION_MESSAGE, 0, start, buttons, buttons[3]);
 		if(difficulty == EXIT_VALUE)
 			difficulty = JOptionPane.CLOSED_OPTION;
@@ -78,7 +79,9 @@ public class OptionPanes {
 	
 	public int chooseLevelInGame(){
 		String[] buttons = {"Easy", "Medium", "Hard"};
-		difficulty = JOptionPane.showOptionDialog(null, "Here we go again! Choose your difficulty:", "Welcome to Sudoku Fun!",
+		difficulty = JOptionPane.showOptionDialog(null, 
+			"Here we go again! Choose your difficulty:", 
+			"Welcome to Sudoku Fun!",
 		        JOptionPane.INFORMATION_MESSAGE, 0, start, buttons, buttons[2]);
 		return difficulty;
 	}
@@ -91,7 +94,8 @@ public class OptionPanes {
 	public void exitWinGame(){
 		
 		String[] buttons = {"Cool see ya!"};
-		JOptionPane.showOptionDialog(null, "Oh alright, see you next time champ!", "Aurevoir Sudoku Fun!",
+		JOptionPane.showOptionDialog(null, "Oh alright, see you next time champ!", 
+			"Aurevoir Sudoku Fun!",
 		        JOptionPane.INFORMATION_MESSAGE, 0, awesome, buttons, buttons[0]);
 		
 		System.exit(0);
@@ -100,10 +104,10 @@ public class OptionPanes {
 
 	/**
 	 * Asks for user confirmation
-	 * @param icon
-	 * @param message
-	 * @param title
-	 * @return
+	 * @param icon the icon displayed in the pop up
+	 * @param message the message to be shown
+	 * @param title the title of pop up
+	 * @return true if pop up confirmed, false otherwise.
 	 */
 	public boolean confirmationPopUp(Icon icon, String message, String title){
 		String[] buttons = {"Yes", "No"};

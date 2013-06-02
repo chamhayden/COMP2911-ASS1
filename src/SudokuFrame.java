@@ -1,13 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.LinkedList;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -29,7 +24,11 @@ public class SudokuFrame extends JFrame
 {
 	public SudokuFrame(Board sudokuBoard)
 	{
-		 
+		 ImageIcon st = (ImageIcon) OptionPanes.createImageIcon("Images/puffer.gif", null);
+		    ImagePanel panel = new ImagePanel(st.getImage());
+		    panel.setOpaque(false);
+		    getContentPane().add(panel);
+		
 		this.board = sudokuBoard;
 		setTitle("SUDOKU FUN!");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -55,18 +54,26 @@ public class SudokuFrame extends JFrame
 		scorePanel.setVisible(true);
 		scorePanel.setBackground(DEFAULTBG);
 
-		newGameButton = makeCommandButton("[N]EW GAME", commandPanel, new newGameFunction(), "Allows you to switch difficulties.");
-		resetGameButton = makeCommandButton("[R]estart game", commandPanel, new restartFunction(), "Give this puzzle another go!");
-		giveUpButton = makeCommandButton("[G]ive Up", commandPanel, new giveUpFunction(), "Reveals solution.");
-		solutionButton = makeCommandButton("[C]heck my solution!", commandPanel, new solutionFunction(), null);
-		undoButton = makeCommandButton("[U]ndo my last", commandPanel, new undoFunction(), "Undo your last move");
-		exitButton = makeCommandButton("E[X]IT GAME", commandPanel, new exitFunction(), "Bye bye!" );
+		newGameButton = makeCommandButton("[N]EW GAME", commandPanel, 
+			new newGameFunction(), "Allows you to switch difficulties.");
+		resetGameButton = makeCommandButton("[R]estart game", commandPanel, 
+			new restartFunction(), "Give this puzzle another go!");
+		giveUpButton = makeCommandButton("[G]ive Up", commandPanel, 
+			new giveUpFunction(), "Reveals solution.");
+		solutionButton = makeCommandButton("[C]heck my solution!", 
+			commandPanel, new solutionFunction(), null);
+		undoButton = makeCommandButton("[U]ndo my last", commandPanel, 
+			new undoFunction(), "Undo your last move");
+		exitButton = makeCommandButton("E[X]IT GAME", commandPanel, 
+			new exitFunction(), "Bye bye!" );
 		
 		
 		setUpButtonInputs();
 		
-		draftButton = makeCommandButton("[D]RAFT", scorePanel, new draftFunction(), "Click me if you're not sure!");
-		eraseButton = makeCommandButton("[E]RASE", scorePanel, new eraseFunction(), "Made a mistake? Click me!");
+		draftButton = makeCommandButton("[D]RAFT", scorePanel, new draftFunction(),
+		 "Click me if you're not sure!");
+		eraseButton = makeCommandButton("[E]RASE", scorePanel, new eraseFunction(),
+		 "Made a mistake? Click me!");
 
 		prepareSolutionButtonForDifficulty();
 		JPanel fillerEast = new JPanel();
@@ -74,18 +81,9 @@ public class SudokuFrame extends JFrame
 		JPanel fillerWest = new JPanel();
 		fillerWest.setBackground(DEFAULTBG);
 		
-		
-		/*JPanel panel = new BackgroundPanel(new FlowLayout(FlowLayout.CENTER,0,0));
-		panel.add(buttonPanel,new FlowLayout(FlowLayout.CENTER,0,0));
-		super.add(panel,BorderLayout.CENTER);
-		*/
-		
 		add(buttonPanel,BorderLayout.CENTER);
 		add(commandPanel,BorderLayout.NORTH);
 		add(scorePanel,BorderLayout.SOUTH);
-		//add(fillerEast,BorderLayout.EAST);
-		//panel.add(fillerWest, BorderLayout.WEST);
-		
 	}
 	
 	/************************************************
@@ -188,7 +186,7 @@ public class SudokuFrame extends JFrame
 	 * @param name is the button text
 	 * @param panel is the JPanel button will belong to
 	 * @param given says whether a button value is initially given or not
-	 * @return new JButton
+	 * @return the new JButton
 	 */
 	private JButton makeGridButton( String name, JPanel panel, boolean given)
 	{
@@ -246,12 +244,13 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Creates a new command or feature button
-	 * @param name
-	 * @param panel
+	 * @param name the name of the button
+	 * @param panel the panel to add the button to
 	 * @param action is the listener to be attached
-	 * @return JButton
+	 * @return the new JButton
 	 */
-	private JButton makeCommandButton(String name, JPanel panel, ActionListener action, String tooltip)
+	private JButton makeCommandButton(String name, JPanel panel, 
+		ActionListener action, String tooltip)
 	{
 		JButton button = new JButton(name);
 		panel.add(button);
@@ -276,19 +275,23 @@ public class SudokuFrame extends JFrame
 	 */
 	
 	private void toggleDraftValues(String value, JButton b){
-		if(board.isVisibleCellDraft(rowVal(b), colVal(b), Integer.parseInt(value))){
-			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), false);
+		if(board.isVisibleCellDraft(rowVal(b), colVal(b), 
+			Integer.parseInt(value))){
+			board.setCellDraftVisibility(rowVal(b), colVal(b), 
+				Integer.parseInt(value), false);
 		} else{
-			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), true);
+			board.setCellDraftVisibility(rowVal(b), colVal(b), 
+				Integer.parseInt(value), true);
 			
 		}
 	}
 	
 	/**
 	 * Checks whether a button is toggled
-	 * @param button
-	 * @param defaultColour
-	 * @return boolean
+	 * @param button the button to be checked.
+	 * @param defaultColour the colour of the button.
+	 * @return true if the colour is not the same as the background color,
+	 * false otherwise
 	 */
 	
 	private boolean isButtonToggled(JButton button, Color defaultColour){
@@ -299,9 +302,9 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Toggles a button 
-	 * @param button
-	 * @param colour
-	 * @param defaultColour
+	 * @param button the button to be toggled.
+	 * @param colour the colour of the button.
+	 * @param defaultColour the default colour.
 	 */
 	
 	private void toggleButton(JButton button, Color colour, Color defaultColour){
@@ -332,7 +335,8 @@ public class SudokuFrame extends JFrame
 	 */
 	private void checkEndGame(){
 		if(board.isFilledBoard() && board.isCorrectBoard()){
-			if(pane.confirmationPopUp(pane.getIcon("awesomeIcon"),"You're awesome! Shall we go again?", "You Win!")){
+			if(pane.confirmationPopUp(pane.getIcon("awesomeIcon"),
+				"You're awesome! Shall we go again?", "You Win!")){
 				board.clear();
 				board.generate(pane.chooseLevelInGame());
 				prepareSolutionButtonForDifficulty();
@@ -343,7 +347,7 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Enables and disables certain command buttons 
-	 * @param enable
+	 * @param enable boolean state whether the component is enabled.
 	 */
 	private void enableCommands(boolean enable){
 		for(Component commands: commandPanel.getComponents()){
@@ -354,8 +358,8 @@ public class SudokuFrame extends JFrame
 	}
 	
 	/**
-	 * Checks whether or not a square is filled correctly and makes it flash appropriately
-	 * @param b is button to be checked
+	 * Checks whether or not a square is filled correctly and makes it 
+	 * flash appropriately @param b is button to be checked
 	 * @param seconds time delay for blink
 	 * @return whether input is correct or not
 	 */
@@ -363,7 +367,8 @@ public class SudokuFrame extends JFrame
 	private boolean checkSquare(JButton b, int seconds)	{
 		boolean correct;
 		if(board.isDifficultyEasy())
-			correct = board.isCorrectInputForCell(rowVal(b), colVal(b), Integer.decode(getCurrentValue()));
+			correct = board.isCorrectInputForCell(rowVal(b), colVal(b), 
+				Integer.decode(getCurrentValue()));
 		else correct = board.isCorrectCell(rowVal(b), colVal(b));
 		
 		if(correct)		
@@ -376,9 +381,9 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Sets up timer for blinkerFunction
-	 * @param button
-	 * @param colour
-	 * @param seconds
+	 * @param button the button to blink.
+	 * @param colour the colour.
+	 * @param seconds the time period.
 	 */
 	
 	private void blinkOut(JButton button , Color colour, int seconds){
@@ -388,7 +393,8 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Highlights a chosen number input
-	 * @param current is the value to be highlighted - BLANK to be passed in to un-highlight
+	 * @param current is the value to be highlighted - BLANK to be passed in 
+	 * to un-highlight
 	 */
 	
 	public void highlightInputValue(String current){
@@ -404,7 +410,7 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Highlights all grid buttons with the chosen string value
-	 * @param current
+	 * @param current the text to be set in the button.
 	 */
 	public void highlightGridValue(String current){
 		for(JButton jb: buttonRow){
@@ -442,10 +448,12 @@ public class SudokuFrame extends JFrame
 				if(!isButtonToggled(draftButton, DEFAULT_COMMAND)){
 					if(board.isDifficultyEasy()){
 						if(checkSquare(b,1)){
-							board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(getCurrentValue()));
+							board.setCellValue(rowVal(b), colVal(b), 
+								Integer.parseInt(getCurrentValue()));
 						}
 					}else{
-						board.setCellValue(rowVal(b), colVal(b), Integer.parseInt(getCurrentValue()));
+						board.setCellValue(rowVal(b), colVal(b), 
+							Integer.parseInt(getCurrentValue()));
 					}
 				} else{
 					toggleDraftValues(getCurrentValue(), b);
@@ -466,7 +474,7 @@ public class SudokuFrame extends JFrame
 	{
 		/**
 		 * Constructor
-		 * @param img
+		 * @param imageAddr the address of the image.
 		 */
 		public ImagePanel(String imageAddr) {
 		  this(new ImageIcon(imageAddr).getImage());
@@ -474,7 +482,7 @@ public class SudokuFrame extends JFrame
 		
 		  /**
 		   * Image constructor
-		   * @param img
+		   * @param img the image to be used.
 		   */
 		public ImagePanel(Image img) {
 			this.img = img;
@@ -609,7 +617,8 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * ActionListener attached to Sudoku newGameButton
-	 * Creates a pop-up with choice of new game difficulty and sets the new game up
+	 * Creates a pop-up with choice of new game difficulty and sets the new 
+	 * game up
 	 */
 	
 	private class newGameFunction implements ActionListener
@@ -678,8 +687,8 @@ public class SudokuFrame extends JFrame
 	private class blinkFunction implements ActionListener{
 		/**
 		 * Constructor
-		 * @param button
-		 * @param colour
+		 * @param button the button to be used.
+		 * @param colour the colour.
 		 */
 		public blinkFunction(JButton button , Color colour){
 			b = button;
@@ -735,7 +744,8 @@ public class SudokuFrame extends JFrame
 	 * New game helper function - creates new game procedure
 	 */
 	public void toggleNewGame(){
-		if(pane.confirmationPopUp(pane.getIcon("puzzledIcon"),"Start another game?", "New Game")){
+		if(pane.confirmationPopUp(pane.getIcon("puzzledIcon"),
+			"Start another game?", "New Game")){
 			board.clear();
 			board.generate(pane.chooseLevelInGame());
 			enableCommands(true);
@@ -748,7 +758,8 @@ public class SudokuFrame extends JFrame
 	 * Reveals the grid
 	 */
 	public void toggleGiveUp(){
-		if(pane.confirmationPopUp(pane.getIcon("grumpyIcon"),"Give up, eh? Are you sure?", "Sudoku Fun GAME OVER!")){
+		if(pane.confirmationPopUp(pane.getIcon("grumpyIcon"),
+			"Give up, eh? Are you sure?", "Sudoku Fun GAME OVER!")){
 			revealAll();
 			enableCommands(false);
 			labelGrid();
@@ -759,7 +770,9 @@ public class SudokuFrame extends JFrame
 	 * Toggles exit pop up
 	 */
 	public void toggleExit(){
-		if(pane.confirmationPopUp(pane.getIcon("grumpyIcon"),"Really? Your progress will not be saved.", "Aurevoir Sudoku Fun!")){
+		if(pane.confirmationPopUp(pane.getIcon("grumpyIcon"),
+			"Really? Your progress will not be saved.", 
+			"Aurevoir Sudoku Fun!")){
 			System.exit(0);
 		}
 	}
@@ -788,7 +801,8 @@ public class SudokuFrame extends JFrame
 	 * Restarts game if user confirms
 	 */
 	public void toggleRestart(){
-		if(pane.confirmationPopUp(pane.getIcon("puzzledIcon"), "Restart? Are you sure?", "Restart")){
+		if(pane.confirmationPopUp(pane.getIcon("puzzledIcon"), 
+			"Restart? Are you sure?", "Restart")){
 			removeAllUserValues();
 			labelGrid();
 		}
@@ -850,7 +864,7 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Resets currentValue to BLANK
-	 * @return currentValue
+	 * @return currentValue as value of blank
 	 */
 	
 	public String resetCurrentValue(){
@@ -869,7 +883,7 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Sets currentValue
-	 * @param value
+	 * @param value with new string set.
 	 */
 	public void setCurrentValue(String value) {
 		currentValue = value;
@@ -877,8 +891,8 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Converts a button's row and column values to an index
-	 * @param row
-	 * @param column
+	 * @param row the row of the button.
+	 * @param column the column of the button.
 	 * @return index fir buttonRow ArrayList
 	 */
 	
@@ -893,7 +907,7 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Converts a button's index to a row value
-	 * @param JButton b
+	 * @param JButton b button to get the rowVal of
 	 * @return row value for JButton
 	 */
 	
@@ -906,7 +920,7 @@ public class SudokuFrame extends JFrame
 	
 	/**
 	 * Converts a button's index to a column value
-	 * @param JButton b
+	 * @param JButton b button to get colVal of 
 	 * @return column value for JButton
 	 */
 	
@@ -962,3 +976,8 @@ public class SudokuFrame extends JFrame
 	public static final int DEFAULT_WIDTH = 900;
 	public static final int DEFAULT_HEIGHT = 700;
 }
+
+
+
+
+
