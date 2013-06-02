@@ -17,14 +17,14 @@ import javax.swing.border.Border;
 
 
 /**
- * SudokuFrame creates the GUI for Board (implemented by SudokuBoard)
+ * SudokuGUI creates the GUI for Board (implemented by SudokuBoard)
  */
 
 public class SudokuFrame extends JFrame
 {
-	public SudokuFrame(Board sBoard)
+	public SudokuFrame(Board sudokuBoard)
 	{
-		this.board = sBoard;
+		this.board = sudokuBoard;
 		
 		setTitle("SUDOKU FUN!");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -759,8 +759,8 @@ public class SudokuFrame extends JFrame
 	public Color DEFAULT_INPUT = new Color(90,200,150);
 	public Color userTempColor = Color.BLUE;
 	public Color draftColor = Color.LIGHT_GRAY;
-	private Color DEFAULT_GRID = new Color(238,238,238);
-	private Color DEFAULT_COMMAND = new Color(238,150,140);
+	public Color DEFAULT_GRID = new Color(238,238,238);
+	public Color DEFAULT_COMMAND = new Color(238,150,140);
 	
 	public Font USERINPUT = new Font ("Courrier", Font.CENTER_BASELINE, 25);
 	public Font DRAFTSMALL = new Font("Courrier",Font.CENTER_BASELINE ,15);
@@ -779,7 +779,7 @@ public class SudokuFrame extends JFrame
 	private JPanel buttonPanel;
 	private JPanel commandPanel;
 	private JPanel scorePanel;
-	public LinkedList<JButton> buttonInputs;
+	private LinkedList<JButton> buttonInputs;
 	private ArrayList<JButton> buttonRow;
 	private OptionPanes pane = new OptionPanes();
 

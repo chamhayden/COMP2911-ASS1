@@ -27,7 +27,6 @@ public class SudokuManager {
 
 		board.generate(difficulty);
 		
-		//initialises frame with events handler
 		EventQueue.invokeLater(new Runnable(){
 			public void run()
 			{
@@ -40,7 +39,6 @@ public class SudokuManager {
 							System.exit(0);
 					}
 				});
-				//frame.addKeyListener(new Listeners(frame).inputShortCut());
 				frame.setMinimumSize(new Dimension(MIN_WIDTH,MIN_HEIGHT));
 				frame.pack();
 				frame.setVisible(true);
