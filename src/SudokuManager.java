@@ -20,7 +20,7 @@ public class SudokuManager {
 		difficulty = pane.chooseLevel();
 		
 		while(difficulty == pane.closedOption()){
-			if(pane.exitMessageStart()){
+			if(pane.confirmationPopUp(pane.getIcon("grumpyIcon"),"So soon? Are you sure?", "Aurevoir Sudoku Fun!")){
 				System.exit(0);
 			} else difficulty = pane.chooseLevel();
 		}
@@ -33,9 +33,8 @@ public class SudokuManager {
 				SudokuFrame frame = new SudokuFrame(board);
 				frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 				frame.addWindowListener(new WindowAdapter() {
-					// handle window closing 
 					public void windowClosing(WindowEvent we) {
-						if(pane.exitMessageInGame())
+						if(pane.confirmationPopUp(pane.getIcon("grumpyIcon"),"So soon? Are you sure?", "Aurevoir Sudoku Fun!"))
 							System.exit(0);
 					}
 				});
@@ -47,7 +46,7 @@ public class SudokuManager {
 		});
 	}
 	
-	private int MIN_WIDTH = 600;
+	private int MIN_WIDTH = 820;
 	private int MIN_HEIGHT = 700;
 	private OptionPanes pane;
 	private int difficulty;

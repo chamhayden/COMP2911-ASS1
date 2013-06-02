@@ -28,6 +28,24 @@ public class OptionPanes {
 	}
 	
 	/**
+	 * Retrieves a chosen icon
+	 * @param name of icon
+	 * @return icon
+	 */
+	public Icon getIcon(String name){
+		if(name.equals("startIcon"))
+			return start;
+		if(name.equals("grumpyIcon"))
+			return grumpy;
+		if(name.equals("awesomeIcon"))
+			return awesome;
+		if(name.equals("puzzledIcon"))
+			return puzzled;
+		else return null;
+	}
+	
+	
+	/**
 	 * @return value of closing a window
 	 */
 	
@@ -62,52 +80,9 @@ public class OptionPanes {
 		return difficulty;
 	}
 	
-	/**
-	 * Exit pop up before first game
-	 * @return confirmation of exit
-	 */
-	
-	public boolean exitMessageStart(){
-		String[] buttons = {"Yes", "No"};
-		value = JOptionPane.showOptionDialog(null, "So soon? Are you sure?", "Aurevoir Sudoku Fun!",
-		        JOptionPane.INFORMATION_MESSAGE, 0, grumpy, buttons, buttons[1]);
-		if(value == JOptionPane.YES_OPTION)
-			return true;
-		else return false;
-	}
 	
 	/**
-	 * Reveal message pop up
-	 * @return user confirmation
-	 *
-	 */
-	
-	public boolean revealMessage(){
-		String[] buttons = {"Yes", "No"};
-		value = JOptionPane.showOptionDialog(null, "Give up, eh? Are you sure?", "Sudoku Fun GAME OVER!",
-		        JOptionPane.INFORMATION_MESSAGE, 0, grumpy, buttons, buttons[1]);
-		if(value == JOptionPane.YES_NO_OPTION)
-			return true;
-		else return false;
-	}
-	
-	/**
-	 * Exit pop up once mid-game 
-	 * @return user confirmation
-	 *
-	 */
-	
-	public boolean exitMessageInGame(){
-		String[] buttons = {"Yes", "No"};
-		value = JOptionPane.showOptionDialog(null, "Really? Your progress will not be saved.", "Aurevoir Sudoku Fun!",
-		        JOptionPane.INFORMATION_MESSAGE, 0, grumpy, buttons, buttons[1]);
-		if(value == JOptionPane.YES_OPTION)
-			return true;
-		else return false;
-	}
-	
-	/**
-	 * Exit pop after a finished game
+	 * Exit pop up after a finished game
 	 */
 	
 	public void exitWinGame(){
@@ -119,49 +94,14 @@ public class OptionPanes {
 		System.exit(0);
 	}
 	
+
 	/**
-	 * New game or exit options pop up
-	 * @return user confirmation
-	 *
+	 * Asks for user confirmation
+	 * @param icon
+	 * @param message
+	 * @param title
+	 * @return
 	 */
-	
-	public boolean winGame(){
-		String[] buttons = {"Yes", "No"};
-		value = JOptionPane.showOptionDialog(null, "You're awesome! Shall we go again?", "You Win!",
-		        JOptionPane.INFORMATION_MESSAGE, 0, awesome, buttons, buttons[1]);
-		if(value == JOptionPane.YES_OPTION)
-			return true;
-		else return false;
-	}
-	
-	/**
-	 * @author Jerome
-	 *
-	 */
-	
-	public boolean newGameInGame(){
-		String[] buttons = {"Yes", "No"};
-		value = JOptionPane.showOptionDialog(null, "Start another game?", "New Game",
-		        JOptionPane.INFORMATION_MESSAGE, 0, puzzled, buttons, buttons[1]);
-		if(value == JOptionPane.YES_OPTION)
-			return true;
-		else return false;
-	}
-	
-	/**
-	 * @author Jerome
-	 *
-	 */
-	
-	public boolean restartGame(){
-		String[] buttons = {"Yes", "No"};
-		value = JOptionPane.showOptionDialog(null, "Restart? Are you sure?", "New Game",
-		        JOptionPane.INFORMATION_MESSAGE, 0, puzzled, buttons, buttons[1]);
-		if(value == JOptionPane.YES_OPTION)
-			return true;
-		else return false;
-	}
-	
 	public boolean confirmationPopUp(Icon icon, String message, String title){
 		String[] buttons = {"Yes", "No"};
 		value = JOptionPane.showOptionDialog(null, message, title,
@@ -216,10 +156,10 @@ public class OptionPanes {
         }
     }
 	
-    Icon start;
-    Icon grumpy;
-    Icon awesome;
-    Icon puzzled;
+    private Icon start;
+    private Icon grumpy;
+    private Icon awesome;
+    private Icon puzzled;
     
     private int EXIT_VALUE = 3;
 	private int difficulty;

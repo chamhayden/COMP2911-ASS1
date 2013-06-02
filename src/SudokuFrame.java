@@ -108,7 +108,7 @@ public class SudokuFrame extends JFrame
 	         JButton keyButton = new JButton(label);
 	         keyButton.addActionListener(new NumberSelect());
 	         keyButton.setBackground(DEFAULT_INPUT);
-	         keyButton.setFont(USERINPUT);
+	         keyButton.setFont(userInputFont);
 	         buttonInputs.add(keyButton);
 	         scorePanel.add(keyButton);
 	      }
@@ -181,7 +181,7 @@ public class SudokuFrame extends JFrame
 		JButton button = new JButton(name);
 		panel.add(button);
 		button.setBackground(DEFAULT_GRID);
-		button.setFont(FIXEDSQUARES);
+		button.setFont(givenSquaresFont);
 		button.setBorder(buttonLine);
 		if(!given){
 			NumberInsert insert = new NumberInsert(button);
@@ -193,7 +193,7 @@ public class SudokuFrame extends JFrame
 			    String label = LABELS.substring(i, i + 1);
 			    JLabel l = new JLabel(label);
 			    l.setVisible(false);
-			    l.setFont(DRAFTSMALL);
+			    l.setFont(draftSmallFont);
 				l.setForeground(draftColor);
 				button.add(l);
 			}
@@ -218,23 +218,12 @@ public class SudokuFrame extends JFrame
 						}
 					}else{
 						b.setText(BLANK);
-						//if(board.hasDrafts(i,j)){
-							int count = 1;
-							for(Component label: b.getComponents()){
-								if(board.isVisibleCellDraft(i, j, count++))
-									label.setVisible(true);
-								else label.setVisible(false);
-							}
-							
-							
-							
-							/*for(int draft = 1; draft <= 9; draft++){
-								if(board.isVisibleCellDraft(i, j, draft)){
-									b.getComponent(draft-1).setVisible(true);
-								}else b.getComponent(draft-1).setVisible(false);
-							}*/
-					//	}
-						
+						int draft = 1;
+						for(Component label: b.getComponents()){
+							if(board.isVisibleCellDraft(i, j, draft++))
+								label.setVisible(true);
+							else label.setVisible(false);
+						}
 					}
 				}
 			}
@@ -256,7 +245,8 @@ public class SudokuFrame extends JFrame
 		button.setBackground(DEFAULT_COMMAND);
 		button.setToolTipText(tooltip);
 		if(panel.equals(scorePanel))
-				button.setFont(BIGFONT);
+				button.setFont(lowerButtonFont);
+		else button.setFont(topButtonFont);
 		return button;
 	}
 	
@@ -272,12 +262,9 @@ public class SudokuFrame extends JFrame
 	 */
 	
 	private void toggleDraftValues(String value, JButton b){
-		Component label = b.getComponent(Integer.parseInt(value)-1);
 		if(board.isVisibleCellDraft(rowVal(b), colVal(b), Integer.parseInt(value))){
-			//label.setVisible(false);
 			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), false);
 		} else{
-			//label.setVisible(true);
 			board.setCellDraftVisibility(rowVal(b), colVal(b), Integer.parseInt(value), true);
 			
 		}
@@ -323,7 +310,6 @@ public class SudokuFrame extends JFrame
 			if(!buttonInputs.contains(commands))
 				commands.setBackground(DEFAULT_COMMAND);
 		}
-		
 	}
 	
 	/**
@@ -332,7 +318,7 @@ public class SudokuFrame extends JFrame
 	 */
 	private void checkEndGame(){
 		if(board.isFilledBoard() && board.isCorrectBoard()){
-			if(pane.winGame()){
+			if(pane.confirmationPopUp(pane.getIcon("awesomeIcon"),"You're awesome! Shall we go again?", "You Win!")){
 				board.clear();
 				board.generate(pane.chooseLevelInGame());
 				prepareSolutionButtonForDifficulty();
@@ -351,10 +337,7 @@ public class SudokuFrame extends JFrame
 				commands.setEnabled(false);
 			else commands.setEnabled(true);
 		}
-		
-		
 	}
-	
 	
 	/**
 	 * Checks whether or not a square is filled correctly and makes it flash appropriately
@@ -513,7 +496,7 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			if(pane.newGameInGame()){
+			if(pane.confirmationPopUp(pane.getIcon("puzzledIcon"),"Start another game?", "New Game")){
 				board.clear();
 				board.generate(pane.chooseLevelInGame());
 				enableCommands(true);
@@ -587,7 +570,7 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			if(pane.revealMessage()){
+			if(pane.confirmationPopUp(pane.getIcon("grumpyIcon"),"Give up, eh? Are you sure?", "Sudoku Fun GAME OVER!")){
 				revealAll();
 				enableCommands(false);
 				labelGrid();
@@ -626,7 +609,7 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			if(pane.exitMessageInGame()){
+			if(pane.confirmationPopUp(pane.getIcon("grumpyIcon"),"Really? Your progress will not be saved.", "Aurevoir Sudoku Fun!")){
 				System.exit(0);
 			}
 		}
@@ -641,7 +624,7 @@ public class SudokuFrame extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			if(pane.restartGame()){
+			if(pane.confirmationPopUp(pane.getIcon("puzzledIcon"), "Restart? Are you sure?", "Restart")){
 				removeAllUserValues();
 				labelGrid();
 			}
@@ -751,8 +734,8 @@ public class SudokuFrame extends JFrame
 		return col;
 	}
 	
-	public Border buttonLine = BorderFactory.createLineBorder(Color.gray, 2);
-	public Border panelLine = BorderFactory.createLineBorder(Color.gray, 5);
+	public Border buttonLine = BorderFactory.createLineBorder(Color.gray, 1);
+	public Border panelLine = BorderFactory.createLineBorder(Color.gray, 2);
 	public Timer timer;
 	
 	public Color DEFAULTBG = new Color(200,200,250);
@@ -766,10 +749,11 @@ public class SudokuFrame extends JFrame
 	public Color DEFAULT_GRID = new Color(238,238,238);
 	public Color DEFAULT_COMMAND = new Color(238,150,140);
 	
-	public Font USERINPUT = new Font ("Courrier", Font.CENTER_BASELINE, 25);
-	public Font DRAFTSMALL = new Font("Courrier",Font.CENTER_BASELINE ,15);
-	public Font FIXEDSQUARES = new Font("Arial", Font.BOLD, 20);
-	public Font BIGFONT = new Font("Courrier", Font.CENTER_BASELINE, 25);
+	public Font topButtonFont = new Font("Courrier", Font.CENTER_BASELINE,15);
+	public Font userInputFont = new Font ("Courrier", Font.CENTER_BASELINE, 25);
+	public Font draftSmallFont = new Font("Courrier",Font.CENTER_BASELINE ,15);
+	public Font givenSquaresFont = new Font("Arial", Font.BOLD, 20);
+	public Font lowerButtonFont = new Font("Courrier", Font.CENTER_BASELINE, 25);
 	
 	private JButton exitButton;
 	private JButton newGameButton;
@@ -790,6 +774,7 @@ public class SudokuFrame extends JFrame
 	public Board board;
 	
 	private String currentValue;
+	
 	public static final String LABELS = "123456789";
 	public static final String BLANK = "";
 	public static final int DEFAULT_WIDTH = 900;

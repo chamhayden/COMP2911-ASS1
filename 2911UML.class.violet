@@ -258,19 +258,19 @@ setUpButtonInputs():void</string>
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double6"/>
-      <double>238.0</double>
+      <double>255.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double6"/>
-      <double>188.0</double>
+      <double>232.0</double>
      </void>
     </void>
     <void method="setLocation">
-     <double>238.0</double>
-     <double>188.0</double>
+     <double>255.0</double>
+     <double>232.0</double>
     </void>
    </object>
   </void>
@@ -681,11 +681,11 @@ puzzled:icon</string>
     </void>
     <void property="methods">
      <void property="text">
-      <string>chooseLevel:int
+      <string>getIcon(String);Icon
+chooseLevel:int
 closedOption:int
-exitMessageInGame:boolean
-exitMessageStart:boolean
-revealMessage:boolean</string>
+confirmationPopUp(Icon,String,Strin):boolean
+exitWinGame():void</string>
      </void>
     </void>
     <void property="name">
